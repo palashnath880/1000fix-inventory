@@ -144,7 +144,9 @@ export default function Sidebar() {
                     {menu?.menus?.map((submenu, subIndex) => (
                       <MenuItem
                         key={subIndex}
-                        component={menu.href && <NavLink to={submenu.href} />}
+                        component={
+                          submenu.href && <NavLink to={submenu.href} />
+                        }
                         icon={<submenu.Icon fontSize="medium" />}
                       >
                         {submenu.name}
