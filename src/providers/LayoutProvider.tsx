@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useAppDispatch } from "../hooks";
 import { fetchUsers } from "../features/userSlice";
+import { fetchSku } from "../features/skuCodeSlice";
 
 const client = new QueryClient();
 
@@ -13,6 +14,7 @@ export default function LayoutProvider() {
   // fetch users
   useEffect(() => {
     dispatch(fetchUsers(""));
+    dispatch(fetchSku(""));
   }, []);
   return (
     <QueryClientProvider client={client}>
