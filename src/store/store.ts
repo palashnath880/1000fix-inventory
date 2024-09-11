@@ -3,6 +3,9 @@ import authReducer from "../features/authSlice";
 import branchReducer from "../features/branchSlice";
 import userReducer from "../features/userSlice";
 import skuCodeReducer from "../features/skuCodeSlice";
+import categoryReducer from "../features/categorySlice";
+import modelReducer from "../features/modelSlice";
+import itemReducer from "../features/itemSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +13,9 @@ const store = configureStore({
     branches: branchReducer,
     users: userReducer,
     skuCodes: skuCodeReducer,
+    categories: categoryReducer,
+    models: modelReducer,
+    items: itemReducer,
   },
 });
 
