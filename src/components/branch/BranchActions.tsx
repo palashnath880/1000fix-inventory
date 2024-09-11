@@ -128,7 +128,10 @@ export default function BranchActions({ branch }: { branch: Branch }) {
     watch(({ address, users }) => {
       if (
         address !== branch.address ||
-        !isArraysMatched(users || [], branch.users)
+        !isArraysMatched(
+          users?.map((i) => i?.id) || [],
+          branch.users?.map((i) => i?.id)
+        )
       ) {
         setIsAnyChanged(true);
       } else {
