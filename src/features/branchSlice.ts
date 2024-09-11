@@ -11,10 +11,10 @@ const initialState: InitialState = {
   loading: true,
 };
 
-const fetchBranch = createAsyncThunk<Branch[], { search: string }>(
+const fetchBranch = createAsyncThunk<Branch[], string>(
   "branches",
-  async (params) => {
-    const res = await branchApi.get(params.search);
+  async (search) => {
+    const res = await branchApi.get(search);
     return res.data;
   }
 );
