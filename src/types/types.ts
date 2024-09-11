@@ -1,4 +1,5 @@
 export type User = {
+  id: string;
   name: string;
   email: string;
   username: string;
@@ -7,6 +8,7 @@ export type User = {
 };
 
 export type Branch = {
+  id: string;
   name: string;
   address: string;
   users: User[];
