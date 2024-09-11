@@ -3,7 +3,8 @@ export type User = {
   name: string;
   email: string;
   username: string;
-  branch: null;
+  createdAt: string;
+  branch: Branch | null;
   role: "admin" | "manager" | "engineer";
 };
 
