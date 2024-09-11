@@ -19,6 +19,8 @@ import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import userApi from "../../api/user";
+import { useAppDispatch } from "../../hooks";
+import { fetchUsers } from "../../features/userSlice";
 
 type Inputs = {
   name: string;
@@ -31,6 +33,9 @@ export default function AddUser() {
   // states
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
+
+  //
+  const dispatch = useAppDispatch();
 
   // popup
   const addPopup = usePopupState({ variant: "popover", popupId: "addUser" });
@@ -57,6 +62,7 @@ export default function AddUser() {
       setErrorMsg("");
       await userApi.create(data);
       reset();
+      dispatch(fetchUsers(""));
       toast.success(`User added successfully`);
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
