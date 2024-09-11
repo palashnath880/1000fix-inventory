@@ -61,6 +61,7 @@ export default function BranchActions({ branch }: { branch: Branch }) {
         render: `${branch.name} branch deleted`,
         type: "success",
         isLoading: false,
+        autoClose: 3000,
       });
       dispatch(fetchBranch("")); // fetch branches
     } catch (err) {
@@ -69,6 +70,7 @@ export default function BranchActions({ branch }: { branch: Branch }) {
         render: `Sorry! ${branch.name} couldn't be deleted`,
         type: "error",
         isLoading: false,
+        autoClose: 3000,
       });
     } finally {
       toast.dismiss(toastId);
@@ -90,6 +92,7 @@ export default function BranchActions({ branch }: { branch: Branch }) {
         type: "success",
         render: `${branch.name} branch updated.`,
         isLoading: false,
+        autoClose: 3000,
       });
       dispatch(fetchBranch(""));
     } catch (err) {
@@ -98,6 +101,7 @@ export default function BranchActions({ branch }: { branch: Branch }) {
         type: "error",
         render: `Sorry! ${branch.name} couldn't be updated`,
         isLoading: false,
+        autoClose: 3000,
       });
     }
   };
