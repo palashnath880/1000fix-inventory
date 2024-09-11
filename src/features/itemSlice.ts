@@ -12,7 +12,7 @@ const initialState: InitialState = {
   data: [],
 };
 
-const fetchModels = createAsyncThunk("items", async () => {
+const fetchItems = createAsyncThunk("items", async () => {
   const res = await itemApi.get();
   return res.data;
 });
@@ -23,17 +23,17 @@ export const itemSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(fetchModels.pending, (state) => ({
+      .addCase(fetchItems.pending, (state) => ({
         ...state,
         loading: true,
       }))
-      .addCase(fetchModels.fulfilled, (_, action) => ({
+      .addCase(fetchItems.fulfilled, (_, action) => ({
         loading: false,
         data: action.payload,
       }))
-      .addCase(fetchModels.rejected, (state) => ({ ...state, loading: false }));
+      .addCase(fetchItems.rejected, (state) => ({ ...state, loading: false }));
   },
 });
 
-export { fetchModels };
+export { fetchItems };
 export default itemSlice.reducer;
