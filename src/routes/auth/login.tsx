@@ -39,7 +39,14 @@ export default function Login() {
         const token = res.data?.token;
         Cookies.set("auth_token", token, { expires: 7 });
         reset();
-        window.location.href = "/";
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("redirectTo")) {
+          window.location.href = params.get("redirectTo") || "/";
+        } else {
+          window.location.href = "/";
+        }
+      } else {
+        setErrorMsg("Sorry! Something went wrong.");
       }
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
