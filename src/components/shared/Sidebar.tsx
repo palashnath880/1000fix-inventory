@@ -92,6 +92,11 @@ export default function Sidebar() {
           name: "Branch",
           Icon: Settings,
         },
+        {
+          href: "/users",
+          name: "Users",
+          Icon: Settings,
+        },
       ],
     },
   ];
