@@ -5,6 +5,13 @@ import {
   Dialog,
   IconButton,
   Paper,
+  Skeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
@@ -14,10 +21,13 @@ import {
   bindTrigger,
   usePopupState,
 } from "material-ui-popup-state/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import branchApi from "../../api/branch";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { fetchBranch } from "../../features/branchSlice";
+import BranchActions from "../../components/branch/BranchActions";
 
 type Inputs = {
   name: string;
@@ -28,6 +38,10 @@ export default function Branch() {
   // states
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
+
+  // branch
+  const { loading, data: branches } = useAppSelector((state) => state.branches);
+  const dispatch = useAppDispatch();
 
   // react hook form
   const {
@@ -48,6 +62,7 @@ export default function Branch() {
       await branchApi.create(data);
       toast.success(`Branch added successfully`);
       reset();
+      dispatch(fetchBranch(""));
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       const msg =
@@ -57,6 +72,11 @@ export default function Branch() {
       setSubmitting(false);
     }
   };
+
+  // call fetch branch
+  useEffect(() => {
+    dispatch(fetchBranch(""));
+  }, []);
 
   return (
     <>
@@ -69,6 +89,47 @@ export default function Branch() {
       </Button>
 
       {/* loader*/}
+      {loading && (
+        <div className="mt-5">
+          {[...Array(8)].map((_, index) => (
+            <Skeleton animation="wave" height={80} key={index} />
+          ))}
+        </div>
+      )}
+
+      {/* branch display */}
+      {!loading && Array.isArray(branches) && branches?.length > 0 && (
+        <div className="mt-5">
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>#</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Address</TableCell>
+                  <TableCell>Users</TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {branches.map((branch, index) => (
+                  <TableRow key={branch.id}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{branch.name}</TableCell>
+                    <TableCell>{branch.address}</TableCell>
+                    <TableCell>
+                      {branch.users?.map((i) => i.name)?.join("; ")}
+                    </TableCell>
+                    <TableCell>
+                      <BranchActions branch={branch} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      )}
 
       {/* add popup dialog */}
       <Dialog {...bindDialog(addPopup)}>
