@@ -4,10 +4,10 @@ import branchApi from "../api/branch";
 
 type InitialState = {
   loading: boolean;
-  branches: Branch[];
+  data: Branch[];
 };
 const initialState: InitialState = {
-  branches: [],
+  data: [],
   loading: true,
 };
 
@@ -28,7 +28,7 @@ export const branchSlice = createSlice({
       .addCase(fetchBranch.pending, (state) => ({ ...state, loading: true }))
       .addCase(fetchBranch.fulfilled, (_, action) => ({
         loading: false,
-        branches: action.payload,
+        data: action.payload,
       }))
       .addCase(fetchBranch.rejected, (state) => ({ ...state, loading: false }));
   },
