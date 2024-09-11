@@ -13,7 +13,6 @@ export default function App() {
         <style>{`.Toastify__close-button{align-self:center !important;}`}</style>
         <ToastContainer
           hideProgressBar={true}
-          autoClose={5000}
           toastClassName={"!min-h-[50px]"}
           bodyClassName={"!my-0 !py-0 !items-center !text-sm"}
         />
