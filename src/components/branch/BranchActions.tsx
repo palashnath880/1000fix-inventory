@@ -24,6 +24,7 @@ import { fetchBranch } from "../../features/branchSlice";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { isArraysMatched } from "../../utils/utils";
+import { fetchUsers } from "../../features/userSlice";
 
 type UpdateInputs = {
   address: string;
@@ -64,6 +65,7 @@ export default function BranchActions({ branch }: { branch: Branch }) {
         autoClose: 3000,
       });
       dispatch(fetchBranch("")); // fetch branches
+      dispatch(fetchUsers(""));
     } catch (err) {
       console.error(err);
       toast.update(toastId, {
@@ -95,6 +97,7 @@ export default function BranchActions({ branch }: { branch: Branch }) {
         autoClose: 3000,
       });
       dispatch(fetchBranch(""));
+      dispatch(fetchUsers(""));
     } catch (err) {
       console.error(err);
       toast.update(toastId, {
