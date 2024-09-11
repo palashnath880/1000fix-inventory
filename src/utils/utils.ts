@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const getFileRoutes = () => {
   const files = import.meta.glob("../routes/manager/**/*.tsx", {
     eager: true,
@@ -17,4 +18,14 @@ export const getFileRoutes = () => {
   }
 
   return { admin: routes };
+};
+
+export const isArraysMatched = (arr1: any[], arr2: any[]) => {
+  if (!Array.isArray(arr1) || !Array.isArray(arr2)) {
+    return false;
+  }
+  return (
+    arr1.every((item) => arr2.includes(item)) &&
+    arr2.every((item) => arr1.includes(item))
+  );
 };
