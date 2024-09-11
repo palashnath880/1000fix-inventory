@@ -17,7 +17,7 @@ import {
   Sidebar as ReactSidebar,
   SubMenu,
 } from "react-pro-sidebar";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 type Menu = {
   href?: string;
@@ -35,6 +35,10 @@ type Menu = {
 export default function Sidebar() {
   // mui theme
   const theme = useTheme();
+
+  // path name
+  const location = useLocation();
+  const pathname = location.pathname;
 
   // menus array
   const menus: Menu[] = [
@@ -83,6 +87,11 @@ export default function Sidebar() {
           name: "Stock Entry",
           Icon: Settings,
         },
+        {
+          href: "/branch",
+          name: "Branch",
+          Icon: Settings,
+        },
       ],
     },
   ];
@@ -92,7 +101,7 @@ export default function Sidebar() {
       <div className="h-full flex flex-col gap-5">
         <div className="flex flex-col items-center">
           <img className="" src="" />
-          <Typography variant="h5" color="textSecondary">
+          <Typography variant="h5" color="secondary">
             Branch name
           </Typography>
         </div>
@@ -108,17 +117,17 @@ export default function Sidebar() {
             <Menu
               menuItemStyles={{
                 button: {
-                  color: theme.palette.text.secondary,
+                  color: theme.palette.secondary.main,
                   paddingRight: 5,
                   paddingLeft: 5,
                   borderRadius: 8,
                   fontSize: 15,
                   height: 46,
                   ":hover": {
-                    backgroundColor: `${theme.palette.text.secondary}85`,
+                    backgroundColor: `${theme.palette.secondary.main}85`,
                   },
                   "&.active": {
-                    backgroundColor: `${theme.palette.text.secondary}85`,
+                    backgroundColor: `${theme.palette.secondary.main}85`,
                     fontWeight: 600,
                   },
                 },
@@ -140,6 +149,9 @@ export default function Sidebar() {
                         display: "flex",
                       },
                     }}
+                    defaultOpen={
+                      !!menu?.menus?.find((i) => i.href === pathname)
+                    }
                   >
                     {menu?.menus?.map((submenu, subIndex) => (
                       <MenuItem
