@@ -17,6 +17,7 @@ import {
 import { useState } from "react";
 import branchApi from "../../api/branch";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 type Inputs = {
   name: string;
@@ -45,6 +46,7 @@ export default function Branch() {
       setSubmitting(true);
       setErrorMsg("");
       await branchApi.create(data);
+      toast.success(`Branch added successfully`);
       reset();
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
