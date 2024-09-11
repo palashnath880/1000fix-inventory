@@ -1,10 +1,19 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/shared/Sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useAppDispatch } from "../hooks";
+import { fetchUsers } from "../features/userSlice";
 
 const client = new QueryClient();
 
 export default function LayoutProvider() {
+  const dispatch = useAppDispatch();
+
+  // fetch users
+  useEffect(() => {
+    dispatch(fetchUsers(""));
+  }, []);
   return (
     <QueryClientProvider client={client}>
       <div className="w-screen h-screen overflow-hidden">
