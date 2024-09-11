@@ -53,6 +53,10 @@ export default function RoutesProvider() {
           path: "/branch",
           element: <Routes.Branch />,
         },
+        {
+          path: "/users",
+          element: <Routes.Users />,
+        },
       ],
     },
     {
