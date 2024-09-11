@@ -5,6 +5,9 @@ import { useEffect } from "react";
 import { useAppDispatch } from "../hooks";
 import { fetchUsers } from "../features/userSlice";
 import { fetchSku } from "../features/skuCodeSlice";
+import { fetchCategories } from "../features/categorySlice";
+import { fetchModels } from "../features/modelSlice";
+import { fetchItems } from "../features/itemSlice";
 
 const client = new QueryClient();
 
@@ -13,6 +16,9 @@ export default function LayoutProvider() {
 
   // fetch users
   useEffect(() => {
+    dispatch(fetchCategories());
+    dispatch(fetchModels());
+    dispatch(fetchItems());
     dispatch(fetchUsers(""));
     dispatch(fetchSku(""));
   }, []);
