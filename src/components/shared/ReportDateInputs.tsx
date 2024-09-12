@@ -25,8 +25,8 @@ export default function ReportDateInputs({
   const handleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSearch({
-      from: moment(fromDate).format("YYYY-MM-DD"),
-      to: moment(toDate).format("YYYY-MM-DD"),
+      from: fromDate ? moment(fromDate).format("YYYY-MM-DD") : "",
+      to: toDate ? moment(toDate).format("YYYY-MM-DD") : "",
     });
   };
 
