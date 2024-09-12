@@ -44,3 +44,19 @@ export type SKUCode = {
   item: Item;
   isDefective: boolean;
 };
+
+export type StockType = {
+  id: string;
+  createdAt: string;
+  type: "entry" | "transfer" | "engineer" | "return" | "defective";
+  status: "open" | "approved" | "rejected" | "received" | "returned";
+  price: number;
+  quantity: number;
+  rackNo: string;
+  note: string;
+  challan: string;
+  sender: Branch | null;
+  receiver: Branch | null;
+  skuCode: SKUCode | null;
+  endAt: string;
+};
