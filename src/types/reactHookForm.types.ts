@@ -1,3 +1,5 @@
+import { Category, Model } from "./types";
+
 export type LoginInputs = {
   login: string;
   password: string;
@@ -9,5 +11,11 @@ export type CategoryInputs = {
 
 export type ModelInputs = {
   name: string;
-  category: string;
+  category: Category | null;
+};
+
+export type ItemInputs = {
+  name: string;
+  uom: string;
+  model: Model | null;
 };
