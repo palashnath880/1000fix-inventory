@@ -61,6 +61,10 @@ export default function RoutesProvider() {
           path: "/stock-entry",
           element: <Routes.StockEntry />,
         },
+        {
+          path: "/own-stock",
+          element: <Routes.OwnStock />,
+        },
       ],
     },
     {
