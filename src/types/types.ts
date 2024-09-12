@@ -41,7 +41,6 @@ export type SKUCode = {
   name: string;
   id: string;
   createdAt: string;
-  model: string;
-  item: string;
-  category: string;
+  item: Item;
+  isDefective: boolean;
 };
