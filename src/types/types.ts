@@ -32,6 +32,7 @@ export type Model = {
 export type Item = {
   name: string;
   id: string;
+  uom: string;
   createdAt: string;
   model: Model;
 };
