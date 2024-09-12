@@ -57,6 +57,10 @@ export default function RoutesProvider() {
           path: "/users",
           element: <Routes.Users />,
         },
+        {
+          path: "/stock-entry",
+          element: <Routes.StockEntry />,
+        },
       ],
     },
     {

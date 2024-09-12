@@ -27,7 +27,7 @@ export default function LayoutProvider() {
       <div className="w-screen h-screen overflow-hidden">
         <div className="flex h-full w-full">
           <Sidebar />
-          <div className="flex-1 px-4 py-5">
+          <div className="flex-1 px-4 py-5 overflow-y-auto">
             <Outlet />
           </div>
         </div>
