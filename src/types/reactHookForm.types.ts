@@ -1,4 +1,4 @@
-import { Category, Item, Model } from "./types";
+import { Category, Item, Model, SKUCode } from "./types";
 
 export type LoginInputs = {
   login: string;
@@ -24,4 +24,10 @@ export type SKUInputs = {
   name: string;
   isDefective: boolean;
   item: Item | null;
+};
+
+export type StockFormInputs = {
+  skuCode: SKUCode | null;
+  price: string;
+  quantity: string;
 };
