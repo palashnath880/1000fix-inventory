@@ -57,6 +57,11 @@ export default function Sidebar() {
       Icon: BarChart,
       menus: [
         {
+          href: "/own-stock",
+          name: "Own Stock",
+          Icon: LocalShipping,
+        },
+        {
           href: "/stock-transfer",
           name: "Stock Transfer",
           Icon: LocalShipping,
