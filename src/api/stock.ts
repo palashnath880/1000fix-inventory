@@ -12,6 +12,8 @@ const stockApi = {
   getBySkuId: (skuId: string) =>
     instance.get(`/stock/get-by-sku?skuCodeId=${skuId}`),
   transfer: (data: any) => instance.post(`/stock/transfer`, data),
+  transferList: (from: string, to: string) =>
+    instance.get(`/stock/transfer?fromDate=${from}&toDate=${to}`),
 };
 
 export default stockApi;
