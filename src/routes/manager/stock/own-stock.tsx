@@ -63,6 +63,7 @@ export default function OwnStock() {
       {/* search inputs start  */}
       <div className="flex max-md:flex-col gap-3 flex-1">
         <Autocomplete
+          disabled={isLoading}
           className="!flex-1"
           options={categories}
           value={categories?.find((i) => i.id === category) || null}
@@ -82,6 +83,7 @@ export default function OwnStock() {
         />
 
         <Autocomplete
+          disabled={isLoading}
           className="!flex-1"
           options={models}
           value={models?.find((i) => i.id === model) || null}
@@ -99,6 +101,7 @@ export default function OwnStock() {
         />
 
         <Autocomplete
+          disabled={isLoading}
           className="!flex-1"
           options={skuCodes}
           value={skuCodes?.find((i) => i.id === skuCode) || null}
