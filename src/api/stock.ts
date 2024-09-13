@@ -14,6 +14,7 @@ const stockApi = {
   transfer: (data: any) => instance.post(`/stock/transfer`, data),
   transferList: (from: string, to: string) =>
     instance.get(`/stock/transfer?fromDate=${from}&toDate=${to}`),
+  receiveList: () => instance.get(`/stock/receive`),
 };
 
 export default stockApi;
