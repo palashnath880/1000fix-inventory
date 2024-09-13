@@ -60,3 +60,10 @@ export type StockType = {
   skuCode: SKUCode | null;
   endAt: string;
 };
+
+export type OwnStockType = {
+  avgPrice: number;
+  quantity: number;
+  defective: number;
+  skuCode: SKUCode;
+};

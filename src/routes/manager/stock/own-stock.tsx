@@ -17,15 +17,8 @@ import { useSearchParams } from "react-router-dom";
 import { useAppSelector } from "../../../hooks";
 import { useQuery } from "@tanstack/react-query";
 import stockApi from "../../../api/stock";
-import { SKUCode } from "../../../types/types";
 import { Download, Refresh } from "@mui/icons-material";
-
-type QueryType = {
-  avgPrice: number;
-  quantity: number;
-  defective: number;
-  skuCode: SKUCode;
-};
+import { OwnStockType } from "../../../types/types";
 
 export default function OwnStock() {
   // react redux
@@ -43,7 +36,7 @@ export default function OwnStock() {
   const { category, model, skuCode } = queries;
 
   // fetch stock
-  const { data, isLoading, refetch, isSuccess } = useQuery<QueryType[]>({
+  const { data, isLoading, refetch, isSuccess } = useQuery<OwnStockType[]>({
     queryKey: ["ownStock", category, model, skuCode],
     queryFn: async () => {
       const res = await stockApi.ownStock(category, model, skuCode);

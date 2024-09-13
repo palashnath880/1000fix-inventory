@@ -29,3 +29,14 @@ export const isArraysMatched = (arr1: any[], arr2: any[]) => {
     arr2.every((item) => arr1.includes(item))
   );
 };
+
+export const debounce = (func: any, delay: number = 300) => {
+  let timer: any;
+
+  return (...args: any) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};
