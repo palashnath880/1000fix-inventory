@@ -1,5 +1,6 @@
 import Login from "./auth/login";
 import Branch from "./manager/branch";
+import JobEntry from "./manager/job/job-entry";
 import SKUCode from "./manager/sku-code";
 import StockEntry from "./manager/stock-entry";
 import OwnStock from "./manager/stock/own-stock";
@@ -16,6 +17,7 @@ const Routes: { [key: string]: React.FC } = {
   OwnStock: OwnStock,
   StockTransfer,
   StockReceive,
+  JobEntry,
 };
 
 export default Routes;
