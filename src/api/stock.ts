@@ -17,6 +17,7 @@ const stockApi = {
   receiveList: () => instance.get(`/stock/receive`),
   statusUpdate: (Id: string, data: any) =>
     instance.put(`/stock/status/${Id}`, data),
+  approval: () => instance.get(`/stock/approval`),
 };
 
 export default stockApi;
