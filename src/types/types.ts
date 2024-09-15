@@ -67,3 +67,21 @@ export type OwnStockType = {
   defective: number;
   skuCode: SKUCode;
 };
+
+export type JobItemType = {
+  price: number;
+  quantity: number;
+  skuCode: SKUCode;
+  jobId: string;
+};
+
+export type JobType = {
+  id: string;
+  jobNo: string;
+  imeiNo: string;
+  serviceType: string;
+  sellFrom: "branch" | "engineer";
+  engineer: User | null;
+  createdAt: string;
+  items: JobItemType[];
+};

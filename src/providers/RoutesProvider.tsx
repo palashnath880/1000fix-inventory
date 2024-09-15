@@ -77,6 +77,10 @@ export default function RoutesProvider() {
           path: "/job-entry",
           element: <Routes.JobEntry />,
         },
+        {
+          path: "/job-entry-list",
+          element: <Routes.JobEntryList />,
+        },
       ],
     },
     {
