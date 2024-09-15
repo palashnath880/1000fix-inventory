@@ -1,4 +1,4 @@
-import { Branch, Category, Item, Model, SKUCode } from "./types";
+import { Branch, Category, Item, Model, SKUCode, User } from "./types";
 
 export type LoginInputs = {
   login: string;
@@ -36,4 +36,25 @@ export type StockTransferInputs = {
   skuCode: SKUCode | null;
   branch: Branch | null;
   quantity: string;
+};
+
+export type JobEntryInputs = {
+  jobNo: string;
+  imeiNo: string;
+  serviceType: "AMC" | "BD Call" | "PM";
+  sellFrom: "branch" | "engineer";
+  engineerId?: string;
+  engineer: User | null;
+  items: {
+    price: string;
+    quantity: string;
+    skuCodeId?: string;
+    skuCode: SKUCode | null;
+  }[];
+};
+
+export type JobItemInputs = {
+  price: string;
+  quantity: string;
+  skuCode: SKUCode | null;
 };
