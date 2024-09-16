@@ -38,6 +38,12 @@ export type StockTransferInputs = {
   quantity: string;
 };
 
+export type StockReturnInputs = {
+  skuCode: SKUCode | null;
+  quantity: string;
+  note: string;
+};
+
 export type JobEntryInputs = {
   jobNo: string;
   imeiNo: string;
