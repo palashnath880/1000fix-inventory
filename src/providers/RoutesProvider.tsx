@@ -85,6 +85,15 @@ export default function RoutesProvider() {
           path: "/job-entry-list",
           element: <Routes.JobEntryList />,
         },
+        {
+          path: "/engineers",
+          children: [
+            {
+              path: "/engineers/stock-transfer",
+              element: <Routes.EnStockTransfer />,
+            },
+          ],
+        },
       ],
     },
     {
