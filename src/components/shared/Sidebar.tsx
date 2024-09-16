@@ -3,8 +3,12 @@ import {
   Approval,
   BarChart,
   CallReceived,
+  Group,
   Home,
+  Inventory,
+  KeyboardReturn,
   LocalShipping,
+  Send,
   Settings,
   SvgIconComponent,
   WorkHistory,
@@ -18,6 +22,7 @@ import {
   SubMenu,
 } from "react-pro-sidebar";
 import { NavLink, useLocation } from "react-router-dom";
+import { useAppSelector } from "../../hooks";
 
 type Menu = {
   href?: string;
@@ -33,6 +38,9 @@ type Menu = {
 };
 
 export default function Sidebar() {
+  const { user } = useAppSelector((state) => state.auth);
+  const role = user?.role;
+
   // mui theme
   const theme = useTheme();
 
@@ -46,41 +54,68 @@ export default function Sidebar() {
       href: "/",
       name: "Home",
       Icon: Home,
+      show: true,
     },
     {
       href: "/job-entry",
       name: "Job Entry",
       Icon: WorkHistory,
+      show: true,
     },
     {
       name: "Stock Inquiry",
       Icon: BarChart,
+      show: true,
       menus: [
         {
           href: "/own-stock",
           name: "Own Stock",
-          Icon: LocalShipping,
+          Icon: Inventory,
+          show: true,
         },
         {
           href: "/stock-transfer",
           name: "Stock Transfer",
           Icon: LocalShipping,
+          show: true,
         },
         {
           href: "/stock-receive",
           name: "Stock Receive",
           Icon: CallReceived,
+          show: role === "manager",
+        },
+        {
+          href: "/stock-return",
+          name: "Stock Return",
+          Icon: KeyboardReturn,
+          show: role === "manager",
         },
         {
           href: "/stock-approval",
           name: "Stock Approval",
           Icon: Approval,
+          show: role === "admin",
+        },
+      ],
+    },
+    {
+      name: "Engineers",
+      Icon: Group,
+      show: true,
+      menus: [
+        {
+          href: "/send-product",
+          name: "Send Product",
+          Icon: Send,
+          show: true,
         },
       ],
     },
     {
       name: "Admin Options",
       Icon: AdminPanelSettings,
+      show: role === "admin",
       menus: [
         {
           href: "/sku-code",
@@ -143,47 +178,52 @@ export default function Sidebar() {
                 },
               }}
             >
-              {menus.map((menu, index) =>
-                menu?.menus ? (
-                  <SubMenu
-                    key={index}
-                    icon={<menu.Icon fontSize="medium" />}
-                    label={menu.name}
-                    rootStyles={{
-                      "& .ps-submenu-content": {
-                        backgroundColor: "transparent !important",
-                        paddingLeft: 20,
-                      },
-                      "& .ps-submenu-expand-icon": {
-                        paddingRight: 10,
-                        display: "flex",
-                      },
-                    }}
-                    defaultOpen={
-                      !!menu?.menus?.find((i) => i.href === pathname)
-                    }
-                  >
-                    {menu?.menus?.map((submenu, subIndex) => (
-                      <MenuItem
-                        key={subIndex}
-                        component={
-                          submenu.href && <NavLink to={submenu.href} />
-                        }
-                        icon={<submenu.Icon fontSize="medium" />}
-                      >
-                        {submenu.name}
-                      </MenuItem>
-                    ))}
-                  </SubMenu>
-                ) : (
-                  <MenuItem
-                    key={index}
-                    component={menu.href && <NavLink to={menu.href} />}
-                    icon={<menu.Icon fontSize="medium" />}
-                  >
-                    {menu.name}
-                  </MenuItem>
-                )
+              {menus.map(
+                (menu, index) =>
+                  menu.show &&
+                  (menu?.menus ? (
+                    <SubMenu
+                      key={index}
+                      icon={<menu.Icon fontSize="medium" />}
+                      label={menu.name}
+                      rootStyles={{
+                        "& .ps-submenu-content": {
+                          backgroundColor: "transparent !important",
+                          paddingLeft: 20,
+                        },
+                        "& .ps-submenu-expand-icon": {
+                          paddingRight: 10,
+                          display: "flex",
+                        },
+                      }}
+                      defaultOpen={
+                        !!menu?.menus?.find((i) => i.href === pathname)
+                      }
+                    >
+                      {menu?.menus?.map(
+                        (submenu, subIndex) =>
+                          submenu.show && (
+                            <MenuItem
+                              key={subIndex}
+                              component={
+                                submenu.href && <NavLink to={submenu.href} />
+                              }
+                              icon={<submenu.Icon fontSize="medium" />}
+                            >
+                              {submenu.name}
+                            </MenuItem>
+                          )
+                      )}
+                    </SubMenu>
+                  ) : (
+                    <MenuItem
+                      key={index}
+                      component={menu.href && <NavLink to={menu.href} />}
+                      icon={<menu.Icon fontSize="medium" />}
+                    >
+                      {menu.name}
+                    </MenuItem>
+                  ))
               )}
             </Menu>
           </ReactSidebar>
