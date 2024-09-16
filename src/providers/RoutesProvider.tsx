@@ -78,6 +78,10 @@ export default function RoutesProvider() {
           element: <Routes.StockApproval />,
         },
         {
+          path: "/stock-return",
+          element: <Routes.StockReturn />,
+        },
+        {
           path: "/job-entry",
           element: <Routes.JobEntry />,
         },

@@ -47,7 +47,6 @@ export default function StockTransferForm() {
     formState: { errors },
     reset,
     setValue,
-    watch,
   } = useForm<StockTransferInputs>();
 
   // add to transfer list
@@ -128,7 +127,7 @@ export default function StockTransferForm() {
   useEffect(() => {
     // fetch branch
     dispatch(fetchBranch(""));
-  }, [dispatch, watch]);
+  }, [dispatch]);
   return (
     <div className="flex items-start gap-5">
       {/* stock add form */}

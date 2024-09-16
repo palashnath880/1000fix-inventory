@@ -1,3 +1,3 @@
 export default function EnStockTransfer() {
-  return <div>stock-transfer</div>;
+  return <div className="pb-10"></div>;
 }

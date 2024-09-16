@@ -8,6 +8,7 @@ import StockEntry from "./manager/stock-entry";
 import OwnStock from "./manager/stock/own-stock";
 import StockApproval from "./manager/stock/stock-approval";
 import StockReceive from "./manager/stock/stock-receive";
+import StockReturn from "./manager/stock/stock-return";
 import StockTransfer from "./manager/stock/stock-transfer";
 import Users from "./manager/users";
 
@@ -23,6 +24,7 @@ const Routes: { [key: string]: React.FC } = {
   JobEntry,
   JobEntryList,
   StockApproval,
+  StockReturn,
   EnStockTransfer,
 };
 
