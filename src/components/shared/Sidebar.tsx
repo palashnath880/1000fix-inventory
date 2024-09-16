@@ -105,7 +105,7 @@ export default function Sidebar() {
       show: true,
       menus: [
         {
-          href: "/send-product",
+          href: "/send-stock",
           name: "Send Product",
           Icon: Send,
           show: true,

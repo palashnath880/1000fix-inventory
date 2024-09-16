@@ -93,8 +93,8 @@ export default function RoutesProvider() {
           path: "/engineers",
           children: [
             {
-              path: "/engineers/stock-transfer",
-              element: <Routes.EnStockTransfer />,
+              path: "/engineers/send-stock",
+              element: <Routes.SendStock />,
             },
           ],
         },

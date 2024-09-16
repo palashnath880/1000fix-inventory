@@ -1,6 +1,6 @@
 import Login from "./auth/login";
 import Branch from "./manager/branch";
-import EnStockTransfer from "./manager/engineers/stock-transfer";
+import SendStock from "./manager/engineers/send-stock";
 import JobEntry from "./manager/job/job-entry";
 import JobEntryList from "./manager/job/job-entry-list";
 import SKUCode from "./manager/sku-code";
@@ -25,7 +25,7 @@ const Routes: { [key: string]: React.FC } = {
   JobEntryList,
   StockApproval,
   StockReturn,
-  EnStockTransfer,
+  SendStock,
 };
 
 export default Routes;
