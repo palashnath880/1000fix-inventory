@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Add, Close } from "@mui/icons-material";
 import {
-  Autocomplete,
   Button,
   CircularProgress,
   Divider,
@@ -18,23 +17,19 @@ import {
 import { useState } from "react";
 import { StockReturnInputs } from "../../types/reactHookForm.types";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useAppSelector } from "../../hooks";
 import { toast } from "react-toastify";
 import { OwnStockType } from "../../types/types";
 import engineerStockApi from "../../api/engineerStock";
 import { AxiosError } from "axios";
 import FaultyReturnReport from "../../components/engineer/FaultyReturnReport";
+import SkuCodeSelect from "../../components/engineer/SkuCodeSelect";
+import QuantitySelector from "../../components/engineer/QuantitySelector";
 
 export default function FaultyReturn() {
   // states
   const [ownStock, setOwnStock] = useState<OwnStockType | null>(null);
-  const [stockLoading, setStockLoading] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [returnList, setReturnList] = useState<StockReturnInputs[]>([]);
-
-  // react redux
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
-  const { user } = useAppSelector((state) => state.auth);
 
   // react hook form
   const {
@@ -65,36 +60,6 @@ export default function FaultyReturn() {
     setOwnStock(null);
     setValue("skuCode", null);
     reset();
-  };
-
-  // fetch stock by sku id
-  const stockBySkuId = async (skuId: string | undefined) => {
-    if (!skuId) {
-      setOwnStock(null);
-      return;
-    }
-    try {
-      setStockLoading(true);
-      const res = await engineerStockApi.stockBySku(
-        user?.id || "",
-        skuId || ""
-      );
-      if (res?.data && typeof res?.data === "object") {
-        const stock: OwnStockType = res?.data;
-        const filteredList = returnList.filter((i) => i.skuCode?.id === skuId);
-        const totalQuantity = filteredList.reduce(
-          (total, list) => total + parseFloat(list.quantity),
-          0
-        );
-        stock.quantity = stock.quantity - totalQuantity;
-        setOwnStock(stock);
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error(`Sorry! Something went wrong.`);
-    } finally {
-      setStockLoading(false);
-    }
   };
 
   const faultyReturn = async () => {
@@ -140,42 +105,26 @@ export default function FaultyReturn() {
                   field: { value, onChange },
                   fieldState: { error },
                 }) => (
-                  <Autocomplete
-                    disabled={stockLoading}
-                    options={skuCodes}
-                    value={value || null}
-                    onChange={(_, val) => {
-                      stockBySkuId(val?.id || "");
-                      onChange(val);
-                    }}
-                    isOptionEqualToValue={(opt, val) => opt.id === val.id}
-                    getOptionLabel={(opt) => opt.name}
-                    noOptionsText="No sku matched"
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Select SKU Code"
-                        placeholder="Select SKU Code"
-                        error={Boolean(error)}
-                      />
-                    )}
+                  <SkuCodeSelect
+                    value={value}
+                    error={error}
+                    onChange={(val) => onChange(val)}
+                    onStock={(stock) => setOwnStock(stock)}
                   />
                 )}
               />
               <Typography>
                 <b>Available Quantity:</b> {ownStock?.quantity || 0}
               </Typography>
-              <TextField
-                fullWidth
-                type="text"
-                label="Quantity"
-                placeholder="Quantity"
+              <QuantitySelector
                 error={Boolean(errors["quantity"])}
-                {...register("quantity", {
-                  required: true,
-                  pattern: /^\d+(\.\d+)?$/,
-                  min: 1,
-                })}
+                params={{
+                  ...register("quantity", {
+                    required: true,
+                    pattern: /^\d+(\.\d+)?$/,
+                    min: 1,
+                  }),
+                }}
               />
               <TextField
                 multiline
