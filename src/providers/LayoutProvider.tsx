@@ -8,6 +8,7 @@ import { fetchSku } from "../features/skuCodeSlice";
 import { fetchCategories } from "../features/categorySlice";
 import { fetchModels } from "../features/modelSlice";
 import { fetchItems } from "../features/itemSlice";
+import TopBar from "../components/shared/Topbar";
 
 const client = new QueryClient();
 
@@ -27,8 +28,11 @@ export default function LayoutProvider() {
       <div className="w-screen h-screen overflow-hidden">
         <div className="flex h-full w-full">
           <Sidebar />
-          <div className="flex-1 px-4 py-5 overflow-y-auto">
-            <Outlet />
+          <div className="flex-1 overflow-y-auto">
+            <TopBar />
+            <div className="px-5 py-5">
+              <Outlet />
+            </div>
           </div>
         </div>
       </div>
