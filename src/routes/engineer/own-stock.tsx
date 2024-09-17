@@ -11,6 +11,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import { useAppSelector } from "../../hooks";
@@ -41,8 +42,10 @@ export default function OwnStock() {
 
   return (
     <div className="pb-10">
+      <Typography variant="h6">Own Stock</Typography>
+
       {/* search sku input */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mt-5">
         <Autocomplete
           options={skuCodes}
           value={skuCodes.find((i) => i.id === skuId) || null}

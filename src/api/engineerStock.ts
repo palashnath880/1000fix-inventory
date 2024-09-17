@@ -10,6 +10,8 @@ const engineerStockApi = {
   stock: (skuId: string) => instance.get(`/engineer-stock/own?skuId=${skuId}`),
   stockBySku: (userId: string, skuId: string) =>
     instance.get(`/engineer-stock/get-by-sku/${userId}/${skuId}`),
+  faultyReturn: (data: any) =>
+    instance.post(`/engineer-stock/faulty-return`, data),
 };
 
 export default engineerStockApi;

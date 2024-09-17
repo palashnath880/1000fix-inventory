@@ -13,6 +13,7 @@ import Routes from "../routes";
 import EngineerLayout from "./EngineerLayout";
 import StockReceive from "../routes/engineer/stock-receive";
 import OwnStock from "../routes/engineer/own-stock";
+import FaultyReturn from "../routes/engineer/faulty-return";
 
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   // user
@@ -136,6 +137,10 @@ export default function RoutesProvider() {
         {
           path: "/stock-receive",
           element: <StockReceive />,
+        },
+        {
+          path: "/faulty-return",
+          element: <FaultyReturn />,
         },
       ],
     },
