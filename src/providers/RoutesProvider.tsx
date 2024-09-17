@@ -1,21 +1,17 @@
 import {
   createBrowserRouter,
   Navigate,
+  Outlet,
   RouterProvider,
   useSearchParams,
 } from "react-router-dom";
-import LayoutProvider from "./LayoutProvider";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import Loader from "../components/shared/Loader";
 import { useEffect } from "react";
 import { loadUser } from "../features/authSlice";
-import Routes from "../routes";
-import EngineerLayout from "./EngineerLayout";
-import StockReceive from "../routes/engineer/stock-receive";
-import OwnStock from "../routes/engineer/own-stock";
-import FaultyReturn from "../routes/engineer/faulty-return";
-import StockReport from "../routes/engineer/stock-report";
-import StockReturn from "../routes/engineer/stock-return";
+import engineerRoutes from "../routes/engineer/route";
+import routes from "../routes/manager/route";
+import Login from "../routes/auth/login";
 
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   // user
@@ -48,115 +44,25 @@ export default function RoutesProvider() {
   const dispatch = useAppDispatch();
 
   //  router
-  const managerRouter = createBrowserRouter([
+  const router = createBrowserRouter([
     {
       path: "/",
       element: (
         <ProtectedRoute>
-          <LayoutProvider />
+          <Outlet />
         </ProtectedRoute>
       ),
-      children: [
-        {
-          path: "/sku-code",
-          element: <Routes.SKUCode />,
-        },
-        {
-          path: "/branch",
-          element: <Routes.Branch />,
-        },
-        {
-          path: "/users",
-          element: <Routes.Users />,
-        },
-        {
-          path: "/stock-entry",
-          element: <Routes.StockEntry />,
-        },
-        {
-          path: "/own-stock",
-          element: <Routes.OwnStock />,
-        },
-        {
-          path: "/stock-transfer",
-          element: <Routes.StockTransfer />,
-        },
-        {
-          path: "/stock-receive",
-          element: <Routes.StockReceive />,
-        },
-        {
-          path: "/stock-approval",
-          element: <Routes.StockApproval />,
-        },
-        {
-          path: "/stock-return",
-          element: <Routes.StockReturn />,
-        },
-        {
-          path: "/job-entry",
-          element: <Routes.JobEntry />,
-        },
-        {
-          path: "/job-entry-list",
-          element: <Routes.JobEntryList />,
-        },
-        {
-          path: "/engineers",
-          children: [
-            {
-              path: "/engineers/send-stock",
-              element: <Routes.SendStock />,
-            },
-          ],
-        },
-      ],
+      children: [...routes, ...engineerRoutes],
     },
     {
       path: "/login",
       element: (
         <AuthRoute>
-          <Routes.Login />
+          <Login />
         </AuthRoute>
       ),
     },
   ]);
-
-  // engineer router
-  const engineerRouter = createBrowserRouter([
-    {
-      path: "/",
-      element: (
-        <ProtectedRoute>
-          <EngineerLayout />
-        </ProtectedRoute>
-      ),
-      children: [
-        {
-          path: "/",
-          element: <OwnStock />,
-        },
-        {
-          path: "/stock-receive",
-          element: <StockReceive />,
-        },
-        {
-          path: "/faulty-return",
-          element: <FaultyReturn />,
-        },
-        {
-          path: "/stock-report",
-          element: <StockReport />,
-        },
-        {
-          path: "/stock-return",
-          element: <StockReturn />,
-        },
-      ],
-    },
-  ]);
-
-  const router = user?.role === "engineer" ? engineerRouter : managerRouter;
 
   useEffect(() => {
     dispatch(loadUser());

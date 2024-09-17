@@ -1,16 +1,15 @@
-import { Outlet } from "react-router-dom";
-import Sidebar from "../components/shared/Sidebar";
-
 import { useEffect } from "react";
-import { useAppDispatch } from "../hooks";
-import { fetchUsers } from "../features/userSlice";
-import { fetchSku } from "../features/skuCodeSlice";
-import { fetchCategories } from "../features/categorySlice";
-import { fetchModels } from "../features/modelSlice";
-import { fetchItems } from "../features/itemSlice";
-import TopBar from "../components/shared/TopBar";
+import { useAppDispatch } from "../../hooks";
+import { fetchSku } from "../../features/skuCodeSlice";
+import { fetchUsers } from "../../features/userSlice";
+import { fetchItems } from "../../features/itemSlice";
+import { fetchModels } from "../../features/modelSlice";
+import { fetchCategories } from "../../features/categorySlice";
+import TopBar from "../../components/shared/TopBar";
+import { Outlet } from "react-router-dom";
+import Sidebar from "../../components/shared/Sidebar";
 
-export default function LayoutProvider() {
+export default function Layout() {
   const dispatch = useAppDispatch();
 
   // fetch users
@@ -20,7 +19,8 @@ export default function LayoutProvider() {
     dispatch(fetchItems());
     dispatch(fetchUsers(""));
     dispatch(fetchSku(""));
-  }, []);
+  }, [dispatch]);
+
   return (
     <div className="w-screen h-screen overflow-hidden">
       <div className="flex h-full w-full">
