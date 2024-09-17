@@ -42,18 +42,20 @@ export default function ReportDateInputs({
     <form onSubmit={handleSearch}>
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <div className="flex max-sm:flex-col gap-3">
-          <DatePicker
-            label="From Date"
-            value={fromDate}
-            onChange={(e) => setFromDate(e)}
-            sx={{ width: 200 }}
-          />
-          <DatePicker
-            label="To Date"
-            value={toDate}
-            onChange={(e) => setToDate(e)}
-            sx={{ width: 200 }}
-          />
+          <div className="flex items-center justify-between gap-3">
+            <DatePicker
+              label="From Date"
+              value={fromDate}
+              onChange={(e) => setFromDate(e)}
+              sx={{ width: 200 }}
+            />
+            <DatePicker
+              label="To Date"
+              value={toDate}
+              onChange={(e) => setToDate(e)}
+              sx={{ width: 200 }}
+            />
+          </div>
           {button ? (
             <>{button}</>
           ) : (
