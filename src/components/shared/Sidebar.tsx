@@ -147,7 +147,7 @@ export default function Sidebar() {
         <div className="flex flex-col items-center">
           <img className="" src="" />
           <Typography variant="h5" color="secondary">
-            Branch name
+            {user?.branch?.name}
           </Typography>
         </div>
         <div className="flex-1">
