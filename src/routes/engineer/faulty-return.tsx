@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
 import { OwnStockType } from "../../types/types";
 import engineerStockApi from "../../api/engineerStock";
 import { AxiosError } from "axios";
+import FaultyReturnReport from "../../components/engineer/FaultyReturnReport";
 
 export default function FaultyReturn() {
   // states
@@ -242,6 +243,8 @@ export default function FaultyReturn() {
           </div>
         </div>
       </div>
+
+      <FaultyReturnReport />
     </div>
   );
 }
