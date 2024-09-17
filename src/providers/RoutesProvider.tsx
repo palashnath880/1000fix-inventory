@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { loadUser } from "../features/authSlice";
 import Routes from "../routes";
 import EngineerLayout from "./EngineerLayout";
+import StockReceive from "../routes/engineer/stock-receive";
 
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   // user
@@ -126,7 +127,12 @@ export default function RoutesProvider() {
           <EngineerLayout />
         </ProtectedRoute>
       ),
-      children: [],
+      children: [
+        {
+          path: "/stock-receive",
+          element: <StockReceive />,
+        },
+      ],
     },
   ]);
 

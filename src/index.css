@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* engineer receive stock card table css */
+table.engineerReceiveStock tr td {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
