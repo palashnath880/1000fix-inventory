@@ -35,7 +35,9 @@ export type StockFormInputs = {
 export type StockTransferInputs = {
   skuCode: SKUCode | null;
   branch: Branch | null;
+  engineer: User | null;
   quantity: string;
+  stockToEn: boolean;
 };
 
 export type StockReturnInputs = {
