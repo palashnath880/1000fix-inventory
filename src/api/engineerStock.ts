@@ -8,6 +8,10 @@ const engineerStockApi = {
   update: (id: string, data: any) =>
     instance.put(`/engineer-stock/${id}`, data),
   stock: (skuId: string) => instance.get(`/engineer-stock/own?skuId=${skuId}`),
+  stockReport: (userId: string, from: string, to: string) =>
+    instance.get(
+      `/engineer-stock/receive-report/${userId}?fromDate=${from}&toDate=${to}`
+    ),
   stockBySku: (userId: string, skuId: string) =>
     instance.get(`/engineer-stock/get-by-sku/${userId}/${skuId}`),
   faultyReturn: (data: any) =>

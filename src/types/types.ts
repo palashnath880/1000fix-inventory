@@ -61,6 +61,20 @@ export type StockType = {
   endAt: string;
 };
 
+export type EngineerStock = {
+  id: string;
+  createdAt: string;
+  type: "transfer" | "return" | "faulty";
+  status: "open" | "approved" | "rejected" | "received" | "returned";
+  price: number;
+  quantity: number;
+  note: string;
+  branchId: string;
+  branch: Branch | null;
+  skuCode: SKUCode | null;
+  endAt: string;
+};
+
 export type OwnStockType = {
   avgPrice: number;
   quantity: number;
