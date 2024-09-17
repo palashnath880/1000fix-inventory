@@ -10,6 +10,7 @@ import Loader from "../components/shared/Loader";
 import { useEffect } from "react";
 import { loadUser } from "../features/authSlice";
 import Routes from "../routes";
+import EngineerLayout from "./EngineerLayout";
 
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   // user
@@ -42,7 +43,7 @@ export default function RoutesProvider() {
   const dispatch = useAppDispatch();
 
   //  router
-  const router = createBrowserRouter([
+  const managerRouter = createBrowserRouter([
     {
       path: "/",
       element: (
@@ -115,6 +116,21 @@ export default function RoutesProvider() {
       ),
     },
   ]);
+
+  // engineer router
+  const engineerRouter = createBrowserRouter([
+    {
+      path: "/",
+      element: (
+        <ProtectedRoute>
+          <EngineerLayout />
+        </ProtectedRoute>
+      ),
+      children: [],
+    },
+  ]);
+
+  const router = user?.role === "engineer" ? engineerRouter : managerRouter;
 
   useEffect(() => {
     dispatch(loadUser());
