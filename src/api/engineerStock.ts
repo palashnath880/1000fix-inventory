@@ -7,6 +7,9 @@ const engineerStockApi = {
   receive: () => instance.get(`/engineer-stock/receive`),
   update: (id: string, data: any) =>
     instance.put(`/engineer-stock/${id}`, data),
+  stock: (skuId: string) => instance.get(`/engineer-stock/own?skuId=${skuId}`),
+  stockBySku: (userId: string, skuId: string) =>
+    instance.get(`/engineer-stock/get-by-sku/${userId}/${skuId}`),
 };
 
 export default engineerStockApi;

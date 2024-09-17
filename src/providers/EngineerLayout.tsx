@@ -17,9 +17,10 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchSku } from "../features/skuCodeSlice";
 
 export default function EngineerLayout() {
   // states
@@ -29,6 +30,7 @@ export default function EngineerLayout() {
   // react redux
   const { user } = useAppSelector((state) => state.auth);
   const splitName = user?.name?.split(" ")[0];
+  const dispatch = useAppDispatch();
 
   // const menus array
   const menus = [
@@ -53,6 +55,11 @@ export default function EngineerLayout() {
       Icon: KeyboardReturn,
     },
   ];
+
+  //
+  useEffect(() => {
+    dispatch(fetchSku(""));
+  }, [dispatch]);
 
   return (
     <div>
