@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 import { OwnStockType } from "../../types/types";
 import engineerStockApi from "../../api/engineerStock";
 import { AxiosError } from "axios";
-import FaultyReturnReport from "../../components/engineer/FaultyReturnReport";
+import ReturnReport from "../../components/engineer/ReturnReport";
 import SkuCodeSelect from "../../components/engineer/SkuCodeSelect";
 import QuantitySelector from "../../components/engineer/QuantitySelector";
 
@@ -91,7 +91,7 @@ export default function FaultyReturn() {
       <Typography variant="h6">Faulty Stock Return</Typography>
 
       <div className="mt-5 flex flex-col gap-5">
-        <div className="px-5 py-5 bg-slate-200 flex-1 rounded-md">
+        <div className="px-3 py-5 bg-slate-200 flex-1 rounded-md">
           <Typography variant="h6">Stock Return Form</Typography>
           <Divider className="!my-2" />
           <form onSubmit={handleSubmit(addToList)}>
@@ -193,7 +193,7 @@ export default function FaultyReturn() {
         </div>
       </div>
 
-      <FaultyReturnReport />
+      <ReturnReport report="faulty" />
     </div>
   );
 }

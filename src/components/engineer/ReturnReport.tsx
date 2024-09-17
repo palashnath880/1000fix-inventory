@@ -20,7 +20,11 @@ import { EngineerStock } from "../../types/types";
 import ReportDateInputs from "../shared/ReportDateInputs";
 import { Download } from "@mui/icons-material";
 
-export default function FaultyReturnReport() {
+export default function ReturnReport({
+  report,
+}: {
+  report: "return" | "faulty";
+}) {
   // react redux
   const { user } = useAppSelector((state) => state.auth);
 
@@ -31,13 +35,14 @@ export default function FaultyReturnReport() {
 
   // react queries
   const { data, isLoading, isSuccess } = useQuery<EngineerStock[]>({
-    queryKey: ["engineerFaultyReport"],
+    queryKey: ["engineerReport", fromDate, toDate],
     queryFn: async () => {
       if (!fromDate || !toDate) {
         return [];
       }
-      const addOne = moment(toDate).add("days", 1).format("YYYY-MM-DD");
-      const res = await engineerStockApi.faultyReturnList(
+      const addOne = moment(toDate).add(1, "days").format("YYYY-MM-DD");
+      const res = await engineerStockApi.report(
+        report,
         user?.id || "",
         fromDate,
         addOne
@@ -48,7 +53,9 @@ export default function FaultyReturnReport() {
 
   return (
     <div className="mt-5">
-      <Typography variant="h6">Faulty Return Report</Typography>
+      <Typography variant="h6">
+        {report === "faulty" ? "Faulty Return Report" : "Stock Return Report"}
+      </Typography>
 
       <div className="mt-5">
         <ReportDateInputs
@@ -84,6 +91,7 @@ export default function FaultyReturnReport() {
                     <TableCell>SKU</TableCell>
                     <TableCell>Quantity</TableCell>
                     <TableCell>Status</TableCell>
+                    {report === "faulty" && <TableCell>Note</TableCell>}
                     <TableCell>Received/Rejected Date</TableCell>
                   </TableRow>
                 </TableHead>
@@ -105,6 +113,9 @@ export default function FaultyReturnReport() {
                       <TableCell className="!capitalize">
                         {item?.status}
                       </TableCell>
+                      {report === "faulty" && (
+                        <TableCell>{item.note}</TableCell>
+                      )}
                       <TableCell>
                         {item?.endAt && moment(item.endAt).format("lll")}
                       </TableCell>

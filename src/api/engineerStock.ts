@@ -17,9 +17,14 @@ const engineerStockApi = {
   return: (data: any) => instance.post(`/engineer-stock/return`, data),
   faultyReturn: (data: any) =>
     instance.post(`/engineer-stock/faulty-return`, data),
-  faultyReturnList: (userId: string, from: string, to: string) =>
+  report: (
+    type: "return" | "faulty",
+    userId: string,
+    from: string,
+    to: string
+  ) =>
     instance.get(
-      `/engineer-stock/faulty-return-report/${userId}?fromDate=${from}&toDate=${to}`
+      `/engineer-stock/report/${userId}?type=${type}&fromDate=${from}&toDate=${to}`
     ),
 };
 
