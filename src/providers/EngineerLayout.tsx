@@ -45,6 +45,11 @@ export default function EngineerLayout() {
       Icon: BarChart,
     },
     {
+      href: "/stock-return",
+      name: "Stock Return",
+      Icon: KeyboardReturn,
+    },
+    {
       href: "/stock-report",
       name: "Stock Report",
       Icon: ShowChart,

@@ -15,6 +15,7 @@ import StockReceive from "../routes/engineer/stock-receive";
 import OwnStock from "../routes/engineer/own-stock";
 import FaultyReturn from "../routes/engineer/faulty-return";
 import StockReport from "../routes/engineer/stock-report";
+import StockReturn from "../routes/engineer/stock-return";
 
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
   // user
@@ -146,6 +147,10 @@ export default function RoutesProvider() {
         {
           path: "/stock-report",
           element: <StockReport />,
+        },
+        {
+          path: "/stock-return",
+          element: <StockReturn />,
         },
       ],
     },
