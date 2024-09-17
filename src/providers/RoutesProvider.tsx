@@ -2,6 +2,7 @@ import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
+  useSearchParams,
 } from "react-router-dom";
 import LayoutProvider from "./LayoutProvider";
 import { useAppDispatch, useAppSelector } from "../hooks";
@@ -22,21 +23,26 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   // user
   const { user, loading } = useAppSelector((state) => state.auth);
-  const url = window.location.href;
+  const [params, setParams] = useSearchParams(window.location.search);
+  const url = window.location.pathname;
 
   if (!user && !loading) {
-    return <Navigate to={`/login?redirectTo=${encodeURIComponent(url)}`} />;
+    setParams((param) => {
+      param.set("redirectTo", url);
+      return param;
+    });
+    return <Navigate to={`/login?${params.toString()}`} />;
   }
   return children;
 };
 
 export default function RoutesProvider() {
   // user
-  const { loading } = useAppSelector((state) => state.auth);
+  const { loading, user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   //  router
-  const adminRouter = createBrowserRouter([
+  const router = createBrowserRouter([
     {
       path: "/",
       element: (
@@ -110,14 +116,13 @@ export default function RoutesProvider() {
     },
   ]);
 
-  // const router = user?.role === "admin" ? adminRouter : authRouter;
-  const router = adminRouter;
-
   useEffect(() => {
     dispatch(loadUser());
-  }, []);
+  }, [dispatch]);
 
-  if (loading) <Loader />;
+  if (loading && !user) {
+    return <Loader />;
+  }
 
   return <RouterProvider router={router} />;
 }
