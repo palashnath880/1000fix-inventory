@@ -6,6 +6,7 @@ import skuCodeReducer from "../features/skuCodeSlice";
 import categoryReducer from "../features/categorySlice";
 import modelReducer from "../features/modelSlice";
 import itemReducer from "../features/itemSlice";
+import headerReducer from "../features/headerSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     categories: categoryReducer,
     models: modelReducer,
     items: itemReducer,
+    header: headerReducer,
   },
 });
 

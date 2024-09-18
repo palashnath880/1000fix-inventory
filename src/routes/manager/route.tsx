@@ -1,4 +1,4 @@
-import { Navigate, Outlet, RouteObject } from "react-router-dom";
+import { Navigate, RouteObject } from "react-router-dom";
 import Home from "./home";
 import SKUCode from "./sku-code";
 import Branch from "./branch";
@@ -13,6 +13,8 @@ import JobEntry from "./job/job-entry";
 import JobEntryList from "./job/job-entry-list";
 import React from "react";
 import { useAppSelector } from "../../hooks";
+import Layout from "./layout";
+import FaultyStock from "./engineers/faulty-stock";
 
 const ManagerRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAppSelector((state) => state.auth);
@@ -33,7 +35,7 @@ const routes: RouteObject[] = [
     path: "/",
     element: (
       <ManagerRoute>
-        <Outlet />
+        <Layout />
       </ManagerRoute>
     ),
     children: [
@@ -86,8 +88,13 @@ const routes: RouteObject[] = [
         element: <JobEntryList />,
       },
       {
-        path: "/engineers",
-        children: [],
+        path: "/engineer",
+        children: [
+          {
+            path: "faulty-stock",
+            element: <FaultyStock />,
+          },
+        ],
       },
     ],
   },
