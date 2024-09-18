@@ -3,6 +3,7 @@ import {
   Approval,
   BarChart,
   CallReceived,
+  Cancel,
   Group,
   Home,
   Inventory,
@@ -100,17 +101,29 @@ export default function Sidebar() {
       ],
     },
     {
-      name: "Engineers",
+      name: "Engineer",
       Icon: Group,
       show: true,
       menus: [
         {
-          href: "/engineers/send-stock",
-          name: "Send Product",
+          href: "/engineer/faulty-stock",
+          name: "Faulty Stock",
+          Icon: Send,
+          show: true,
+        },
+        {
+          href: "/engineer/return-stock",
+          name: "Return Stock",
           Icon: Send,
           show: true,
         },
       ],
+    },
+    {
+      href: "/defective",
+      name: "Defective",
+      Icon: Cancel,
+      show: true,
     },
     {
       name: "Admin Options",

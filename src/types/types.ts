@@ -72,6 +72,7 @@ export type EngineerStock = {
   branchId: string;
   branch: Branch | null;
   skuCode: SKUCode | null;
+  engineer: User | null;
   endAt: string;
 };
 

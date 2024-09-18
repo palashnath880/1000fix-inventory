@@ -15,6 +15,8 @@ const engineerStockApi = {
   stockBySku: (userId: string, skuId: string) =>
     instance.get(`/engineer-stock/get-by-sku/${userId}/${skuId}`),
   return: (data: any) => instance.post(`/engineer-stock/return`, data),
+  returnStockByBranch: (type: "return" | "faulty") =>
+    instance.get(`/engineer-stock/return-stock/${type}`),
   faultyReturn: (data: any) =>
     instance.post(`/engineer-stock/faulty-return`, data),
   report: (
