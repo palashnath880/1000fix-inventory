@@ -119,36 +119,8 @@ export default function Defective() {
     },
   });
 
-  // move to scrap
-  const moveToScrap = async () => {
-    const error = selected.some((i) => i.quantity < 1 || i.quantity > i.max);
-    if (error) {
-      toast.error(`Please select valid quantity`);
-      return;
-    }
-
-    try {
-      const list: any[] = selected.map((i) => ({
-        skuCodeId: i.skuId,
-        quantity: i.quantity,
-      }));
-
-      setIsDisabled(true);
-      refetch();
-      await stockApi.moveToScrap({ list });
-      toast.success(`Moved to scrap done.`);
-    } catch (err) {
-      const error = err as AxiosError<{ message: string }>;
-      const msg =
-        error.response?.data?.message || "Sorry! Something went wrong";
-      toast.error(msg);
-    } finally {
-      setIsDisabled(false);
-    }
-  };
-
   // defective send
-  const sendDefective = async () => {
+  const defectiveHandler = async (type: "defective" | "scrap") => {
     const error = selected.some((i) => i.quantity < 1 || i.quantity > i.max);
     if (error) {
       toast.error(`Please select valid quantity`);
@@ -163,8 +135,14 @@ export default function Defective() {
 
       setIsDisabled(true);
       refetch();
-      await stockApi.sendDefective({ list });
-      toast.success(`Defective send successfully`);
+      if (type === "defective") {
+        await stockApi.sendDefective({ list });
+        toast.success(`Defective send successfully`);
+      } else if (type === "scrap") {
+        await stockApi.moveToScrap({ list });
+        toast.success(`Moved to scrap done.`);
+      }
+      setSelected([]);
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       const msg =
@@ -275,7 +253,7 @@ export default function Defective() {
                       <Button
                         variant="contained"
                         color="error"
-                        onClick={moveToScrap}
+                        onClick={() => defectiveHandler("scrap")}
                         disabled={isDisabled}
                       >
                         Move to Scrap
@@ -284,7 +262,7 @@ export default function Defective() {
                       <Button
                         variant="contained"
                         color="error"
-                        onClick={sendDefective}
+                        onClick={() => defectiveHandler("defective")}
                         disabled={isDisabled}
                       >
                         Send To Head Office
