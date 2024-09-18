@@ -1,3 +1,8 @@
+/* eslint-disable prefer-const */
+
+import moment from "moment";
+import { utils, writeFile } from "xlsx";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const getFileRoutes = () => {
   const files = import.meta.glob("../routes/manager/**/*.tsx", {
@@ -39,4 +44,48 @@ export const debounce = (func: any, delay: number = 300) => {
       func(...args);
     }, delay);
   };
+};
+
+export const exportExcel = (tableId: string, filename: string = "report") => {
+  const today = moment(new Date()).format("YYYY-MM-DD");
+  filename = `${filename}-${today}.xls`;
+  const headerRow = [];
+  let data: any = [];
+
+  const selectedTbl = document.getElementById(tableId);
+  const tbHeader = selectedTbl?.querySelectorAll("thead tr th");
+  const tbBody = selectedTbl?.querySelectorAll("tbody tr");
+
+  // get the inner text of table header
+  if (tbHeader) {
+    for (let item of tbHeader) {
+      const content = item.textContent;
+      headerRow.push(content);
+    }
+  }
+
+  if (tbBody) {
+    for (let row of tbBody) {
+      const columns = row.querySelectorAll("td");
+      const columnData = [];
+      for (let column of columns) {
+        const content = column.textContent;
+        columnData.push(content);
+      }
+      data.push(columnData);
+    }
+  }
+
+  data = [headerRow, ...data];
+
+  const ws = utils.json_to_sheet(data, { skipHeader: true });
+  const wb = utils.book_new();
+
+  utils.sheet_add_aoa(ws, [headerRow], { origin: "A1" });
+  utils.book_append_sheet(wb, ws, "Data");
+
+  ws["!cols"] = [{ width: 10 }];
+
+  /* export to XLSX */
+  writeFile(wb, filename);
 };

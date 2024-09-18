@@ -4,13 +4,16 @@ import { useEffect, useState } from "react";
 import {
   BarChart,
   Home,
+  Https,
   KeyboardReturn,
+  Logout,
   Menu,
   ShowChart,
 } from "@mui/icons-material";
 import { fetchSku } from "../../features/skuCodeSlice";
 import {
   AppBar,
+  Avatar,
   Box,
   Drawer,
   IconButton,
@@ -20,7 +23,11 @@ import {
   MenuItem,
   Toolbar,
   Typography,
+  Menu as PopupMenu,
 } from "@mui/material";
+import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
+import { logOut } from "../../features/authSlice";
+import ChangePassword from "../../components/shared/ChangePassword";
 
 export default function Layout() {
   // states
@@ -82,12 +89,48 @@ export default function Layout() {
             <Typography variant="h6" color="inherit" component="div">
               Hello, {splitName}
             </Typography>
+            <div className="flex flex-1 justify-end">
+              <PopupState variant="popover">
+                {(popup) => (
+                  <>
+                    <Avatar
+                      sx={{ width: 30, height: 30 }}
+                      {...bindTrigger(popup)}
+                    />
+                    <PopupMenu {...bindMenu(popup)}>
+                      <ChangePassword>
+                        {(popup) => (
+                          <MenuItem
+                            className="!min-w-[150px]"
+                            {...bindTrigger(popup)}
+                          >
+                            <ListItemIcon>
+                              <Https />
+                            </ListItemIcon>
+                            <ListItemText>Change Password</ListItemText>
+                          </MenuItem>
+                        )}
+                      </ChangePassword>
+                      <MenuItem
+                        className="!min-w-[150px]"
+                        onClick={() => dispatch(logOut())}
+                      >
+                        <ListItemIcon>
+                          <Logout />
+                        </ListItemIcon>
+                        <ListItemText>Logout</ListItemText>
+                      </MenuItem>
+                    </PopupMenu>
+                  </>
+                )}
+              </PopupState>
+            </div>
           </Toolbar>
         </AppBar>
+        <div className="px-4 py-5">
+          <Outlet />
+        </div>
       </Box>
-      <div className="px-4 py-5">
-        <Outlet />
-      </div>
 
       {/* bottom menu drawer */}
       <Drawer

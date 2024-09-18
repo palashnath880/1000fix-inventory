@@ -19,6 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Download, Refresh } from "@mui/icons-material";
 import engineerStockApi from "../../api/engineerStock";
 import { OwnStockType } from "../../types/types";
+import { exportExcel } from "../../utils/utils";
 
 export default function OwnStock() {
   // search params
@@ -79,6 +80,7 @@ export default function OwnStock() {
               variant="contained"
               startIcon={<Download />}
               disabled={data?.length <= 0}
+              onClick={() => exportExcel("ownStock", "own stock")}
             >
               Download
             </Button>
@@ -88,7 +90,7 @@ export default function OwnStock() {
             {Array.isArray(data) && data?.length > 0 ? (
               <div>
                 <TableContainer component={Paper}>
-                  <Table>
+                  <Table id="ownStock">
                     <TableHead>
                       <TableRow>
                         <TableCell>#</TableCell>

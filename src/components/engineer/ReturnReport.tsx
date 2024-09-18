@@ -19,6 +19,7 @@ import moment from "moment";
 import { EngineerStock } from "../../types/types";
 import ReportDateInputs from "../shared/ReportDateInputs";
 import { Download } from "@mui/icons-material";
+import { exportExcel } from "../../utils/utils";
 
 export default function ReturnReport({
   report,
@@ -76,10 +77,21 @@ export default function ReturnReport({
         <div className="mt-5">
           {Array.isArray(data) && data?.length > 0 ? (
             <TableContainer component={Paper}>
-              <Button variant="contained" startIcon={<Download />}>
+              <Button
+                variant="contained"
+                startIcon={<Download />}
+                onClick={() =>
+                  exportExcel(
+                    "returnReport",
+                    report === "faulty"
+                      ? "faulty return report"
+                      : "stock return report"
+                  )
+                }
+              >
                 Download
               </Button>
-              <Table className="mt-2">
+              <Table className="mt-2" id="returnReport">
                 <TableHead>
                   <TableRow>
                     <TableCell>#</TableCell>

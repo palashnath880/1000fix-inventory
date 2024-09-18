@@ -19,6 +19,7 @@ import moment from "moment";
 import { EngineerStock } from "../../types/types";
 import { useAppSelector } from "../../hooks";
 import { Download } from "@mui/icons-material";
+import { exportExcel } from "../../utils/utils";
 
 export default function StockReport() {
   const { user } = useAppSelector((state) => state.auth);
@@ -35,7 +36,7 @@ export default function StockReport() {
       if (!fromDate || !toDate) {
         return [];
       }
-      const addOne = moment(toDate).add("days", 1).format("YYYY-MM-DD");
+      const addOne = moment(toDate).add(1, "days").format("YYYY-MM-DD");
       const res = await engineerStockApi.stockReport(
         user?.id || "",
         fromDate,
@@ -66,10 +67,16 @@ export default function StockReport() {
         <div className="mt-5">
           {Array.isArray(data) && data?.length > 0 ? (
             <TableContainer component={Paper}>
-              <Button variant="contained" startIcon={<Download />}>
+              <Button
+                variant="contained"
+                startIcon={<Download />}
+                onClick={() =>
+                  exportExcel("#stockReport", "stock receive reject report")
+                }
+              >
                 Download
               </Button>
-              <Table className="mt-2">
+              <Table className="mt-2" id="stockReport">
                 <TableHead>
                   <TableRow>
                     <TableCell>#</TableCell>
