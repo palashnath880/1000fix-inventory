@@ -25,6 +25,8 @@ const stockApi = {
     ),
   moveToScrap: (data: { list: { quantity: number; skuCodeId: string }[] }) =>
     instance.post(`/stock/scrap`, data),
+  sendDefective: (data: { list: { quantity: number; skuCodeId: string }[] }) =>
+    instance.post(`/stock/defective-send`, data),
 };
 
 export default stockApi;

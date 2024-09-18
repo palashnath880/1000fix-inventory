@@ -99,6 +99,7 @@ export default function Defective() {
   const { data: categories } = useAppSelector((state) => state.categories);
   const { data: models } = useAppSelector((state) => state.models);
   const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
+  const { user } = useAppSelector((state) => state.auth);
 
   // search queries
   const [search, setSearch] = useSearchParams();
@@ -136,6 +137,34 @@ export default function Defective() {
       refetch();
       await stockApi.moveToScrap({ list });
       toast.success(`Moved to scrap done.`);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      const msg =
+        error.response?.data?.message || "Sorry! Something went wrong";
+      toast.error(msg);
+    } finally {
+      setIsDisabled(false);
+    }
+  };
+
+  // defective send
+  const sendDefective = async () => {
+    const error = selected.some((i) => i.quantity < 1 || i.quantity > i.max);
+    if (error) {
+      toast.error(`Please select valid quantity`);
+      return;
+    }
+
+    try {
+      const list: any[] = selected.map((i) => ({
+        skuCodeId: i.skuId,
+        quantity: i.quantity,
+      }));
+
+      setIsDisabled(true);
+      refetch();
+      await stockApi.sendDefective({ list });
+      toast.success(`Defective send successfully`);
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       const msg =
@@ -241,14 +270,27 @@ export default function Defective() {
                 </div>
 
                 {selected?.length > 0 && (
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={moveToScrap}
-                    disabled={isDisabled}
-                  >
-                    Move to Scrap
-                  </Button>
+                  <>
+                    {user?.role === "admin" ? (
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={moveToScrap}
+                        disabled={isDisabled}
+                      >
+                        Move to Scrap
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={sendDefective}
+                        disabled={isDisabled}
+                      >
+                        Send To Head Office
+                      </Button>
+                    )}
+                  </>
                 )}
               </div>
               <Table id="defectiveStock">
