@@ -21,8 +21,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { OwnStockType } from "../../types/types";
 import stockApi from "../../api/stock";
-import { Download, Refresh } from "@mui/icons-material";
-import { exportExcel } from "../../utils/utils";
+import { Refresh } from "@mui/icons-material";
 import { useState } from "react";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
@@ -238,15 +237,6 @@ export default function Defective() {
                     onClick={() => refetch()}
                   >
                     Refresh
-                  </Button>
-                  <Button
-                    startIcon={<Download />}
-                    variant="contained"
-                    onClick={() =>
-                      exportExcel("defectiveStock", "defective stock")
-                    }
-                  >
-                    Download
                   </Button>
                 </div>
 
