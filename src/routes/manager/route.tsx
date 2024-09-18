@@ -11,7 +11,6 @@ import StockApproval from "./stock/stock-approval";
 import StockReceive from "./stock/stock-receive";
 import JobEntry from "./job/job-entry";
 import JobEntryList from "./job/job-entry-list";
-import SendStock from "./engineers/send-stock";
 import React from "react";
 import { useAppSelector } from "../../hooks";
 
@@ -88,12 +87,7 @@ const routes: RouteObject[] = [
       },
       {
         path: "/engineers",
-        children: [
-          {
-            path: "/engineers/send-stock",
-            element: <SendStock />,
-          },
-        ],
+        children: [],
       },
     ],
   },
