@@ -60,7 +60,7 @@ export default function Login() {
 
   return (
     <div className="w-full h-screen grid place-items-center">
-      <Paper className="!px-5 !py-5 sm:!w-[380px]">
+      <Paper className="!px-5 !py-5 max-sm:w-[90%] sm:!w-[380px]">
         <form onSubmit={handleSubmit(loginHandler)}>
           <div className="flex flex-col gap-4">
             <Typography className="!text-center !font-bold" variant="h4">
