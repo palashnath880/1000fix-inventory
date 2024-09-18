@@ -19,6 +19,12 @@ const stockApi = {
   statusUpdate: (Id: string, data: any) =>
     instance.put(`/stock/status/${Id}`, data),
   approval: () => instance.get(`/stock/approval`),
+  getDefective: (cate: string, model: string, sku: string) =>
+    instance.get(
+      `/stock/defective?category=${cate}&model=${model}&skuCode=${sku}`
+    ),
+  moveToScrap: (data: { list: { quantity: number; skuCodeId: string }[] }) =>
+    instance.post(`/stock/scrap`, data),
 };
 
 export default stockApi;
