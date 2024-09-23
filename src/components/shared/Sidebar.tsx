@@ -1,4 +1,5 @@
 import {
+  AdfScanner,
   AdminPanelSettings,
   Approval,
   BarChart,
@@ -124,6 +125,12 @@ export default function Sidebar() {
       name: "Defective",
       Icon: Cancel,
       show: true,
+    },
+    {
+      href: "/challan",
+      name: "Challan",
+      Icon: AdfScanner,
+      show: user?.role === "admin",
     },
     {
       name: "Admin Options",

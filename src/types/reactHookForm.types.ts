@@ -66,3 +66,15 @@ export type JobItemInputs = {
   quantity: string;
   skuCode: SKUCode | null;
 };
+
+export type ChallanInputs = {
+  name: string;
+  address: string;
+  phone: string;
+  description: string;
+  items: {
+    skuCode: SKUCode | null;
+    skuCodeId?: string;
+    quantity: string;
+  }[];
+};

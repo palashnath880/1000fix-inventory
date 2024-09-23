@@ -16,6 +16,7 @@ import { useAppSelector } from "../../hooks";
 import Layout from "./layout";
 import FaultyStock from "./engineers/faulty-stock";
 import Defective from "./defective";
+import Challan from "./challan";
 
 const ManagerRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAppSelector((state) => state.auth);
@@ -91,6 +92,10 @@ const routes: RouteObject[] = [
       {
         path: "/defective",
         element: <Defective />,
+      },
+      {
+        path: "/challan",
+        element: <Challan />,
       },
       {
         path: "/engineer",
