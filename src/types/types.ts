@@ -100,3 +100,14 @@ export type JobType = {
   createdAt: string;
   items: JobItemType[];
 };
+
+export type Challan = {
+  id: string;
+  name: string;
+  address: string;
+  description: string;
+  challanNo: string;
+  phone: string;
+  items: { skuCode: SKUCode; quantity: number }[];
+  createdAt: string;
+};
