@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  Autocomplete,
   Button,
+  Checkbox,
   Divider,
   FormControl,
   FormControlLabel,
@@ -18,15 +20,18 @@ import {
   SubmitHandler,
   useFieldArray,
   useForm,
+  useWatch,
 } from "react-hook-form";
 import { JobEntryInputs } from "../../../types/reactHookForm.types";
 import { Add, Remove } from "@mui/icons-material";
 import { bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
 import JobEntryItem from "../../../components/job/JobEntryItem";
 import { AxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import jobApi from "../../../api/job";
 import { toast } from "react-toastify";
+import { useAppSelector } from "../../../hooks";
+import { Header } from "../../../components/shared/TopBar";
 
 export default function JobEntry() {
   // state
@@ -36,6 +41,10 @@ export default function JobEntry() {
   // add item popup
   const addPopup = usePopupState({ variant: "popover", popupId: "addItem" });
 
+  // redux
+  const { data: users } = useAppSelector((state) => state.users);
+  const engineers = users?.filter((i) => i.role === "engineer");
+
   // react -hook form
   const {
     register,
@@ -44,6 +53,7 @@ export default function JobEntry() {
     handleSubmit,
     control,
     setValue,
+    watch,
   } = useForm<JobEntryInputs>();
   const { fields, append, remove } = useFieldArray({
     control,
@@ -55,6 +65,10 @@ export default function JobEntry() {
     quantity: i.quantity,
     skuCodeId: i.skuCodeId,
   }));
+  const { sellFrom, engineer } = useWatch({
+    control: control,
+    defaultValue: { sellFrom: "branch" },
+  });
 
   // job entry handler
   const handler: SubmitHandler<JobEntryInputs> = async (data) => {
@@ -62,7 +76,10 @@ export default function JobEntry() {
       setLoading(true);
       setErrorMsg("");
 
-      const dataObj: any = { ...data, sellFrom: "branch" };
+      const dataObj: any = { ...data };
+      if (data.sellFrom === "engineer" && data.engineer) {
+        dataObj.engineerId = data.engineer.id;
+      }
       dataObj.items = data.items.map((i) => ({
         price: parseFloat(i.price),
         quantity: parseFloat(i.quantity),
@@ -82,8 +99,19 @@ export default function JobEntry() {
     }
   };
 
+  useEffect(() => {
+    watch((_, { name }) => {
+      if (name === "sellFrom") {
+        setValue("engineer", null);
+        setValue("items", []);
+      }
+    });
+  }, [watch, setValue]);
+
   return (
     <div className="pb-10">
+      <Header title="Job Entry" />
+
       <Paper className="!mx-auto px-4 py-5 max-w-[500px] !bg-slate-50">
         <Typography variant="h6">Job Entry Form</Typography>
         <Divider className="!mt-3" />
@@ -145,6 +173,54 @@ export default function JobEntry() {
                   </FormControl>
                 )}
               />
+
+              <Controller
+                control={control}
+                name="sellFrom"
+                render={({ field: { value, onChange } }) => (
+                  <FormControlLabel
+                    checked={value === "engineer"}
+                    control={
+                      <Checkbox
+                        onChange={(e) =>
+                          onChange(e.target.checked ? "engineer" : "branch")
+                        }
+                      />
+                    }
+                    label="Stock From Engineer"
+                    className="!w-max"
+                  />
+                )}
+              />
+
+              {sellFrom === "engineer" && (
+                <Controller
+                  control={control}
+                  name="engineer"
+                  rules={{ required: true }}
+                  render={({
+                    field: { value, onChange },
+                    fieldState: { error },
+                  }) => (
+                    <Autocomplete
+                      value={value}
+                      options={engineers}
+                      onChange={(_, val) => onChange(val)}
+                      noOptionsText="No engineer matched"
+                      getOptionLabel={(opt) => opt.name}
+                      isOptionEqualToValue={(opt, val) => opt.id === val.id}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Select Engineer"
+                          error={Boolean(error)}
+                        />
+                      )}
+                    />
+                  )}
+                />
+              )}
+
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between">
                   <Typography variant="subtitle1">Job Items</Typography>
@@ -152,6 +228,7 @@ export default function JobEntry() {
                     variant="outlined"
                     startIcon={<Add />}
                     {...bindTrigger(addPopup)}
+                    disabled={sellFrom === "engineer" && !engineer}
                   >
                     Add Item
                   </Button>
@@ -208,6 +285,7 @@ export default function JobEntry() {
 
       {/* add item dialog */}
       <JobEntryItem
+        engineer={engineer}
         popup={addPopup}
         fields={items}
         add={({ price, quantity, skuCode, skuCodeId }) => {

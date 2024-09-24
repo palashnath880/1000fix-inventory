@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { OwnStockType, SKUCode } from "../../types/types";
+import { OwnStockType, SKUCode, User } from "../../types/types";
 import { useAppSelector } from "../../hooks";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { JobItemInputs } from "../../types/reactHookForm.types";
@@ -18,12 +18,9 @@ import { Add, Close } from "@mui/icons-material";
 import stockApi from "../../api/stock";
 import { toast } from "react-toastify";
 import { bindDialog } from "material-ui-popup-state";
+import engineerStockApi from "../../api/engineerStock";
 
-export default function JobEntryItem({
-  popup,
-  fields,
-  add,
-}: {
+type JobEntryItemProps = {
   popup: any;
   fields: {
     price: string;
@@ -36,7 +33,15 @@ export default function JobEntryItem({
     skuCode: SKUCode;
     skuCodeId: string;
   }) => void;
-}) {
+  engineer: User | null | any;
+};
+
+export default function JobEntryItem({
+  popup,
+  fields,
+  add,
+  engineer,
+}: JobEntryItemProps) {
   // states
   const [loading, setLoading] = useState<boolean>(false);
   const [stock, setStock] = useState<OwnStockType | null>(null);
@@ -62,17 +67,17 @@ export default function JobEntryItem({
     }
     try {
       setLoading(true);
-      const res = await stockApi.getBySkuId(skuId);
-      if (res?.data) {
-        const data: OwnStockType = res.data;
-        // const total = fields.reduce(
-        //   (total, item) => total + parseFloat(item.quantity),
-        //   0
-        // );
-        // data.quantity = parseFloat((data.quantity - total).toFixed(2));
-        setStock(data);
-        setValue("price", data.avgPrice.toString());
+
+      let data: any = {};
+      if (engineer) {
+        const res = await engineerStockApi.stockBySku(engineer.id, skuId);
+        data = res.data;
+      } else {
+        const res = await stockApi.getBySkuId(skuId);
+        data = res.data;
       }
+      setStock(data);
+      setValue("price", data.avgPrice.toString());
     } catch (err) {
       console.error(err);
     } finally {
