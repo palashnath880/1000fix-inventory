@@ -18,6 +18,7 @@ import FaultyStock from "./engineers/faulty-stock";
 import Defective from "./defective";
 import Challan from "./challan";
 import ChallanPdf from "./challan-pdf";
+import ReturnStock from "./engineers/return-stock";
 
 const ManagerRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAppSelector((state) => state.auth);
@@ -108,6 +109,10 @@ const routes: RouteObject[] = [
           {
             path: "faulty-stock",
             element: <FaultyStock />,
+          },
+          {
+            path: "return-stock",
+            element: <ReturnStock />,
           },
         ],
       },

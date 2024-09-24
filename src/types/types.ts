@@ -80,6 +80,7 @@ export type OwnStockType = {
   avgPrice: number;
   quantity: number;
   defective: number;
+  faulty: number;
   skuCode: SKUCode;
 };
 

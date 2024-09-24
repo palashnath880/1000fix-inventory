@@ -131,6 +131,7 @@ export default function ReturnStock({ type }: { type: "faulty" | "return" }) {
                       {type === "faulty" && <TableCell>{item.note}</TableCell>}
                       <TableCell>
                         <Actions stock={item} refetch={refetch} />
+                        {/* {type === false} */}
                       </TableCell>
                     </TableRow>
                   ))}

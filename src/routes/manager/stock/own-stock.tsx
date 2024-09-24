@@ -19,6 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import stockApi from "../../../api/stock";
 import { Download, Refresh } from "@mui/icons-material";
 import { OwnStockType } from "../../../types/types";
+import TransferToStock from "../../../components/stock/TransferToStock";
 
 export default function OwnStock() {
   // react redux
@@ -49,6 +50,9 @@ export default function OwnStock() {
     : 0;
   const totalDefective = Array.isArray(data)
     ? data?.reduce((total, val) => total + val.defective, 0)
+    : 0;
+  const totalFaulty = Array.isArray(data)
+    ? data?.reduce((total, val) => total + val.faulty, 0)
     : 0;
 
   return (
@@ -152,6 +156,8 @@ export default function OwnStock() {
                     <TableCell>SKU Code</TableCell>
                     <TableCell>Quantity</TableCell>
                     <TableCell>Defective</TableCell>
+                    <TableCell>Faulty</TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -167,6 +173,12 @@ export default function OwnStock() {
                       <TableCell>{item?.skuCode?.name}</TableCell>
                       <TableCell>{item?.quantity}</TableCell>
                       <TableCell>{item?.defective}</TableCell>
+                      <TableCell>{item?.faulty}</TableCell>
+                      <TableCell>
+                        {item?.faulty > 0 && (
+                          <TransferToStock stock={item} refetch={refetch} />
+                        )}
+                      </TableCell>
                     </TableRow>
                   ))}
                   <TableRow>
@@ -175,6 +187,8 @@ export default function OwnStock() {
                     </TableCell>
                     <TableCell>{totalGood || 0}</TableCell>
                     <TableCell>{totalDefective || 0}</TableCell>
+                    <TableCell>{totalFaulty || 0}</TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
                 </TableBody>
               </Table>

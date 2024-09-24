@@ -12,6 +12,7 @@ const myTheme = createTheme({
           paddingBottom: 10,
           textTransform: "capitalize",
         },
+        variant: "contained",
       },
     },
   },
