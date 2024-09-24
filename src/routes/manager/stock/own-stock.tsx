@@ -154,6 +154,7 @@ export default function OwnStock() {
                     <TableCell>Item</TableCell>
                     <TableCell>UOM</TableCell>
                     <TableCell>SKU Code</TableCell>
+                    <TableCell>AVG Price</TableCell>
                     <TableCell>Quantity</TableCell>
                     <TableCell>Defective</TableCell>
                     <TableCell>Faulty</TableCell>
@@ -171,6 +172,7 @@ export default function OwnStock() {
                       <TableCell>{item?.skuCode?.item?.name}</TableCell>
                       <TableCell>{item?.skuCode?.item?.uom}</TableCell>
                       <TableCell>{item?.skuCode?.name}</TableCell>
+                      <TableCell>{item?.avgPrice}</TableCell>
                       <TableCell>{item?.quantity}</TableCell>
                       <TableCell>{item?.defective}</TableCell>
                       <TableCell>{item?.faulty}</TableCell>
