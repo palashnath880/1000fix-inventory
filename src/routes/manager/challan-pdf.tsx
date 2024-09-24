@@ -215,7 +215,7 @@ export default function ChallanPdf() {
                   >
                     Description:
                   </Text>
-                  <Text style={{ fontSize: 10, marginTop: 5 }}>
+                  <Text style={{ fontSize: 10, marginTop: 7, lineHeight: 1.7 }}>
                     {challan.description}
                   </Text>
                 </View>
