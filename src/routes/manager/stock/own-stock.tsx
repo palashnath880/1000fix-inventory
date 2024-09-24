@@ -184,7 +184,7 @@ export default function OwnStock() {
                     </TableRow>
                   ))}
                   <TableRow>
-                    <TableCell colSpan={6} className="!text-end">
+                    <TableCell colSpan={7} className="!text-end">
                       <b>Total</b>
                     </TableCell>
                     <TableCell>{totalGood || 0}</TableCell>
