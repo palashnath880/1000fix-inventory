@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Print, Refresh } from "@mui/icons-material";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import moment from "moment";
 import ReportDateInputs from "../../components/shared/ReportDateInputs";
 import type { Challan } from "../../types/types";
@@ -112,9 +112,11 @@ export default function Challan() {
                         ))}
                       </TableCell>
                       <TableCell>
-                        <IconButton color="primary">
-                          <Print />
-                        </IconButton>
+                        <Link to={challan.id}>
+                          <IconButton color="primary">
+                            <Print />
+                          </IconButton>
+                        </Link>
                       </TableCell>
                     </TableRow>
                   ))}
