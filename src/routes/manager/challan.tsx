@@ -6,6 +6,7 @@ import {
   Alert,
   Button,
   IconButton,
+  Link,
   Paper,
   Skeleton,
   Table,
@@ -17,7 +18,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Print, Refresh } from "@mui/icons-material";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import moment from "moment";
 import ReportDateInputs from "../../components/shared/ReportDateInputs";
 import type { Challan } from "../../types/types";
@@ -32,10 +33,14 @@ export default function Challan() {
   const { data, isLoading, isSuccess, refetch } = useQuery<Challan[]>({
     queryKey: ["challans", fromDate, toDate],
     queryFn: async () => {
-      if (!fromDate || !toDate) return [];
-      const addOne = moment(toDate).add(1, "days").format("YYYY-MM-DD");
+      const from = fromDate
+        ? fromDate
+        : moment(new Date()).format("YYYY-MM-DD");
+      const to = moment(toDate ? toDate : new Date())
+        .add(1, "days")
+        .format("YYYY-MM-DD");
 
-      const res = await challanApi.getAll(fromDate, addOne);
+      const res = await challanApi.getAll(from, to);
       return res.data;
     },
   });
@@ -95,7 +100,7 @@ export default function Challan() {
                 </TableHead>
                 <TableBody>
                   {data?.map((challan, index) => (
-                    <TableRow>
+                    <TableRow key={index}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>
                         {moment(challan.createdAt).format("lll")}
@@ -112,7 +117,7 @@ export default function Challan() {
                         ))}
                       </TableCell>
                       <TableCell>
-                        <Link to={challan.id}>
+                        <Link href={`/challan/${challan.id}`}>
                           <IconButton color="primary">
                             <Print />
                           </IconButton>

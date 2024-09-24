@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { Header } from "../../components/shared/TopBar";
 import { useQuery } from "@tanstack/react-query";
 import challanApi from "../../api/challan";
-import { Alert, CircularProgress, Paper } from "@mui/material";
+import { Alert, Button, CircularProgress, Paper } from "@mui/material";
 import {
   Document,
   Image,
@@ -15,6 +15,7 @@ import {
 import type { Challan } from "../../types/types";
 import moment from "moment";
 import logo from "../../assets/logo.png";
+import { Refresh } from "@mui/icons-material";
 
 const styles = StyleSheet.create({
   page: {
@@ -168,110 +169,121 @@ export default function ChallanPdf() {
 
       {/* pdf render */}
       {isSuccess && challan && (
-        <Paper className="aspect-[1/1.414]">
-          <PDFViewer className="w-full h-full">
-            <Document pageMode="fullScreen" title={challan.name}>
-              <Page size="A4" orientation="portrait" style={styles.page}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <View style={{ display: "flex", rowGap: 3 }}>
-                    <Text style={{ fontSize: 11 }}>Name: {challan.name}</Text>
-                    <Text style={{ fontSize: 11 }}>
-                      Mobile: {`+880${challan.phone}`}
-                    </Text>
-                    <Text style={{ fontSize: 11 }}>
-                      Address: {challan.address}
-                    </Text>
-                  </View>
+        <>
+          <Button
+            onClick={() => window.location.reload()}
+            variant="contained"
+            startIcon={<Refresh />}
+          >
+            Refresh
+          </Button>
+          <Paper className="aspect-[1/1.414] mt-5">
+            <PDFViewer className="w-full h-full">
+              <Document pageMode="fullScreen" title={challan.name}>
+                <Page size="A4" orientation="portrait" style={styles.page}>
                   <View
                     style={{
-                      display: "flex",
-                      alignItems: "flex-end",
-                      flexDirection: "column",
-                      rowGap: 6,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", fontSize: 18 }}>
-                      Inventory Challan
+                    <View style={{ display: "flex", rowGap: 3 }}>
+                      <Text style={{ fontSize: 11 }}>Name: {challan.name}</Text>
+                      <Text style={{ fontSize: 11 }}>
+                        Mobile: {`+880${challan.phone}`}
+                      </Text>
+                      <Text style={{ fontSize: 11 }}>
+                        Address: {challan.address}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                        flexDirection: "column",
+                        rowGap: 6,
+                      }}
+                    >
+                      <Text style={{ fontWeight: "bold", fontSize: 18 }}>
+                        Inventory Challan
+                      </Text>
+                      <Text style={{ fontSize: 10 }}>
+                        Challan No: {challan.challanNo}
+                      </Text>
+                      <Text style={{ fontSize: 10 }}>
+                        Create Date: {moment(challan.createdAt).format("ll")}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ marginTop: 12 }}>
+                    <Text
+                      style={{
+                        fontWeight: 700,
+                        fontSize: 14,
+                      }}
+                    >
+                      Description:
                     </Text>
-                    <Text style={{ fontSize: 10 }}>
-                      Challan No: {challan.challanNo}
-                    </Text>
-                    <Text style={{ fontSize: 10 }}>
-                      Create Date: {moment(challan.createdAt).format("ll")}
+                    <Text
+                      style={{ fontSize: 10, marginTop: 7, lineHeight: 1.7 }}
+                    >
+                      {challan.description}
                     </Text>
                   </View>
-                </View>
-                <View style={{ marginTop: 12 }}>
+                  <View style={styles.table}>
+                    <TableHeader />
+                    {Array.isArray(challan.items) &&
+                      challan.items?.map((item, index) => (
+                        <TableRow
+                          key={index}
+                          skuCode={item.skuCode.name}
+                          serial={index + 1}
+                          quantity={item.quantity}
+                        />
+                      ))}
+                    <View style={{ flexDirection: "row" }}>
+                      <Text
+                        style={{
+                          padding: 10,
+                          textAlign: "right",
+                          fontWeight: 700,
+                          fontSize: 12,
+                          flex: 1,
+                        }}
+                      >
+                        Total
+                      </Text>
+                      <Text
+                        style={{
+                          width: 80,
+                          padding: 10,
+                          textAlign: "center",
+                          fontWeight: 700,
+                          fontSize: 12,
+                        }}
+                      >
+                        {total || 0}
+                      </Text>
+                    </View>
+                  </View>
+                  <Image style={styles.image} src={logo} fixed />
                   <Text
+                    fixed
                     style={{
-                      fontWeight: 700,
-                      fontSize: 14,
+                      textAlign: "center",
+                      paddingTop: 10,
+                      fontSize: 10,
+                      fontStyle: "italic",
+                      marginTop: "auto",
                     }}
                   >
-                    Description:
+                    Thank you
                   </Text>
-                  <Text style={{ fontSize: 10, marginTop: 7, lineHeight: 1.7 }}>
-                    {challan.description}
-                  </Text>
-                </View>
-                <View style={styles.table}>
-                  <TableHeader />
-                  {Array.isArray(challan.items) &&
-                    challan.items?.map((item, index) => (
-                      <TableRow
-                        key={index}
-                        skuCode={item.skuCode.name}
-                        serial={index + 1}
-                        quantity={item.quantity}
-                      />
-                    ))}
-                  <View style={{ flexDirection: "row" }}>
-                    <Text
-                      style={{
-                        padding: 10,
-                        textAlign: "right",
-                        fontWeight: 700,
-                        fontSize: 12,
-                        flex: 1,
-                      }}
-                    >
-                      Total
-                    </Text>
-                    <Text
-                      style={{
-                        width: 80,
-                        padding: 10,
-                        textAlign: "center",
-                        fontWeight: 700,
-                        fontSize: 12,
-                      }}
-                    >
-                      {total || 0}
-                    </Text>
-                  </View>
-                </View>
-                <Image style={styles.image} src={logo} fixed />
-                <Text
-                  fixed
-                  style={{
-                    textAlign: "center",
-                    paddingTop: 10,
-                    fontSize: 10,
-                    fontStyle: "italic",
-                    marginTop: "auto",
-                  }}
-                >
-                  Thank you
-                </Text>
-              </Page>
-            </Document>
-          </PDFViewer>
-        </Paper>
+                </Page>
+              </Document>
+            </PDFViewer>
+          </Paper>
+        </>
       )}
     </>
   );
