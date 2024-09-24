@@ -21,6 +21,7 @@ import { SKUCode } from "../../types/types";
 import { useAppSelector } from "../../hooks";
 import challanApi from "../../api/challan";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const AddItem = ({
   add,
@@ -117,6 +118,7 @@ export default function AddChallan({ refetch }: { refetch?: () => void }) {
   // states
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   // react hook form
   const {
@@ -147,7 +149,8 @@ export default function AddChallan({ refetch }: { refetch?: () => void }) {
         skuCodeId: i.skuCode?.id,
       }));
 
-      await challanApi.create(dataObj);
+      const res = await challanApi.create(dataObj);
+      if (res.data?.id) navigate(`/challan/${res.data.id}`);
       setValue("items", []);
       reset();
       toast.success(`Challan created successfully`);
