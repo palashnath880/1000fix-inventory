@@ -159,18 +159,32 @@ export default function JobEntryItem({
             />
             {stock && (
               <>
-                <TextField
-                  fullWidth
-                  type="text"
-                  label="Price"
-                  placeholder="Price"
-                  error={Boolean(errors["price"])}
-                  {...register("price", {
-                    required: true,
-                    pattern: /^\d+(\.\d+)?$/,
-                  })}
-                />
-                <Typography>Available Quantity: {stock?.quantity}</Typography>
+                <div className="flex flex-col gap-0">
+                  <Typography>
+                    <span className="font-semibold">Category:</span>{" "}
+                    {stock?.skuCode?.item?.model?.category?.name}
+                  </Typography>
+                  <Typography>
+                    <span className="font-semibold">Model:</span>{" "}
+                    {stock?.skuCode?.item?.model?.name}
+                  </Typography>
+                  <Typography>
+                    <span className="font-semibold">Item:</span>{" "}
+                    {stock?.skuCode?.item?.name}
+                  </Typography>
+                  <Typography>
+                    <span className="font-semibold">UOM:</span>{" "}
+                    {stock?.skuCode?.item?.uom}
+                  </Typography>
+                  <Typography>
+                    <span className="font-semibold">Price:</span>{" "}
+                    {stock?.avgPrice}
+                  </Typography>
+                  <Typography>
+                    <span className="font-semibold">Available Quantity:</span>{" "}
+                    {stock?.quantity}
+                  </Typography>
+                </div>
                 <TextField
                   fullWidth
                   type="text"
