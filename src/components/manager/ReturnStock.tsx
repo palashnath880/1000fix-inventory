@@ -109,6 +109,7 @@ export default function ReturnStock({ type }: { type: "faulty" | "return" }) {
                     <TableCell>Item</TableCell>
                     <TableCell>UOM</TableCell>
                     <TableCell>SKU</TableCell>
+                    <TableCell>Quantity</TableCell>
                     {type === "faulty" && <TableCell>Reason</TableCell>}
                     <TableCell></TableCell>
                   </TableRow>
@@ -128,6 +129,7 @@ export default function ReturnStock({ type }: { type: "faulty" | "return" }) {
                       <TableCell>{item.skuCode?.item?.name}</TableCell>
                       <TableCell>{item.skuCode?.item?.uom}</TableCell>
                       <TableCell>{item.skuCode?.name}</TableCell>
+                      <TableCell>{item.quantity}</TableCell>
                       {type === "faulty" && <TableCell>{item.note}</TableCell>}
                       <TableCell>
                         <Actions stock={item} refetch={refetch} />
