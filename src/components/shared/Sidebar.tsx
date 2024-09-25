@@ -131,6 +131,12 @@ export default function Sidebar() {
       show: true,
       menus: [
         {
+          href: "/engineer/stock",
+          name: "Engineer Stock",
+          Icon: BarChart,
+          show: true,
+        },
+        {
           href: "/engineer/faulty-stock",
           name: "Faulty Stock",
           Icon: Send,
