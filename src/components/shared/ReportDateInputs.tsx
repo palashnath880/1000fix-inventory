@@ -56,7 +56,7 @@ export default function ReportDateInputs({
                 "& label": {
                   transform: "translate(14px, 11px) scale(1)",
                 },
-                "& label.Mui-focused": {
+                "& label.MuiInputLabel-shrink": {
                   transform: "translate(14px, -9px) scale(0.75)",
                 },
               }}
@@ -74,7 +74,7 @@ export default function ReportDateInputs({
                 "& label": {
                   transform: "translate(14px, 11px) scale(1)",
                 },
-                "& label.Mui-focused": {
+                "& label.MuiInputLabel-shrink": {
                   transform: "translate(14px, -9px) scale(0.75)",
                 },
               }}
