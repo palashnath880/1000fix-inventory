@@ -8,6 +8,7 @@ import { fetchCategories } from "../../features/categorySlice";
 import TopBar from "../../components/shared/TopBar";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../../components/shared/Sidebar";
+import { fetchBranch } from "../../features/branchSlice";
 
 export default function Layout() {
   const dispatch = useAppDispatch();
@@ -15,6 +16,7 @@ export default function Layout() {
   // fetch users
   useEffect(() => {
     dispatch(fetchCategories());
+    dispatch(fetchBranch(""));
     dispatch(fetchModels());
     dispatch(fetchItems());
     dispatch(fetchUsers(""));
