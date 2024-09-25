@@ -2,10 +2,12 @@ import {
   AdfScanner,
   AdminPanelSettings,
   Approval,
+  Assessment,
   AssignmentReturn,
   BarChart,
   CallReceived,
   Cancel,
+  EditNote,
   Group,
   Home,
   Inventory,
@@ -60,10 +62,24 @@ export default function Sidebar() {
       show: true,
     },
     {
-      href: "/job-entry",
+      href: "",
       name: "Job Entry",
       Icon: WorkHistory,
       show: true,
+      menus: [
+        {
+          href: "/job-entry",
+          name: "Create Job",
+          Icon: EditNote,
+          show: true,
+        },
+        {
+          href: "/job-entry-list",
+          name: "Job Entry Report",
+          Icon: Assessment,
+          show: true,
+        },
+      ],
     },
     {
       name: "Stock Inquiry",
