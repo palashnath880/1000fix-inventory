@@ -47,13 +47,37 @@ export default function ReportDateInputs({
               label="From Date"
               value={fromDate}
               onChange={(e) => setFromDate(e)}
-              sx={{ width: 200 }}
+              sx={{
+                width: 150,
+                "& input": {
+                  paddingTop: 1.3,
+                  paddingBottom: 1.3,
+                },
+                "& label": {
+                  transform: "translate(14px, 11px) scale(1)",
+                },
+                "& label.Mui-focused": {
+                  transform: "translate(14px, -9px) scale(0.75)",
+                },
+              }}
             />
             <DatePicker
               label="To Date"
               value={toDate}
               onChange={(e) => setToDate(e)}
-              sx={{ width: 200 }}
+              sx={{
+                width: 150,
+                "& input": {
+                  paddingTop: 1.3,
+                  paddingBottom: 1.3,
+                },
+                "& label": {
+                  transform: "translate(14px, 11px) scale(1)",
+                },
+                "& label.Mui-focused": {
+                  transform: "translate(14px, -9px) scale(0.75)",
+                },
+              }}
             />
           </div>
           {button ? (
