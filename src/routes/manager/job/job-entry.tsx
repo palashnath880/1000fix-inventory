@@ -54,7 +54,7 @@ export default function JobEntry() {
     control,
     setValue,
     watch,
-  } = useForm<JobEntryInputs>();
+  } = useForm<JobEntryInputs>({ defaultValues: { sellFrom: "branch" } });
   const { fields, append, remove } = useFieldArray({
     control,
     name: "items",
@@ -67,7 +67,6 @@ export default function JobEntry() {
   }));
   const { sellFrom, engineer } = useWatch({
     control: control,
-    defaultValue: { sellFrom: "branch" },
   });
 
   // job entry handler
@@ -85,6 +84,7 @@ export default function JobEntry() {
         quantity: parseFloat(i.quantity),
         skuCodeId: i.skuCode?.id,
       }));
+
       await jobApi.create(dataObj);
       setValue("items", []);
       reset();
