@@ -2,6 +2,7 @@ import {
   AdfScanner,
   AdminPanelSettings,
   Approval,
+  AssignmentReturn,
   BarChart,
   CallReceived,
   Cancel,
@@ -130,6 +131,12 @@ export default function Sidebar() {
       href: "/challan",
       name: "Challan",
       Icon: AdfScanner,
+      show: user?.role === "admin",
+    },
+    {
+      href: "/purchase-return",
+      name: "Purchase Return",
+      Icon: AssignmentReturn,
       show: user?.role === "admin",
     },
     {

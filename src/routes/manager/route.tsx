@@ -19,6 +19,7 @@ import Defective from "./defective";
 import Challan from "./challan";
 import ChallanPdf from "./challan-pdf";
 import ReturnStock from "./engineers/return-stock";
+import PurchaseReturn from "./purchase-return";
 
 const ManagerRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAppSelector((state) => state.auth);
@@ -102,6 +103,10 @@ const routes: RouteObject[] = [
       {
         path: "/challan/:challanId",
         element: <ChallanPdf />,
+      },
+      {
+        path: "/purchase-return",
+        element: <PurchaseReturn />,
       },
       {
         path: "/engineer",
