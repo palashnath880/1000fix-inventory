@@ -29,6 +29,9 @@ const stockApi = {
     instance.post(`/stock/defective-send`, data),
   moveToStock: (data: { skuCodeId: string; quantity: number }) =>
     instance.post(`/stock/faulty-to-good`, data),
+  purchaseReturn: (data: any) => instance.post(`/stock/purchase-return`, data),
+  puReturnList: (from: string, to: string) =>
+    instance.get(`/stock/purchase-return?fromDate=${from}&toDate=${to}`),
 };
 
 export default stockApi;
