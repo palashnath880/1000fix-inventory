@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import moment from "moment";
 import ApprovalAction from "../../../components/stock/ApprovalAction";
+import { Header } from "../../../components/shared/TopBar";
 
 export default function StockApproval() {
   // react query
@@ -28,6 +29,8 @@ export default function StockApproval() {
 
   return (
     <div className="pb-10">
+      <Header title="Stock Approval" />
+
       {/* loader */}
       {isLoading && (
         <div className="mt-5">

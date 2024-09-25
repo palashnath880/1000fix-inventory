@@ -19,6 +19,7 @@ import moment from "moment";
 import { useQuery } from "@tanstack/react-query";
 import stockApi from "../../../api/stock";
 import { StockType } from "../../../types/types";
+import { Header } from "../../../components/shared/TopBar";
 
 export default function StockTransfer() {
   // search queries
@@ -46,12 +47,14 @@ export default function StockTransfer() {
 
   return (
     <div className="pb-10">
+      <Header title="Stock Transfer" />
+
       <StockTransferForm />
 
       {/* stock entry list */}
       <div className="mt-8 pb-10">
         <Typography variant="h6">Stock Transfer Report</Typography>
-        <div className="flex justify-between items-center mt-5">
+        <div className="flex justify-between items-center mt-5 mb-3">
           <ReportDateInputs
             value={{ from: fromDate, to: toDate }}
             isLoading={isLoading}
@@ -60,20 +63,20 @@ export default function StockTransfer() {
             }
           />
           <div className="flex items-center gap-3">
-            {fromDate && toDate && (
-              <Button
-                variant="outlined"
-                startIcon={<Refresh />}
-                onClick={() => refetch()}
-              >
-                Refresh
-              </Button>
-            )}
-            {data?.length > 0 && (
-              <Button variant="contained" startIcon={<Download />}>
-                Download as Excel
-              </Button>
-            )}
+            <Button
+              variant="outlined"
+              startIcon={<Refresh />}
+              onClick={() => refetch()}
+            >
+              Refresh
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<Download />}
+              disabled={!data || data?.length <= 0}
+            >
+              Download as Excel
+            </Button>
           </div>
         </div>
 

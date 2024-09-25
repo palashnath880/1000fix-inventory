@@ -20,6 +20,7 @@ import stockApi from "../../../api/stock";
 import { Download, Refresh } from "@mui/icons-material";
 import { OwnStockType } from "../../../types/types";
 import TransferToStock from "../../../components/stock/TransferToStock";
+import { Header } from "../../../components/shared/TopBar";
 
 export default function OwnStock() {
   // react redux
@@ -57,6 +58,8 @@ export default function OwnStock() {
 
   return (
     <div className="pv-10">
+      <Header title="Own Stock" />
+
       {/* search inputs start  */}
       <div className="flex max-md:flex-col gap-3 flex-1">
         <Autocomplete
