@@ -1,7 +1,12 @@
 import {
   Alert,
+  Autocomplete,
   Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   Skeleton,
   Table,
   TableBody,
@@ -9,6 +14,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 import ReportDateInputs from "../../../components/shared/ReportDateInputs";
@@ -16,15 +22,27 @@ import { Download, Refresh } from "@mui/icons-material";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import jobApi from "../../../api/job";
-import moment from "moment";
 import { JobType } from "../../../types/types";
 import { Header } from "../../../components/shared/TopBar";
+import { exportExcel } from "../../../utils/utils";
+import { useAppSelector } from "../../../hooks";
+import moment from "moment";
 
 export default function JobEntryList() {
   // search queries
   const [search, setSearch] = useSearchParams();
-  const fromDate = search.get("fromDate") || "";
-  const toDate = search.get("toDate") || "";
+  const queries = {
+    fromDate: search.get("fromDate") || "",
+    toDate: search.get("toDate") || "",
+    filter: search.get("filter") || "",
+    engineers: search.getAll("engineers") || [],
+  };
+  const { fromDate, toDate, filter, engineers: selectedEng } = queries;
+  const searchQuery = search.toString();
+
+  // engineers
+  const { data: users } = useAppSelector((state) => state.users);
+  const engineers = users?.filter((i) => i.role === "engineer");
 
   // react query
   const {
@@ -33,13 +51,9 @@ export default function JobEntryList() {
     isSuccess,
     refetch,
   } = useQuery<JobType[]>({
-    queryKey: ["jobList", fromDate, toDate],
+    queryKey: ["jobList", searchQuery],
     queryFn: async () => {
-      const from = fromDate || moment(new Date()).format("YYYY-MM-DD");
-      const to = moment(toDate || new Date())
-        .add(1, "days")
-        .format("YYYY-MM-DD");
-      const res = await jobApi.branchList(from, to);
+      const res = await jobApi.branchList(searchQuery);
       return res.data;
     },
   });
@@ -52,7 +66,9 @@ export default function JobEntryList() {
         <ReportDateInputs
           isLoading={isLoading}
           value={{ from: fromDate, to: toDate }}
-          onSearch={({ from, to }) => setSearch({ fromDate: from, toDate: to })}
+          onSearch={({ from, to }) =>
+            setSearch({ ...queries, fromDate: from, toDate: to })
+          }
         />
         <div className="flex items-center gap-4">
           <Button startIcon={<Refresh />} onClick={() => refetch()}>
@@ -62,11 +78,59 @@ export default function JobEntryList() {
           <Button
             startIcon={<Download />}
             disabled={!data || data?.length <= 0}
+            onClick={() => exportExcel("jobEntry", "job entry report")}
           >
             Download
           </Button>
         </div>
       </div>
+
+      <div className="mb-5 flex gap-5 items-center">
+        <FormControl sx={{ minWidth: 150 }} size="small">
+          <InputLabel id="demo-select-small-label">Filter by</InputLabel>
+          <Select
+            labelId="demo-select-small-label"
+            id="demo-select-small"
+            value={filter}
+            label="Filter by"
+            disabled={isLoading}
+            onChange={(e) => {
+              const val = e.target.value;
+              setSearch({
+                ...queries,
+                filter: val,
+                engineers: val !== "engineer" ? [] : selectedEng,
+              });
+            }}
+          >
+            <MenuItem value="">All</MenuItem>
+            <MenuItem value="branch">Branch</MenuItem>
+            <MenuItem value="engineer">Engineers</MenuItem>
+          </Select>
+        </FormControl>
+        {filter === "engineer" && (
+          <Autocomplete
+            multiple
+            options={engineers}
+            size="small"
+            onChange={(_, val) => {
+              const ids = val?.map((i) => i?.id);
+              setSearch({ ...queries, engineers: ids });
+            }}
+            value={engineers.filter((i) => selectedEng.includes(i.id))}
+            noOptionsText="No engineers matched"
+            getOptionLabel={(opt) => opt.name}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Select Engineers"
+                sx={{ width: "auto", minWidth: 200 }}
+              />
+            )}
+          />
+        )}
+      </div>
+
       <Typography variant="body2" className="!text-yellow-700">
         Showing today's report by default
       </Typography>
@@ -85,10 +149,11 @@ export default function JobEntryList() {
         <div className="!mt-5">
           {Array.isArray(data) && data?.length > 0 ? (
             <TableContainer component={Paper}>
-              <Table>
+              <Table id="jobEntry">
                 <TableHead>
                   <TableRow>
                     <TableCell>#</TableCell>
+                    <TableCell>Created At</TableCell>
                     <TableCell>Job No</TableCell>
                     <TableCell>Assets No</TableCell>
                     <TableCell>Sell From</TableCell>
@@ -101,6 +166,9 @@ export default function JobEntryList() {
                   {data?.map((item, index) => (
                     <TableRow key={item.id}>
                       <TableCell>{index + 1}</TableCell>
+                      <TableCell>
+                        {moment(item.createdAt).format("ll")}
+                      </TableCell>
                       <TableCell>{item.jobNo}</TableCell>
                       <TableCell>{item.imeiNo}</TableCell>
                       <TableCell>
