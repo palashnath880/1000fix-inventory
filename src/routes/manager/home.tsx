@@ -1,3 +1,9 @@
+import { Header } from "../../components/shared/TopBar";
+
 export default function Home() {
-  return <div>H</div>;
+  return (
+    <div>
+      <Header title="Home" />
+    </div>
+  );
 }
