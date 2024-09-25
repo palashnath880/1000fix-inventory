@@ -93,6 +93,13 @@ export type BranchStockType = {
   branch: Branch;
 };
 
+export type EnStockType = {
+  avgPrice: number;
+  quantity: number;
+  skuCode: SKUCode;
+  engineer: User;
+};
+
 export type JobItemType = {
   price: number;
   quantity: number;

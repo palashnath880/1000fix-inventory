@@ -28,6 +28,20 @@ const engineerStockApi = {
     instance.get(
       `/engineer-stock/report/${userId}?type=${type}&fromDate=${from}&toDate=${to}`
     ),
+  getEnStock: ({
+    category,
+    id,
+    model,
+    skuId,
+  }: {
+    id: string;
+    model: string;
+    skuId: string;
+    category: string;
+  }) =>
+    instance.get(
+      `/engineer-stock/${id}?model=${model}&category=${category}&sku=${skuId}`
+    ),
 };
 
 export default engineerStockApi;
