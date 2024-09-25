@@ -84,6 +84,15 @@ export type OwnStockType = {
   skuCode: SKUCode;
 };
 
+export type BranchStockType = {
+  avgPrice: number;
+  quantity: number;
+  defective: number;
+  faulty: number;
+  skuCode: SKUCode;
+  branch: Branch;
+};
+
 export type JobItemType = {
   price: number;
   quantity: number;

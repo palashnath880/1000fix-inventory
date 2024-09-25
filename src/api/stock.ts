@@ -9,6 +9,10 @@ const stockApi = {
     instance.get(
       `/stock/own?category=${category}&model=${model}&skuCode=${skuCode}`
     ),
+  branchStock: (branch: string, cate: string, model: string, sku: string) =>
+    instance.get(
+      `/stock/branch?branch=${branch}&category=${cate}&model=${model}&skuCode=${sku}`
+    ),
   getBySkuId: (skuId: string) =>
     instance.get(`/stock/get-by-sku?skuCodeId=${skuId}`),
   transfer: (data: any) => instance.post(`/stock/transfer`, data),

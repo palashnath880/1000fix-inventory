@@ -20,6 +20,7 @@ import Challan from "./challan";
 import ChallanPdf from "./challan-pdf";
 import ReturnStock from "./engineers/return-stock";
 import PurchaseReturn from "./purchase-return";
+import BranchStock from "./stock/branch-stock";
 
 const ManagerRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAppSelector((state) => state.auth);
@@ -83,6 +84,10 @@ const routes: RouteObject[] = [
       {
         path: "/stock-return",
         element: <StockReturn />,
+      },
+      {
+        path: "/branch-stock",
+        element: <BranchStock />,
       },
       {
         path: "/job-entry",

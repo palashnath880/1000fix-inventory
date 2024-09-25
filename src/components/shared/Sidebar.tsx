@@ -10,6 +10,7 @@ import {
   EditNote,
   Group,
   Home,
+  HomeWork,
   Inventory,
   KeyboardReturn,
   LocalShipping,
@@ -91,6 +92,12 @@ export default function Sidebar() {
           name: "Own Stock",
           Icon: Inventory,
           show: true,
+        },
+        {
+          href: "/branch-stock",
+          name: "Branch Stock",
+          Icon: HomeWork,
+          show: user?.role === "admin",
         },
         {
           href: "/stock-transfer",
