@@ -18,6 +18,7 @@ import { useQuery } from "@tanstack/react-query";
 import jobApi from "../../../api/job";
 import moment from "moment";
 import { JobType } from "../../../types/types";
+import { Header } from "../../../components/shared/TopBar";
 
 export default function JobEntryList() {
   // search queries
@@ -34,41 +35,41 @@ export default function JobEntryList() {
   } = useQuery<JobType[]>({
     queryKey: ["jobList", fromDate, toDate],
     queryFn: async () => {
-      if (!fromDate || !toDate) {
-        return [];
-      }
-      const addOne = moment(toDate).add("days", 1).format("YYYY-MM-DD");
-      const res = await jobApi.branchList(fromDate, addOne);
+      const from = fromDate || moment(new Date()).format("YYYY-MM-DD");
+      const to = moment(toDate || new Date())
+        .add(1, "days")
+        .format("YYYY-MM-DD");
+      const res = await jobApi.branchList(from, to);
       return res.data;
     },
   });
 
   return (
     <div className="pb-10">
-      <div className="flex items-center justify-between">
+      <Header title="Job Entry Report" />
+
+      <div className="flex items-center justify-between mb-4">
         <ReportDateInputs
           isLoading={isLoading}
           value={{ from: fromDate, to: toDate }}
           onSearch={({ from, to }) => setSearch({ fromDate: from, toDate: to })}
         />
         <div className="flex items-center gap-4">
-          {fromDate && toDate && (
-            <Button
-              variant="outlined"
-              startIcon={<Refresh />}
-              onClick={() => refetch()}
-            >
-              Refresh
-            </Button>
-          )}
+          <Button startIcon={<Refresh />} onClick={() => refetch()}>
+            Refresh
+          </Button>
 
-          {data?.length > 0 && (
-            <Button variant="contained" startIcon={<Download />}>
-              Download
-            </Button>
-          )}
+          <Button
+            startIcon={<Download />}
+            disabled={!data || data?.length <= 0}
+          >
+            Download
+          </Button>
         </div>
       </div>
+      <Typography variant="body2" className="!text-yellow-700">
+        Showing today's report by default
+      </Typography>
 
       {/* loader */}
       {isLoading && (
