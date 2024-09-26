@@ -25,6 +25,7 @@ import { Refresh } from "@mui/icons-material";
 import { useState } from "react";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import scrapApi from "../../api/scrap";
 
 type SelectType = { skuId: string; quantity: number; max: number };
 
@@ -139,7 +140,7 @@ export default function Defective() {
         await stockApi.sendDefective({ list });
         toast.success(`Defective send successfully`);
       } else if (type === "scrap") {
-        await stockApi.moveToScrap({ list });
+        await scrapApi.create({ items: list, from: "defective" });
         toast.success(`Moved to scrap done.`);
       }
       setSelected([]);
