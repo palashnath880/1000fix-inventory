@@ -126,12 +126,6 @@ export default function Sidebar() {
           Icon: Approval,
           show: role === "admin",
         },
-        {
-          href: "/stock/faulty",
-          name: "Faulty Stock",
-          Icon: Approval,
-          show: role === "admin",
-        },
       ],
     },
     {
