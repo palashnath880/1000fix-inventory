@@ -39,12 +39,18 @@ const styles = StyleSheet.create({
   },
 });
 
+const width = 100 / 3;
+
 const TableRow = ({
   quantity,
   serial,
-  skuCode,
+  category,
+  item,
+  model,
 }: {
-  skuCode: string;
+  category: string;
+  model: string;
+  item: string;
   serial: number;
   quantity: number;
 }) => {
@@ -62,17 +68,42 @@ const TableRow = ({
       >
         {serial}
       </Text>
-      <Text
-        style={{
-          flex: 1,
-          borderBottom: "0.3px solid black",
-          fontSize: 10,
-          paddingHorizontal: 10,
-          paddingVertical: 10,
-        }}
-      >
-        {skuCode}
-      </Text>
+      <View style={{ flex: 1, flexDirection: "row" }}>
+        <Text
+          style={{
+            width: `${width}%`,
+            borderBottom: "0.3px solid black",
+            fontSize: 10,
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+          }}
+        >
+          {category}
+        </Text>
+        <Text
+          style={{
+            width: `${width}%`,
+            borderBottom: "0.3px solid black",
+            fontSize: 10,
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+          }}
+        >
+          {model}
+        </Text>
+        <Text
+          style={{
+            width: `${width}%`,
+            borderBottom: "0.3px solid black",
+            fontSize: 10,
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+          }}
+        >
+          {item}
+        </Text>
+      </View>
+
       <Text
         style={{
           width: 80,
@@ -104,17 +135,41 @@ const TableHeader = () => {
       >
         Serial
       </Text>
-      <Text
-        style={{
-          flex: 1,
-          borderBottom: "0.3px solid black",
-          fontSize: 10,
-          paddingHorizontal: 10,
-          paddingVertical: 10,
-        }}
-      >
-        SKU Code
-      </Text>
+      <View style={{ flex: 1, flexDirection: "row" }}>
+        <Text
+          style={{
+            borderBottom: "0.3px solid black",
+            fontSize: 10,
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+            width: `${width}%`,
+          }}
+        >
+          Category
+        </Text>
+        <Text
+          style={{
+            borderBottom: "0.3px solid black",
+            fontSize: 10,
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+            width: `${width}%`,
+          }}
+        >
+          Model
+        </Text>
+        <Text
+          style={{
+            borderBottom: "0.3px solid black",
+            fontSize: 10,
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+            width: `${width}%`,
+          }}
+        >
+          Item
+        </Text>
+      </View>
       <Text
         style={{
           width: 80,
@@ -236,7 +291,9 @@ export default function ChallanPdf() {
                       challan.items?.map((item, index) => (
                         <TableRow
                           key={index}
-                          skuCode={item.skuCode.name}
+                          category={item.skuCode.item.model.category.name}
+                          model={item.skuCode.item.model.name}
+                          item={item.skuCode.item.name}
                           serial={index + 1}
                           quantity={item.quantity}
                         />
