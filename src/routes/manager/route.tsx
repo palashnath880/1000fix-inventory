@@ -22,6 +22,7 @@ import ReturnStock from "./engineers/return-stock";
 import PurchaseReturn from "./purchase-return";
 import BranchStock from "./stock/branch-stock";
 import EngineerStock from "./engineers/engineer-stock";
+import TransferReport from "./engineers/transfer-report";
 
 const ManagerRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAppSelector((state) => state.auth);
@@ -128,6 +129,10 @@ const routes: RouteObject[] = [
           {
             path: "stock",
             element: <EngineerStock />,
+          },
+          {
+            path: "transfer-report",
+            element: <TransferReport />,
           },
         ],
       },

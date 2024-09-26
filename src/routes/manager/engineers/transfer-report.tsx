@@ -1,9 +1,202 @@
+import { useSearchParams } from "react-router-dom";
 import { Header } from "../../../components/shared/TopBar";
+import { useAppSelector } from "../../../hooks";
+import {
+  Alert,
+  Autocomplete,
+  Button,
+  Checkbox,
+  Chip,
+  FormControlLabel,
+  Paper,
+  Skeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+} from "@mui/material";
+import ReportDateInputs from "../../../components/shared/ReportDateInputs";
+import { useQuery } from "@tanstack/react-query";
+import { Download, Refresh } from "@mui/icons-material";
+import { EngineerStock } from "../../../types/types";
+import moment from "moment";
+import engineerStockApi from "../../../api/engineerStock";
+import { exportExcel } from "../../../utils/utils";
 
 export default function TransferReport() {
+  // engineers
+  const { data: users } = useAppSelector((state) => state.users);
+  const engineers = users.filter((i) => i.role === "engineer");
+  const { user } = useAppSelector((state) => state.auth);
+  const role = user?.role;
+
+  // search queries
+  const [search, setSearch] = useSearchParams();
+  const queries = {
+    engineer: search.get("engineer") || "",
+    fromDate: search.get("fromDate") || "",
+    toDate: search.get("toDate") || "",
+    admin: search.get("admin") || "",
+  };
+  const { engineer, fromDate, toDate, admin } = queries;
+
+  // react query
+  const { data, isLoading, isSuccess, refetch } = useQuery<EngineerStock[]>({
+    queryKey: ["transferReport", fromDate, toDate, engineer],
+    queryFn: async () => {
+      const from = fromDate || moment(new Date()).format("YYYY-MM-DD");
+      const to = moment(toDate || new Date())
+        .add(1, "days")
+        .format("YYYY-MM-DD");
+
+      const res = await engineerStockApi.trReportByBr(engineer, from, to);
+      return res.data;
+    },
+  });
+
+  // filter report when select my branch report
+  const reports: EngineerStock[] = data
+    ? admin === "yes"
+      ? data.filter((i) => i.branchId === user?.branch?.id)
+      : data
+    : [];
+
   return (
     <div className="pb-10">
       <Header title="Engineer Stock Transfer Report" />
+
+      <div className="flex justify-between items-center pb-3">
+        <div className="flex items-center gap-4">
+          <Autocomplete
+            options={engineers}
+            size="small"
+            sx={{ width: 240 }}
+            value={engineers.find((i) => i.id === engineer)}
+            getOptionLabel={(opt) => opt.name}
+            isOptionEqualToValue={(opt, val) => opt.id === val.id}
+            onChange={(_, val) =>
+              setSearch({ ...queries, engineer: val?.id || "" })
+            }
+            renderInput={(params) => (
+              <TextField {...params} label="Select engineer" />
+            )}
+          />
+          <ReportDateInputs
+            value={{ from: fromDate, to: toDate }}
+            onSearch={({ from, to }) =>
+              setSearch({ ...queries, fromDate: from, toDate: to })
+            }
+          />
+        </div>
+        <div className="flex items-center gap-4">
+          <Button startIcon={<Refresh />} onClick={() => refetch()}>
+            Refresh
+          </Button>
+          <Button
+            startIcon={<Download />}
+            onClick={() =>
+              exportExcel("transferReport", "Engineer transfer report")
+            }
+            disabled={!data || data?.length <= 0}
+          >
+            Download
+          </Button>
+        </div>
+      </div>
+
+      <Typography variant="body2" className="!text-yellow-700">
+        Showing today's report by default
+      </Typography>
+
+      {/* is user is admin */}
+      {role === "admin" && (
+        <FormControlLabel
+          className="mt-2"
+          checked={admin === "yes"}
+          control={
+            <Checkbox
+              onChange={(e) =>
+                setSearch({ ...queries, admin: e.target.checked ? "yes" : "" })
+              }
+            />
+          }
+          label="My branch report"
+        />
+      )}
+
+      {/* loader */}
+      {isLoading && (
+        <div>
+          {[...Array(7)].map((_, index) => (
+            <Skeleton key={index} height={70} />
+          ))}
+        </div>
+      )}
+
+      {isSuccess && (
+        <div className="mt-5">
+          {Array.isArray(reports) && reports?.length > 0 ? (
+            <TableContainer>
+              <Table id="transferReport">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>#</TableCell>
+                    <TableCell>Send Date</TableCell>
+                    {role === "admin" && <TableCell>Branch</TableCell>}
+                    <TableCell>Engineer</TableCell>
+                    <TableCell>Category</TableCell>
+                    <TableCell>Model</TableCell>
+                    <TableCell>Item</TableCell>
+                    <TableCell>UOM</TableCell>
+                    <TableCell>SKU </TableCell>
+                    <TableCell>Quantity </TableCell>
+                    <TableCell>Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data?.map((item, index) => (
+                    <TableRow key={item.id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>
+                        {moment(item.createdAt).format("lll")}
+                      </TableCell>
+                      {role === "admin" && (
+                        <TableCell>{item.branch?.name}</TableCell>
+                      )}
+                      <TableCell>{item.engineer?.name}</TableCell>
+                      <TableCell>
+                        {item?.skuCode?.item?.model?.category?.name}
+                      </TableCell>
+                      <TableCell>{item?.skuCode?.item?.model?.name}</TableCell>
+                      <TableCell>{item?.skuCode?.item?.name}</TableCell>
+                      <TableCell>{item?.skuCode?.item?.uom}</TableCell>
+                      <TableCell>{item?.skuCode?.name}</TableCell>
+                      <TableCell>{item?.quantity}</TableCell>
+                      <TableCell>
+                        {item?.status === "open" ? (
+                          <Chip color="warning" label="Open" />
+                        ) : item.status === "received" ? (
+                          <Chip color="success" label="Received" />
+                        ) : (
+                          <Chip color="error" label="Rejected" />
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Paper>
+              <Alert severity="error">No data available</Alert>
+            </Paper>
+          )}
+        </div>
+      )}
     </div>
   );
 }

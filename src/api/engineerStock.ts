@@ -4,6 +4,11 @@ import instance from "./config";
 const engineerStockApi = {
   transfer: (data: { list: any[] }) =>
     instance.post(`/engineer-stock/transfer`, data),
+  // transfer report by branch
+  trReportByBr: (id: string, from: string, to: string) =>
+    instance.get(
+      `/engineer-stock/transfer/?userId=${id}&fromDate=${from}&toDate=${to}`
+    ),
   receive: () => instance.get(`/engineer-stock/receive`),
   update: (id: string, data: any) =>
     instance.put(`/engineer-stock/${id}`, data),
