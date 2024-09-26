@@ -128,3 +128,14 @@ export type Challan = {
   items: { skuCode: SKUCode; quantity: number }[];
   createdAt: string;
 };
+
+export type Scrap = {
+  id: string;
+  createdAt: string;
+  challanNo: string;
+  from: "defective" | "faulty";
+  items: {
+    skuCode: SKUCode;
+    quantity: number;
+  }[];
+};

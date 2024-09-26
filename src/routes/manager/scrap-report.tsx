@@ -18,7 +18,7 @@ import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
 import reportApi from "../../api/report";
-import { StockType } from "../../types/types";
+import { Scrap } from "../../types/types";
 import { exportExcel } from "../../utils/utils";
 
 export default function ScrapReport() {
@@ -28,7 +28,7 @@ export default function ScrapReport() {
   const toDate = search.get("toDate") || "";
 
   // react query
-  const { data, isLoading, isSuccess, refetch } = useQuery<StockType[]>({
+  const { data, isLoading, isSuccess, refetch } = useQuery<Scrap[]>({
     queryKey: ["challans", fromDate, toDate],
     queryFn: async () => {
       const from = fromDate
@@ -94,12 +94,9 @@ export default function ScrapReport() {
                   <TableRow>
                     <TableCell>#</TableCell>
                     <TableCell>Created At</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Model</TableCell>
-                    <TableCell>Item</TableCell>
-                    <TableCell>UOM</TableCell>
-                    <TableCell>SKU</TableCell>
-                    <TableCell>Quantity</TableCell>
+                    <TableCell>Challan No</TableCell>
+                    <TableCell>From</TableCell>
+                    <TableCell>Items</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -109,14 +106,15 @@ export default function ScrapReport() {
                       <TableCell>
                         {moment(item.createdAt).format("ll")}
                       </TableCell>
+                      <TableCell>{item.challanNo}</TableCell>
+                      <TableCell>{item.from}</TableCell>
                       <TableCell>
-                        {item.skuCode?.item?.model?.category?.name}
+                        {item?.items?.map((i, ind) => (
+                          <Typography key={ind}>
+                            SKU: {i.skuCode.name} <br /> Quantity: {i.quantity}
+                          </Typography>
+                        ))}
                       </TableCell>
-                      <TableCell>{item.skuCode?.item?.model?.name}</TableCell>
-                      <TableCell>{item.skuCode?.item?.name}</TableCell>
-                      <TableCell>{item.skuCode?.item?.uom}</TableCell>
-                      <TableCell>{item.skuCode?.name}</TableCell>
-                      <TableCell>{item.quantity}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
