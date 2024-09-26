@@ -140,7 +140,7 @@ export default function TransferReport() {
       {isSuccess && (
         <div className="mt-5">
           {Array.isArray(reports) && reports?.length > 0 ? (
-            <TableContainer>
+            <TableContainer component={Paper}>
               <Table id="transferReport">
                 <TableHead>
                   <TableRow>
