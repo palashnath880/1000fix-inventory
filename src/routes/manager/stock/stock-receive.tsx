@@ -14,6 +14,7 @@ import {
 import { StockType } from "../../../types/types";
 import moment from "moment";
 import StockReceiveActions from "../../../components/stock/StockReceiveActions";
+import { Header } from "../../../components/shared/TopBar";
 
 export default function StockReceive() {
   // react query
@@ -27,6 +28,8 @@ export default function StockReceive() {
 
   return (
     <div className="pb-10">
+      <Header title="Stock Receive" />
+
       {/* loader */}
       {isLoading && (
         <div>
