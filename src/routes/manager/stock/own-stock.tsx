@@ -19,9 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import stockApi from "../../../api/stock";
 import { Download, Refresh } from "@mui/icons-material";
 import { OwnStockType } from "../../../types/types";
-import TransferToStock from "../../../components/stock/TransferToStock";
 import { Header } from "../../../components/shared/TopBar";
-import TransferToScrap from "../../../components/stock/TransferToScrap";
 
 export default function OwnStock() {
   // react redux
@@ -180,14 +178,6 @@ export default function OwnStock() {
                       <TableCell>{item?.quantity}</TableCell>
                       <TableCell>{item?.defective}</TableCell>
                       <TableCell>{item?.faulty}</TableCell>
-                      <TableCell>
-                        {item?.faulty > 0 && (
-                          <>
-                            <TransferToStock stock={item} refetch={refetch} />
-                            <TransferToScrap stock={item} refetch={refetch} />
-                          </>
-                        )}
-                      </TableCell>
                     </TableRow>
                   ))}
                   <TableRow>
