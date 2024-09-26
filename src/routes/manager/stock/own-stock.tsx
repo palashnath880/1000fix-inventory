@@ -182,9 +182,11 @@ export default function OwnStock() {
                       <TableCell>{item?.faulty}</TableCell>
                       <TableCell>
                         {item?.faulty > 0 && (
-                          <TransferToStock stock={item} refetch={refetch} />
+                          <>
+                            <TransferToStock stock={item} refetch={refetch} />
+                            <TransferToScrap stock={item} refetch={refetch} />
+                          </>
                         )}
-                        <TransferToScrap stock={item} refetch={refetch} />
                       </TableCell>
                     </TableRow>
                   ))}
