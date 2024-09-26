@@ -64,6 +64,7 @@ export default function ScrapReport() {
           <Button
             startIcon={<Download />}
             onClick={() => exportExcel("scrapReport", "scrap report")}
+            disabled={!data || data.length <= 0}
           >
             Download
           </Button>
