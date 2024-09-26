@@ -24,6 +24,7 @@ import BranchStock from "./stock/branch-stock";
 import EngineerStock from "./engineers/engineer-stock";
 import TransferReport from "./engineers/transfer-report";
 import ScrapReport from "./scrap-report";
+import AdminFaulty from "./stock/faulty-stock";
 
 const ManagerRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAppSelector((state) => state.auth);
@@ -38,6 +39,13 @@ const ManagerRoute = ({ children }: { children: React.ReactNode }) => {
 
   return <></>;
 };
+
+const stockRoutes: RouteObject[] = [
+  {
+    path: "faulty",
+    element: <AdminFaulty />,
+  },
+];
 
 const routes: RouteObject[] = [
   {
@@ -63,6 +71,10 @@ const routes: RouteObject[] = [
       {
         path: "/users",
         element: <Users />,
+      },
+      {
+        path: "/stock",
+        children: stockRoutes,
       },
       {
         path: "/stock-entry",
