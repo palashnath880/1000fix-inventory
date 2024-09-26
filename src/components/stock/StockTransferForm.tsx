@@ -70,7 +70,6 @@ export default function StockTransferForm() {
     const list = [...transferList, data];
     setTransferList(list);
     setOwnStock(null);
-    setValue("branch", null);
     setValue("skuCode", null);
     reset();
   };

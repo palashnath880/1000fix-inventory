@@ -5,6 +5,7 @@ import {
   Article,
   Assessment,
   AssignmentReturn,
+  AutoDelete,
   BarChart,
   CallReceived,
   Cancel,
@@ -174,6 +175,12 @@ export default function Sidebar() {
       href: "/purchase-return",
       name: "Purchase Return",
       Icon: AssignmentReturn,
+      show: user?.role === "admin",
+    },
+    {
+      href: "/scrap-report",
+      name: "Scrap Report",
+      Icon: AutoDelete,
       show: user?.role === "admin",
     },
     {
