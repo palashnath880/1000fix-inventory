@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  font-family: "Nunito Sans", sans-serif !important;
+}
+
 /* engineer receive stock card table css */
 table.engineerReceiveStock tr td {
   padding-top: 10px !important;

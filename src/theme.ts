@@ -3,6 +3,7 @@ import { createTheme } from "@mui/material/styles";
 const myTheme = createTheme({
   typography: {
     fontSize: 13,
+    fontFamily: `"Nunito Sans", sans-serif`,
   },
   components: {
     MuiButton: {

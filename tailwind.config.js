@@ -6,6 +6,7 @@ export default {
       colors: {
         primary: "#031C30",
       },
+      fontFamily: `"Nunito Sans", sans-serif`,
     },
   },
   plugins: [],
