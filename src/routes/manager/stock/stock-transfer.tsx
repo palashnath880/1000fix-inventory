@@ -20,6 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import stockApi from "../../../api/stock";
 import { StockType } from "../../../types/types";
 import { Header } from "../../../components/shared/TopBar";
+import { exportExcel } from "../../../utils/utils";
 
 export default function StockTransfer() {
   // search queries
@@ -36,11 +37,12 @@ export default function StockTransfer() {
   } = useQuery<StockType[]>({
     queryKey: ["entryList", fromDate, toDate],
     queryFn: async () => {
-      if (!fromDate || !toDate) {
-        return [];
-      }
-      const addOne = moment(toDate).add("days", 1).format("YYYY-MM-DD");
-      const res = await stockApi.transferList(fromDate, addOne);
+      const from = fromDate || moment(new Date()).format("YYYY-MM-DD");
+      const to = moment(toDate || new Date())
+        .add(1, "days")
+        .format("YYYY-MM-DD");
+
+      const res = await stockApi.transferList(from, to);
       return res.data;
     },
   });
@@ -74,11 +76,15 @@ export default function StockTransfer() {
               variant="contained"
               startIcon={<Download />}
               disabled={!data || data?.length <= 0}
+              onClick={() => exportExcel("transferReport", "transfer report")}
             >
               Download as Excel
             </Button>
           </div>
         </div>
+        <Typography variant="body2" className="!text-yellow-700">
+          Showing today's report by default
+        </Typography>
 
         {/* loader */}
         {isLoading && (
@@ -90,12 +96,12 @@ export default function StockTransfer() {
         )}
 
         {/* display data */}
-        {isSuccess && fromDate && toDate && (
+        {isSuccess && (
           <>
             {data?.length > 0 ? (
               <div className="mt-5">
                 <TableContainer component={Paper}>
-                  <Table>
+                  <Table id="transferReport">
                     <TableHead>
                       <TableRow>
                         <TableCell>#</TableCell>
