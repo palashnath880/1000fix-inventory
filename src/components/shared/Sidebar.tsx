@@ -22,7 +22,7 @@ import {
   SvgIconComponent,
   WorkHistory,
 } from "@mui/icons-material";
-import { Typography, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 
 import {
   Menu,
@@ -30,8 +30,9 @@ import {
   Sidebar as ReactSidebar,
   SubMenu,
 } from "react-pro-sidebar";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAppSelector } from "../../hooks";
+import logo from "../../assets/logo.png";
 
 type Menu = {
   href?: string;
@@ -220,22 +221,9 @@ export default function Sidebar() {
     <aside className="h-full bg-primary px-4 py-5 overflow-y-auto overflow-x-hidden w-[260px] scrollbar">
       <div className="h-full flex flex-col gap-5">
         <div className="flex flex-col items-center">
-          <img className="" src="" />
-          <Typography variant="h5" color="secondary">
-            {user?.branch?.name}
-          </Typography>
-          <Typography variant="body1" color="secondary" className="opacity-70">
-            {user?.branch?.address}
-          </Typography>
-          {user?.branch?.isHead && (
-            <Typography
-              variant="body1"
-              color="secondary"
-              className="opacity-90 !italic"
-            >
-              Head Branch
-            </Typography>
-          )}
+          <Link to={"/"} title="1000fix Inventory">
+            <img className="!w-36 !h-auto" src={logo} />
+          </Link>
         </div>
         <div className="flex-1">
           <ReactSidebar
