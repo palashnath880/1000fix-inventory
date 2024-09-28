@@ -7,7 +7,9 @@ import { useQuery } from "@tanstack/react-query";
 import stockApi from "../../../api/stock";
 import {
   Alert,
+  Badge,
   Button,
+  IconButton,
   Paper,
   Skeleton,
   Table,
@@ -18,9 +20,24 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { Refresh } from "@mui/icons-material";
+import { Refresh, ShoppingCart } from "@mui/icons-material";
+import OwnFaultyActions from "../../../components/manager/OwnFaultyActions";
+import { useState } from "react";
+import OwnFaultyDrawer from "../../../components/manager/OwnFaultyDrawer";
+
+type StateType = {
+  skuCodeId: string;
+  quantity: number;
+  maxQuantity: number;
+  error: boolean;
+};
 
 export default function OwnFaultyStock() {
+  // states
+  const [good, setGood] = useState<StateType[]>([]);
+  const [scrap, setScrap] = useState<StateType[]>([]);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   // react redux
   const { data: categories } = useAppSelector((state) => state.categories);
   const { data: models } = useAppSelector((state) => state.models);
@@ -44,7 +61,7 @@ export default function OwnFaultyStock() {
     },
   });
 
-  const stock = data ? data.filter((i) => i.faulty > 0) : [];
+  const stock = data ? data.filter((i) => i.faulty <= 0) : [];
   const totalFaulty = stock?.reduce((total, val) => total + val.faulty, 0) || 0;
 
   return (
@@ -114,7 +131,21 @@ export default function OwnFaultyStock() {
                     <TableCell>UOM</TableCell>
                     <TableCell>SKU Code</TableCell>
                     <TableCell>Faulty</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell>
+                      <span className="flex justify-end">
+                        <IconButton
+                          color="success"
+                          onClick={() => setIsOpen(true)}
+                        >
+                          <Badge
+                            badgeContent={good.length + scrap.length || 0}
+                            color="primary"
+                          >
+                            <ShoppingCart fontSize="medium" />
+                          </Badge>
+                        </IconButton>
+                      </span>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -129,6 +160,15 @@ export default function OwnFaultyStock() {
                       <TableCell>{item?.skuCode?.item?.uom}</TableCell>
                       <TableCell>{item?.skuCode?.name}</TableCell>
                       <TableCell>{item?.faulty}</TableCell>
+                      <TableCell>
+                        <OwnFaultyActions
+                          stock={item}
+                          good={good}
+                          scrap={scrap}
+                          setScrap={setScrap}
+                          setGood={setGood}
+                        />
+                      </TableCell>
                     </TableRow>
                   ))}
                   <TableRow>
@@ -150,6 +190,9 @@ export default function OwnFaultyStock() {
           )}
         </div>
       )}
+
+      {/* drawer */}
+      <OwnFaultyDrawer close={() => setIsOpen(false)} open={isOpen} />
     </>
   );
 }
