@@ -61,7 +61,7 @@ export default function OwnFaultyStock() {
     },
   });
 
-  const stock = data ? data.filter((i) => i.faulty <= 0) : [];
+  const stock = data ? data.filter((i) => i.faulty > 0) : [];
   const totalFaulty = stock?.reduce((total, val) => total + val.faulty, 0) || 0;
 
   return (
