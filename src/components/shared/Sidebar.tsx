@@ -217,7 +217,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="h-full bg-primary px-4 py-5 overflow-y-auto overflow-x-hidden w-[260px]">
+    <aside className="h-full bg-primary px-4 py-5 overflow-y-auto overflow-x-hidden w-[260px] scrollbar">
       <div className="h-full flex flex-col gap-5">
         <div className="flex flex-col items-center">
           <img className="" src="" />
