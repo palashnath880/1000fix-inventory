@@ -134,8 +134,11 @@ export default function StockTransfer() {
                           <TableCell>{report?.skuCode?.item?.uom}</TableCell>
                           <TableCell>{report?.skuCode?.name}</TableCell>
                           <TableCell>{report.quantity}</TableCell>
-                          <TableCell className="!capitalize">
-                            {report.status}
+                          <TableCell>
+                            {report.status === "open" ||
+                            report.status === "approved"
+                              ? "Part in Transit"
+                              : report.status}
                           </TableCell>
                         </TableRow>
                       ))}
