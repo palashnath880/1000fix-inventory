@@ -14,6 +14,7 @@ export type Branch = {
   address: string;
   users: User[];
   createdAt: string;
+  isHead: boolean;
 };
 
 export type Category = {

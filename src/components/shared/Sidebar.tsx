@@ -224,6 +224,18 @@ export default function Sidebar() {
           <Typography variant="h5" color="secondary">
             {user?.branch?.name}
           </Typography>
+          <Typography variant="body1" color="secondary" className="opacity-70">
+            {user?.branch?.address}
+          </Typography>
+          {user?.branch?.isHead && (
+            <Typography
+              variant="body1"
+              color="secondary"
+              className="opacity-90 !italic"
+            >
+              Head Branch
+            </Typography>
+          )}
         </div>
         <div className="flex-1">
           <ReactSidebar
