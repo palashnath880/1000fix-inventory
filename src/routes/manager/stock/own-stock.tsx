@@ -20,6 +20,7 @@ import stockApi from "../../../api/stock";
 import { Download, Refresh } from "@mui/icons-material";
 import { OwnStockType } from "../../../types/types";
 import { Header } from "../../../components/shared/TopBar";
+import { exportExcel } from "../../../utils/utils";
 
 export default function OwnStock() {
   // react redux
@@ -143,11 +144,15 @@ export default function OwnStock() {
                 >
                   Refresh
                 </Button>
-                <Button startIcon={<Download />} variant="contained">
+                <Button
+                  startIcon={<Download />}
+                  variant="contained"
+                  onClick={() => exportExcel("ownStock", `Own stock`)}
+                >
                   Download
                 </Button>
               </div>
-              <Table>
+              <Table id="ownStock">
                 <TableHead>
                   <TableRow>
                     <TableCell>#</TableCell>
