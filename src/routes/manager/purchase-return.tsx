@@ -120,7 +120,7 @@ export default function PurchaseReturn() {
       <Header title="Purchase Return" />
 
       <div className="flex items-start gap-5">
-        {/* stock add form */}
+        {/* stock return form */}
         <div className="px-5 py-5 bg-slate-200 flex-1 rounded-md">
           <Typography variant="h6">Return Form</Typography>
           <Divider className="!my-2" />
@@ -194,9 +194,9 @@ export default function PurchaseReturn() {
           </form>
         </div>
 
-        {/* stock transfer list */}
+        {/* stock return list */}
         <div className="px-5 py-5 bg-slate-200 flex-1 rounded-md">
-          <Typography variant="h6">Stock Transfer List</Typography>
+          <Typography variant="h6">Purchase Return List</Typography>
           <Divider className="!my-2" />
           <div className="pt-3 flex flex-col gap-3">
             {list?.map((item, index) => (
