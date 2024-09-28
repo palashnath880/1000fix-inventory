@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Checkbox, FormControlLabel, TextField } from "@mui/material";
+import { Button, Popover, TextField } from "@mui/material";
 import { OwnStockType } from "../../types/types";
 import { toast } from "react-toastify";
+import PopupState, { bindPopover, bindTrigger } from "material-ui-popup-state";
+import { useState } from "react";
 
 type OwnFaultyActionsProps = {
   stock: OwnStockType;
@@ -28,106 +30,114 @@ export default function OwnFaultyActions({
   setGood,
   setScrap,
 }: OwnFaultyActionsProps) {
+  // states
+  const [quantity, setQuantity] = useState<number>(0);
+
   // check is has in the good and scrap
   const isGood = good.find((i) => i.skuCodeId === stock.skuCode.id);
   const isScrap = scrap.find((i) => i.skuCodeId === stock.skuCode.id);
-  const isError =
-    isGood && isScrap && isGood.quantity + isScrap.quantity > stock.quantity;
-  const quantity = (isGood?.quantity || 0) + (isScrap?.quantity || 0); // available quantity
+  const available = (isGood?.quantity || 0) + (isScrap?.quantity || 0); // available quantity
 
-  // on checked
-  const onChecked = (type: "good" | "scrap", checked: boolean) => {
-    if (checked) {
-      const obj = {
-        skuCodeId: stock.skuCode.id,
-        maxQuantity: stock.quantity,
-        quantity: 1,
-      };
-      if (type === "scrap") {
-        setScrap((state: any) => [...state, obj]);
-      } else {
-        setGood((state: any) => [...state, obj]);
-      }
-    } else {
-      if (type === "good") {
-        setGood((state: any) =>
-          state.filter((i: any) => i.skuCodeId !== stock.skuCode.id)
-        );
-      } else {
-        setScrap((state: any) =>
-          state.filter((i: any) => i.skuCodeId !== stock.skuCode.id)
-        );
-      }
-    }
-  };
-
-  // quantity changed
-  const onChange = (type: "good" | "scrap", value: string) => {
-    if (quantity < parseInt(value)) {
+  const addToGood = () => {
+    if (quantity > 0) {
       toast.error(`Invalid quantity`);
       return;
     }
-    if (type === "good") {
-      const list = good.map((i) =>
-        i.skuCodeId && stock.skuCode.id
-          ? { ...i, quantity: parseInt(value) }
-          : i
-      );
-      setGood(list);
-    } else {
-      const list = scrap.map((i) =>
-        i.skuCodeId && stock.skuCode.id
-          ? { ...i, quantity: parseInt(value) }
-          : i
-      );
-      setScrap(list);
+    setGood();
+  };
+
+  const addToScrap = () => {
+    if (quantity > 0) {
+      toast.error(`Invalid quantity`);
+      return;
     }
+    setScrap();
   };
 
   return (
-    <span className="flex justify-end gap-2">
-      <span className="flex items-center justify-end">
-        <FormControlLabel
-          label="Good"
-          checked={!!isGood}
-          control={
-            <Checkbox
-              size="small"
-              onChange={(e) => onChecked("good", e.target.checked)}
-            />
-          }
-        />
-        <TextField
-          type="number"
-          size="small"
-          sx={{ width: 80 }}
-          value={(isGood && isGood.quantity) || 0}
-          disabled={!isGood}
-          onChange={(e) => onChange("good", e.target.value)}
-          error={isGood ? isError || isGood.error : false}
-        />
-      </span>
-      <span className="flex items-center justify-end">
-        <FormControlLabel
-          label="Scrap"
-          checked={!!isScrap}
-          control={
-            <Checkbox
-              size="small"
-              onChange={(e) => onChecked("scrap", e.target.checked)}
-            />
-          }
-        />
-        <TextField
-          type="number"
-          size="small"
-          sx={{ width: 80 }}
-          value={(isScrap && isScrap.quantity) || 0}
-          disabled={!isScrap}
-          onChange={(e) => onChange("scrap", e.target.value)}
-          error={isScrap ? isError || isScrap.error : false}
-        />
-      </span>
+    <span className="flex flex-col gap-2 !w-max ml-auto">
+      <PopupState variant="popover">
+        {(popup) => (
+          <>
+            <Button color="success" {...bindTrigger(popup)}>
+              Add To Good List
+            </Button>
+            <Popover
+              {...bindPopover(popup)}
+              slotProps={{ paper: { className: "px-4 py-4" } }}
+            >
+              <div className="flex flex-col">
+                <TextField
+                  type="number"
+                  placeholder="Quantity"
+                  size="small"
+                  label="Quantity"
+                  value={quantity}
+                  onChange={(e) => setQuantity(parseInt(e.target.value))}
+                />
+                <div className="flex items-center gap-3 mt-4">
+                  <Button
+                    color="success"
+                    className="!flex-1"
+                    onClick={addToGood}
+                    disabled={quantity <= 0 || available <= 0}
+                  >
+                    Add
+                  </Button>
+                  <Button
+                    color="error"
+                    className="!flex-1"
+                    onClick={popup.close}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            </Popover>
+          </>
+        )}
+      </PopupState>
+      <PopupState variant="popover">
+        {(popup) => (
+          <>
+            <Button color="error" {...bindTrigger(popup)}>
+              Add To Scrap List
+            </Button>
+            <Popover
+              {...bindPopover(popup)}
+              slotProps={{ paper: { className: "px-4 py-4" } }}
+            >
+              <div className="flex flex-col">
+                <TextField
+                  type="number"
+                  placeholder="Quantity"
+                  size="small"
+                  label="Quantity"
+                  value={quantity}
+                  onChange={(e) => setQuantity(parseInt(e.target.value))}
+                />
+                <div className="flex items-center gap-3 mt-4">
+                  <Button
+                    color="success"
+                    className="!flex-1"
+                    disabled={quantity <= 0 || available <= 0}
+                    onClick={addToScrap}
+                  >
+                    Add
+                  </Button>
+                  <Button
+                    color="error"
+                    className="!flex-1"
+                    onClick={popup.close}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            </Popover>
+          </>
+        )}
+      </PopupState>
     </span>
   );
 }
