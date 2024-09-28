@@ -72,6 +72,19 @@ const AddItem = ({
                     !!fields?.find((i) => i?.skuCode?.id === opt.id)
                   }
                   isOptionEqualToValue={(opt, val) => opt.id === val.id}
+                  renderOption={(props, option, state) => (
+                    <li
+                      {...props}
+                      key={state.index}
+                      className={`${props.className} !flex !flex-col !items-start`}
+                    >
+                      <span className="!font-semibold">{option.name}</span>
+                      <span className="flex gap-4">
+                        <small>Item: {option?.item?.name}</small>
+                        <small>UOM: {option?.item?.uom}</small>
+                      </span>
+                    </li>
+                  )}
                   renderInput={(params) => (
                     <TextField {...params} placeholder="Select SKU Code" />
                   )}
