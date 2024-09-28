@@ -51,7 +51,7 @@ export default function StockTransfer() {
 
       <StockTransferForm />
 
-      {/* stock entry list */}
+      {/* stock transfer list */}
       <div className="mt-8 pb-10">
         <Typography variant="h6">Stock Transfer Report</Typography>
         <div className="flex justify-between items-center mt-5 mb-3">
@@ -107,6 +107,7 @@ export default function StockTransfer() {
                         <TableCell>UOM</TableCell>
                         <TableCell>SKU Code</TableCell>
                         <TableCell>Quantity</TableCell>
+                        <TableCell>Status</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -127,6 +128,9 @@ export default function StockTransfer() {
                           <TableCell>{report?.skuCode?.item?.uom}</TableCell>
                           <TableCell>{report?.skuCode?.name}</TableCell>
                           <TableCell>{report.quantity}</TableCell>
+                          <TableCell className="!capitalize">
+                            {report.status}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
