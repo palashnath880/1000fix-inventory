@@ -1,5 +1,6 @@
 import { Header } from "../../../components/shared/TopBar";
 import ReturnStock from "../../../components/manager/ReturnStock";
+import ReturnStockReport from "../../../components/manager/ReturnStockReport";
 
 export default function FaultyStock() {
   return (
@@ -7,6 +8,8 @@ export default function FaultyStock() {
       <Header title="Engineer faulty stock" />
 
       <ReturnStock type="faulty" />
+
+      <ReturnStockReport type="faulty" />
     </div>
   );
 }
