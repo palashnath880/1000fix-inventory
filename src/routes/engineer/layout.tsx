@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useEffect, useState } from "react";
 import {
+  Article,
   BarChart,
   Home,
   Https,
@@ -65,6 +66,11 @@ export default function Layout() {
       href: "/engineer/faulty-return",
       name: "Faulty Return",
       Icon: KeyboardReturn,
+    },
+    {
+      href: "/engineer/defective-report",
+      name: "Defective Report",
+      Icon: Article,
     },
   ];
 

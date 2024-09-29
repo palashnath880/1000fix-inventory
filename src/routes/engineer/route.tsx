@@ -7,6 +7,7 @@ import StockReturn from "./stock-return";
 import FaultyReturn from "./faulty-return";
 import React from "react";
 import { useAppSelector } from "../../hooks";
+import DefectiveReport from "./defective-report";
 
 const EngineerRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAppSelector((state) => state.auth);
@@ -49,6 +50,10 @@ const engineerRoutes: RouteObject[] = [
       {
         path: "/engineer/faulty-return",
         element: <FaultyReturn />,
+      },
+      {
+        path: "/engineer/defective-report",
+        element: <DefectiveReport />,
       },
     ],
   },

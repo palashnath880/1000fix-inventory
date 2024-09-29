@@ -26,6 +26,8 @@ const engineerStockApi = {
     instance.post(`/engineer-stock/faulty-return`, data),
   sendDefective: (data: { skuCodeId: string; quantity: number }) =>
     instance.post(`/engineer-stock/defective`, data),
+  deReport: (from: string, to: string) =>
+    instance.get(`/engineer-stock/defective?fromDate=${from}&toDate=${to}`),
   report: (
     type: "return" | "faulty",
     userId: string,
