@@ -124,7 +124,12 @@ export default function OwnStock() {
                           <TableCell>{stock?.quantity}</TableCell>
                           <TableCell>{stock?.defective || 0}</TableCell>
                           <TableCell>
-                            <DefectiveReturn refetch={refetch} stock={stock} />
+                            {stock?.defective > 0 && (
+                              <DefectiveReturn
+                                refetch={refetch}
+                                stock={stock}
+                              />
+                            )}
                           </TableCell>
                         </TableRow>
                       ))}
