@@ -146,6 +146,17 @@ export default function PurchaseReturn() {
                     isOptionEqualToValue={(opt, val) => opt.id === val.id}
                     getOptionLabel={(opt) => opt.name}
                     noOptionsText="No sku matched"
+                    renderOption={(props, opt) => (
+                      <li
+                        {...props}
+                        className={`${props.className} flex flex-col !items-start`}
+                      >
+                        {opt.name}
+                        <small>
+                          <b>Item:</b> {opt.item?.name}
+                        </small>
+                      </li>
+                    )}
                     renderInput={(params) => (
                       <TextField
                         {...params}
