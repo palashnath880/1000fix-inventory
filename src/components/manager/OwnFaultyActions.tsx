@@ -10,14 +10,10 @@ type OwnFaultyActionsProps = {
   good: {
     skuCodeId: string;
     quantity: number;
-    maxQuantity: number;
-    error: boolean;
   }[];
   scrap: {
     skuCodeId: string;
     quantity: number;
-    maxQuantity: number;
-    error: boolean;
   }[];
   setScrap: any;
   setGood: any;
@@ -36,22 +32,45 @@ export default function OwnFaultyActions({
   // check is has in the good and scrap
   const isGood = good.find((i) => i.skuCodeId === stock.skuCode.id);
   const isScrap = scrap.find((i) => i.skuCodeId === stock.skuCode.id);
-  const available = (isGood?.quantity || 0) + (isScrap?.quantity || 0); // available quantity
+  const available =
+    stock.faulty - (isGood?.quantity || 0) + (isScrap?.quantity || 0); // available quantity
 
-  const addToGood = () => {
-    if (quantity > 0) {
+  // add item to good stock list
+  const addToGood = (close: () => void) => {
+    if (available < quantity) {
       toast.error(`Invalid quantity`);
       return;
     }
-    setGood();
+    const goodList = [...good].map((i) => {
+      return i.skuCodeId === stock.skuCode.id
+        ? { ...i, quantity: i.quantity + quantity }
+        : i;
+    });
+    if (goodList.find((i) => i.skuCodeId !== stock.skuCode.id)) {
+      goodList.push({ skuCodeId: stock.skuCode.id, quantity: quantity });
+    }
+    setGood(goodList);
+    setQuantity(0);
+    close();
   };
 
-  const addToScrap = () => {
-    if (quantity > 0) {
+  // add item to scrap list
+  const addToScrap = (close: () => void) => {
+    if (available < quantity) {
       toast.error(`Invalid quantity`);
       return;
     }
-    setScrap();
+    const scrapList = [...scrap].map((i) => {
+      return i.skuCodeId === stock.skuCode.id
+        ? { ...i, quantity: i.quantity + quantity }
+        : i;
+    });
+    if (scrapList.find((i) => i.skuCodeId !== stock.skuCode.id)) {
+      scrapList.push({ skuCodeId: stock.skuCode.id, quantity: quantity });
+    }
+    setScrap(scrapList);
+    setQuantity(0);
+    close();
   };
 
   return (
@@ -79,8 +98,8 @@ export default function OwnFaultyActions({
                   <Button
                     color="success"
                     className="!flex-1"
-                    onClick={addToGood}
-                    disabled={quantity <= 0 || available <= 0}
+                    onClick={() => addToGood(popup.close)}
+                    disabled={!quantity || quantity <= 0 || available <= 0}
                   >
                     Add
                   </Button>
@@ -120,8 +139,8 @@ export default function OwnFaultyActions({
                   <Button
                     color="success"
                     className="!flex-1"
-                    disabled={quantity <= 0 || available <= 0}
-                    onClick={addToScrap}
+                    disabled={!quantity || quantity <= 0 || available <= 0}
+                    onClick={() => addToScrap(popup.close)}
                   >
                     Add
                   </Button>
