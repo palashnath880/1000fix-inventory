@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Popover, TextField } from "@mui/material";
-import { OwnStockType } from "../../types/types";
+import { OwnStockType, SKUCode } from "../../types/types";
 import { toast } from "react-toastify";
 import PopupState, { bindPopover, bindTrigger } from "material-ui-popup-state";
 import { useState } from "react";
@@ -10,10 +10,12 @@ type OwnFaultyActionsProps = {
   good: {
     skuCodeId: string;
     quantity: number;
+    skuCode: SKUCode;
   }[];
   scrap: {
     skuCodeId: string;
     quantity: number;
+    skuCode: SKUCode;
   }[];
   setScrap: any;
   setGood: any;
@@ -33,7 +35,7 @@ export default function OwnFaultyActions({
   const isGood = good.find((i) => i.skuCodeId === stock.skuCode.id);
   const isScrap = scrap.find((i) => i.skuCodeId === stock.skuCode.id);
   const available =
-    stock.faulty - (isGood?.quantity || 0) + (isScrap?.quantity || 0); // available quantity
+    stock.faulty - ((isGood?.quantity || 0) + (isScrap?.quantity || 0)); // available quantity
 
   // add item to good stock list
   const addToGood = (close: () => void) => {
@@ -46,9 +48,14 @@ export default function OwnFaultyActions({
         ? { ...i, quantity: i.quantity + quantity }
         : i;
     });
-    if (goodList.find((i) => i.skuCodeId !== stock.skuCode.id)) {
-      goodList.push({ skuCodeId: stock.skuCode.id, quantity: quantity });
+    if (!goodList.find((i) => i.skuCodeId === stock.skuCode.id)) {
+      goodList.push({
+        skuCodeId: stock.skuCode.id,
+        quantity: quantity,
+        skuCode: stock.skuCode,
+      });
     }
+    console.log(goodList);
     setGood(goodList);
     setQuantity(0);
     close();
@@ -65,8 +72,12 @@ export default function OwnFaultyActions({
         ? { ...i, quantity: i.quantity + quantity }
         : i;
     });
-    if (scrapList.find((i) => i.skuCodeId !== stock.skuCode.id)) {
-      scrapList.push({ skuCodeId: stock.skuCode.id, quantity: quantity });
+    if (!scrapList.find((i) => i.skuCodeId === stock.skuCode.id)) {
+      scrapList.push({
+        skuCodeId: stock.skuCode.id,
+        quantity: quantity,
+        skuCode: stock.skuCode,
+      });
     }
     setScrap(scrapList);
     setQuantity(0);
@@ -92,6 +103,7 @@ export default function OwnFaultyActions({
                   size="small"
                   label="Quantity"
                   value={quantity}
+                  disabled={available <= 0}
                   onChange={(e) => setQuantity(parseInt(e.target.value))}
                 />
                 <div className="flex items-center gap-3 mt-4">
@@ -133,6 +145,7 @@ export default function OwnFaultyActions({
                   size="small"
                   label="Quantity"
                   value={quantity}
+                  disabled={available <= 0}
                   onChange={(e) => setQuantity(parseInt(e.target.value))}
                 />
                 <div className="flex items-center gap-3 mt-4">
