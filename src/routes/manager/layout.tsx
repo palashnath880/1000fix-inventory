@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useAppDispatch } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchSku } from "../../features/skuCodeSlice";
 import { fetchUsers } from "../../features/userSlice";
 import { fetchItems } from "../../features/itemSlice";
@@ -9,8 +9,10 @@ import TopBar from "../../components/shared/TopBar";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../../components/shared/Sidebar";
 import { fetchBranch } from "../../features/branchSlice";
+import { Alert, Paper, Typography } from "@mui/material";
 
 export default function Layout() {
+  const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   // fetch users
@@ -30,7 +32,19 @@ export default function Layout() {
         <div className="flex-1 overflow-y-auto">
           <TopBar />
           <div className="px-5 py-5">
-            <Outlet />
+            {!user?.branch ? (
+              <div className="mt-5 flex justify-center">
+                <Paper>
+                  <Alert severity="warning">
+                    <Typography variant="body1">
+                      You are not selected for any branch, please contact admin.
+                    </Typography>
+                  </Alert>
+                </Paper>
+              </div>
+            ) : (
+              <Outlet />
+            )}
           </div>
         </div>
       </div>
