@@ -20,6 +20,7 @@ import { Download, Refresh } from "@mui/icons-material";
 import engineerStockApi from "../../api/engineerStock";
 import { OwnStockType } from "../../types/types";
 import { exportExcel } from "../../utils/utils";
+import DefectiveReturn from "../../components/engineer/DefectiveReturn";
 
 export default function OwnStock() {
   // search params
@@ -39,6 +40,7 @@ export default function OwnStock() {
   });
 
   const total = data?.reduce((total, i) => total + i.quantity, 0);
+  const defective = data?.reduce((total, i) => total + i.defective, 0);
 
   return (
     <div className="pb-10">
@@ -101,6 +103,8 @@ export default function OwnStock() {
                         <TableCell>SKU Code</TableCell>
                         <TableCell>AVG Price</TableCell>
                         <TableCell>Good</TableCell>
+                        <TableCell>Defective</TableCell>
+                        <TableCell></TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -118,7 +122,10 @@ export default function OwnStock() {
                           <TableCell>{stock?.skuCode?.name}</TableCell>
                           <TableCell>{stock?.avgPrice}</TableCell>
                           <TableCell>{stock?.quantity}</TableCell>
-                          <TableCell>{stock?.defective}</TableCell>
+                          <TableCell>{stock?.defective || 0}</TableCell>
+                          <TableCell>
+                            <DefectiveReturn refetch={refetch} stock={stock} />
+                          </TableCell>
                         </TableRow>
                       ))}
                       <TableRow>
@@ -126,6 +133,8 @@ export default function OwnStock() {
                           <b>Total</b>
                         </TableCell>
                         <TableCell>{total || 0}</TableCell>
+                        <TableCell>{defective || 0}</TableCell>
+                        <TableCell></TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>

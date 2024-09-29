@@ -24,6 +24,8 @@ const engineerStockApi = {
     instance.get(`/engineer-stock/return-stock/${type}`),
   faultyReturn: (data: any) =>
     instance.post(`/engineer-stock/faulty-return`, data),
+  sendDefective: (data: { skuCodeId: string; quantity: number }) =>
+    instance.post(`/engineer-stock/defective`, data),
   report: (
     type: "return" | "faulty",
     userId: string,
