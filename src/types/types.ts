@@ -97,6 +97,7 @@ export type BranchStockType = {
 export type EnStockType = {
   avgPrice: number;
   quantity: number;
+  defective: number;
   skuCode: SKUCode;
   engineer: User;
 };

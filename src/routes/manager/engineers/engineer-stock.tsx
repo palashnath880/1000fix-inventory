@@ -53,6 +53,11 @@ export default function EngineerStock() {
     },
   });
 
+  const total = data ? data.reduce((total, val) => total + val.quantity, 0) : 0;
+  const defective = data
+    ? data.reduce((total, val) => total + val.defective, 0)
+    : 0;
+
   return (
     <>
       <Header title="Engineer Stock" />
@@ -132,6 +137,7 @@ export default function EngineerStock() {
                     <TableCell>SKU Code</TableCell>
                     <TableCell>AVG Price</TableCell>
                     <TableCell>Quantity</TableCell>
+                    <TableCell>Defective</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -148,13 +154,15 @@ export default function EngineerStock() {
                       <TableCell>{item?.skuCode?.name}</TableCell>
                       <TableCell>{item?.avgPrice}</TableCell>
                       <TableCell>{item?.quantity}</TableCell>
+                      <TableCell>{item?.defective}</TableCell>
                     </TableRow>
                   ))}
                   <TableRow>
-                    <TableCell colSpan={7} className="!text-end">
+                    <TableCell colSpan={8} className="!text-end">
                       <b>Total</b>
                     </TableCell>
-                    {/* <TableCell>{totalGood || 0}</TableCell> */}
+                    <TableCell>{total || 0}</TableCell>
+                    <TableCell>{defective || 0}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
