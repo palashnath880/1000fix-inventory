@@ -2,7 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { Header } from "../../../components/shared/TopBar";
 import SelectInput from "../../../components/stock/SelectInput";
 import { useAppSelector } from "../../../hooks";
-import { OwnStockType } from "../../../types/types";
+import { OwnStockType, SKUCode } from "../../../types/types";
 import { useQuery } from "@tanstack/react-query";
 import stockApi from "../../../api/stock";
 import {
@@ -28,8 +28,7 @@ import OwnFaultyDrawer from "../../../components/manager/OwnFaultyDrawer";
 type StateType = {
   skuCodeId: string;
   quantity: number;
-  maxQuantity: number;
-  error: boolean;
+  skuCode: SKUCode;
 };
 
 export default function OwnFaultyStock() {
@@ -192,7 +191,23 @@ export default function OwnFaultyStock() {
       )}
 
       {/* drawer */}
-      <OwnFaultyDrawer close={() => setIsOpen(false)} open={isOpen} />
+      <OwnFaultyDrawer
+        close={() => setIsOpen(false)}
+        open={isOpen}
+        good={good}
+        scrap={scrap}
+        clear={({ type }) => (type === "good" ? setGood([]) : setScrap([]))}
+        remove={({ skuId, type }) => {
+          if (type === "good") {
+            const list = good.filter((i) => i.skuCodeId !== skuId);
+            setGood(list);
+          } else if (type === "scrap") {
+            const list = scrap.filter((i) => i.skuCodeId !== skuId);
+            setScrap(list);
+          }
+        }}
+        refetch={refetch}
+      />
     </>
   );
 }

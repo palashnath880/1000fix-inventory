@@ -31,7 +31,7 @@ const stockApi = {
     instance.post(`/stock/scrap`, data),
   sendDefective: (data: { list: { quantity: number; skuCodeId: string }[] }) =>
     instance.post(`/stock/defective-send`, data),
-  moveToStock: (data: { skuCodeId: string; quantity: number }) =>
+  moveToStock: (data: { list: { skuCodeId: string; quantity: number }[] }) =>
     instance.post(`/stock/faulty-to-good`, data),
   purchaseReturn: (data: any) => instance.post(`/stock/purchase-return`, data),
   puReturnList: (from: string, to: string) =>
