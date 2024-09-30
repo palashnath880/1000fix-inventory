@@ -51,6 +51,15 @@ const engineerStockApi = {
     instance.get(
       `/engineer-stock/${id}?model=${model}&category=${category}&sku=${skuId}`
     ),
+  cscDefective: () => instance.get(`/engineer-stock/csc/defective`),
+  cscDeActions: (
+    id: string,
+    data: { note: string | null; status: "received" | "rejected" }
+  ) => instance.put(`/engineer-stock/csc/defective/${id}`, data),
+  cscDeReport: (from: string, to: string) =>
+    instance.get(
+      `/engineer-stock/csc/defective/report?fromDate=${from}&toDate=${to}`
+    ),
 };
 
 export default engineerStockApi;

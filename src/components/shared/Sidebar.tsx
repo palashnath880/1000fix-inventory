@@ -164,6 +164,12 @@ export default function Sidebar() {
           Icon: KeyboardReturn,
           show: true,
         },
+        {
+          href: "/engineer/Defective",
+          name: "Defective",
+          Icon: KeyboardReturn,
+          show: true,
+        },
       ],
     },
     {
