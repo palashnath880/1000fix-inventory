@@ -156,13 +156,15 @@ export default function OwnFaultyStock() {
                       <TableCell>{item?.skuCode?.name}</TableCell>
                       <TableCell>{item?.faulty}</TableCell>
                       <TableCell>
-                        <OwnFaultyActions
-                          stock={item}
-                          good={good}
-                          scrap={scrap}
-                          setScrap={setScrap}
-                          setGood={setGood}
-                        />
+                        {user?.role === "admin" && (
+                          <OwnFaultyActions
+                            stock={item}
+                            good={good}
+                            scrap={scrap}
+                            setScrap={setScrap}
+                            setGood={setGood}
+                          />
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}
