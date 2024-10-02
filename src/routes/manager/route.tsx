@@ -24,8 +24,9 @@ import BranchStock from "./stock/branch-stock";
 import EngineerStock from "./engineers/engineer-stock";
 import TransferReport from "./engineers/transfer-report";
 import ScrapReport from "./scrap-report";
-import OwnFaultyStock from "./stock/own-faulty-stock";
 import EnDefective from "./engineers/defective";
+import CSCFaultyStock from "./stock/faulty-stock";
+import FaultyReport from "./stock/faulty-report";
 
 const ManagerRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAppSelector((state) => state.auth);
@@ -44,7 +45,11 @@ const ManagerRoute = ({ children }: { children: React.ReactNode }) => {
 const stockRoutes: RouteObject[] = [
   {
     path: "faulty",
-    element: <OwnFaultyStock />,
+    element: <CSCFaultyStock />,
+  },
+  {
+    path: "faulty/report",
+    element: <FaultyReport />,
   },
 ];
 

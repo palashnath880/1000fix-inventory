@@ -129,7 +129,7 @@ export default function Sidebar() {
         },
         {
           href: "/stock/faulty",
-          name: "Own Faulty Stock",
+          name: "Faulty Stock",
           Icon: Approval,
           show: true,
         },

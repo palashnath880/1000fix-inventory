@@ -36,6 +36,15 @@ const stockApi = {
   purchaseReturn: (data: any) => instance.post(`/stock/purchase-return`, data),
   puReturnList: (from: string, to: string) =>
     instance.get(`/stock/purchase-return?fromDate=${from}&toDate=${to}`),
+  // faulty apis
+  sendFaulty: (data: any) => instance.post(`/stock/faulty`, data),
+  faultyReport: (from: string, to: string) =>
+    instance.get(`/stock/faulty/report?fromDate=${from}&toDate=${to}`),
+  faultyAction: (
+    id: string,
+    data: { status: "received" | "rejected"; note: string }
+  ) => instance.put(`/stock/faulty/${id}`, data),
+  cscSentFaulty: () => instance.get(`/stock/faulty`),
 };
 
 export default stockApi;
