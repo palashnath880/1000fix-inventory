@@ -40,6 +40,12 @@ export type StockTransferInputs = {
   stockToEn: boolean;
 };
 
+export type FaultyInputs = {
+  skuCode: SKUCode | null;
+  quantity: string;
+  note: string;
+};
+
 export type StockReturnInputs = {
   skuCode: SKUCode | null;
   quantity: string;

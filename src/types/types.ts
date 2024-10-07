@@ -141,3 +141,15 @@ export type Scrap = {
     quantity: number;
   }[];
 };
+
+export type FaultyItem = {
+  id: string;
+  createdAt: string;
+  status: "open" | "rejected" | "received";
+  quantity: number;
+  reason: string;
+  endReason: string;
+  branch: Branch | null;
+  skuCode: SKUCode | null;
+  endAt: string;
+};

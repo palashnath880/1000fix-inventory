@@ -4,6 +4,7 @@ import { useAppSelector } from "../../../hooks";
 import { Link } from "react-router-dom";
 import CSCSentFaulty from "../../../components/manager/CSCSentFaulty";
 import OwnFaultyStock from "../../../components/manager/OwnFaultyStock";
+import SendFaulty from "../../../components/manager/SendFaulty";
 
 export default function CSCFaultyStock() {
   // redux
@@ -17,6 +18,7 @@ export default function CSCFaultyStock() {
           <Link to={"report"}>
             <Button>Faulty Report</Button>
           </Link>
+          <SendFaulty />
         </div>
       </div>
 

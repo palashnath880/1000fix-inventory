@@ -17,12 +17,12 @@ import { ArrowBack, Download, Refresh } from "@mui/icons-material";
 import ReportDateInputs from "../../../components/shared/ReportDateInputs";
 import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import stockApi from "../../../api/stock";
 import moment from "moment";
 import { SkuTable } from "../../../components/shared/CustomTable";
-import { StockType } from "../../../types/types";
+import { FaultyItem } from "../../../types/types";
 import { useAppSelector } from "../../../hooks";
 import { exportExcel } from "../../../utils/utils";
+import faultyApi from "../../../api/faulty";
 
 export default function FaultyReport() {
   // redux
@@ -34,7 +34,7 @@ export default function FaultyReport() {
   const toDate = search.get("toDate") || "";
 
   // react - query
-  const { data, isSuccess, isLoading, refetch } = useQuery<StockType[]>({
+  const { data, isSuccess, isLoading, refetch } = useQuery<FaultyItem[]>({
     queryKey: ["faultyReport", fromDate, toDate],
     queryFn: async () => {
       const from = fromDate || moment(new Date()).format("YYYY-MM-DD");
@@ -42,7 +42,7 @@ export default function FaultyReport() {
         .add(1, "days")
         .format("YYYY-MM-DD");
 
-      const res = await stockApi.faultyReport(from, to);
+      const res = await faultyApi.report(from, to);
       return res.data;
     },
   });
@@ -116,13 +116,13 @@ export default function FaultyReport() {
                         {moment(item.createdAt).format("lll")}
                       </TableCell>
                       {user?.role === "admin" && (
-                        <TableCell>{item.sender?.name}</TableCell>
+                        <TableCell>{item.branch?.name}</TableCell>
                       )}
                       <SkuTable
                         skuCode={item.skuCode}
                         quantity={item.quantity}
                       />
-                      <TableCell>{item.note}</TableCell>
+                      <TableCell>{item.reason}</TableCell>
                       <TableCell>{item.status}</TableCell>
                       <TableCell>
                         {item.endAt && moment(item.endAt).format("lll")}

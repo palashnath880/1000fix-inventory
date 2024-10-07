@@ -17,14 +17,14 @@ import { useQuery } from "@tanstack/react-query";
 import { SkuTable } from "../shared/CustomTable";
 import { StockType } from "../../types/types";
 import moment from "moment";
-import stockApi from "../../api/stock";
+import faultyApi from "../../api/faulty";
 
 export default function CSCSentFaulty() {
   // react query
   const { data, isSuccess, isLoading, refetch } = useQuery<StockType[]>({
     queryKey: ["cscSentFaulty"],
     queryFn: async () => {
-      const res = await stockApi.cscSentFaulty();
+      const res = await faultyApi.headFaulty();
       return res.data;
     },
   });
