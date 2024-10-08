@@ -7,7 +7,7 @@ const faultyApi = {
     instance.get(`/faulty/report?fromDate=${from}&toDate=${to}`),
   faultyAction: (
     id: string,
-    data: { status: "received" | "rejected"; endReason: string }
+    data: { status: "received" | "rejected"; endReason?: string }
   ) => instance.put(`/faulty/${id}`, data),
   headFaulty: () => instance.get(`/faulty/head-faulty`),
 };

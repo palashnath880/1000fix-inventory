@@ -18,7 +18,7 @@ export default function CSCFaultyStock() {
           <Link to={"report"}>
             <Button>Faulty Report</Button>
           </Link>
-          <SendFaulty />
+          {user?.role !== "admin" && <SendFaulty />}
         </div>
       </div>
 

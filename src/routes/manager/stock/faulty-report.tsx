@@ -95,7 +95,7 @@ export default function FaultyReport() {
       {isSuccess && (
         <div className="mt-5">
           {Array.isArray(data) && data?.length > 0 ? (
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} elevation={3}>
               <Table id="faultyReport">
                 <TableHead>
                   <TableRow>
@@ -106,6 +106,7 @@ export default function FaultyReport() {
                     <TableCell>Reason</TableCell>
                     <TableCell>Status</TableCell>
                     <TableCell>End Date</TableCell>
+                    <TableCell>Reject Reason</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -127,6 +128,7 @@ export default function FaultyReport() {
                       <TableCell>
                         {item.endAt && moment(item.endAt).format("lll")}
                       </TableCell>
+                      <TableCell>{item?.endReason}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
