@@ -58,7 +58,11 @@ export default function JobEntry() {
   const { fields, append, remove } = useFieldArray({
     control,
     name: "items",
-    rules: { required: "Please at least select one item", minLength: 1 },
+    rules: {
+      required: "Please at least select one item",
+      minLength: 1,
+      maxLength: 10,
+    },
   });
   const items = fields.map((i) => ({
     price: i.price,
@@ -228,7 +232,10 @@ export default function JobEntry() {
                     variant="outlined"
                     startIcon={<Add />}
                     {...bindTrigger(addPopup)}
-                    disabled={sellFrom === "engineer" && !engineer}
+                    disabled={
+                      (sellFrom === "engineer" && !engineer) ||
+                      fields.length >= 10
+                    }
                   >
                     Add Item
                   </Button>
