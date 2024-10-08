@@ -10,6 +10,8 @@ const faultyApi = {
     data: { status: "received" | "rejected"; endReason?: string }
   ) => instance.put(`/faulty/${id}`, data),
   headFaulty: () => instance.get(`/faulty/head-faulty`),
+  ownFaulty: (skuId: string) =>
+    instance.get(`/faulty/own-stock?skuId=${skuId}`),
 };
 
 export default faultyApi;

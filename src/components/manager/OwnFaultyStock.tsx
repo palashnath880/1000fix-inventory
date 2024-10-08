@@ -2,7 +2,6 @@ import { useSearchParams } from "react-router-dom";
 import { useAppSelector } from "../../hooks";
 import { OwnStockType, SKUCode } from "../../types/types";
 import { useQuery } from "@tanstack/react-query";
-import stockApi from "../../api/stock";
 import {
   Alert,
   Autocomplete,
@@ -25,6 +24,8 @@ import { Refresh, ShoppingCart } from "@mui/icons-material";
 import OwnFaultyActions from "../../components/manager/OwnFaultyActions";
 import { useState } from "react";
 import OwnFaultyDrawer from "../../components/manager/OwnFaultyDrawer";
+import { SkuTable } from "../shared/CustomTable";
+import faultyApi from "../../api/faulty";
 
 type StateType = {
   skuCodeId: string;
@@ -48,9 +49,9 @@ export default function OwnFaultyStock() {
 
   // fetch stock
   const { data, isLoading, refetch, isSuccess } = useQuery<OwnStockType[]>({
-    queryKey: ["ownStock", skuCode],
+    queryKey: ["faultyStock", skuCode],
     queryFn: async () => {
-      const res = await stockApi.ownStock("", "", skuCode);
+      const res = await faultyApi.ownFaulty(skuCode);
       return res.data;
     },
   });
@@ -118,11 +119,7 @@ export default function OwnFaultyStock() {
                 <TableHead>
                   <TableRow>
                     <TableCell>#</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Model</TableCell>
-                    <TableCell>Item</TableCell>
-                    <TableCell>UOM</TableCell>
-                    <TableCell>SKU Code</TableCell>
+                    <SkuTable isHeader />
                     <TableCell>Faulty</TableCell>
                     <TableCell>
                       {user?.role === "admin" && (
@@ -147,13 +144,7 @@ export default function OwnFaultyStock() {
                   {stock?.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell>{index + 1}</TableCell>
-                      <TableCell>
-                        {item?.skuCode?.item?.model?.category?.name}
-                      </TableCell>
-                      <TableCell>{item?.skuCode?.item?.model?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.uom}</TableCell>
-                      <TableCell>{item?.skuCode?.name}</TableCell>
+                      <SkuTable skuCode={item.skuCode} />
                       <TableCell>{item?.faulty}</TableCell>
                       <TableCell>
                         {user?.role === "admin" && (
