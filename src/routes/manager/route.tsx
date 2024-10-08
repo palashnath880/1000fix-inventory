@@ -27,6 +27,7 @@ import ScrapReport from "./scrap-report";
 import EnDefective from "./engineers/defective";
 import CSCFaultyStock from "./stock/faulty-stock";
 import FaultyReport from "./stock/faulty-report";
+import JobEntrySummary from "./job/job-entry-summary";
 
 const ManagerRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAppSelector((state) => state.auth);
@@ -140,6 +141,10 @@ const routes: RouteObject[] = [
       {
         path: "/job-entry-list",
         element: <JobEntryList />,
+      },
+      {
+        path: "/job-entry-summary",
+        element: <JobEntrySummary />,
       },
       {
         path: "/defective",

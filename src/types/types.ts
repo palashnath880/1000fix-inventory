@@ -107,6 +107,7 @@ export type JobItemType = {
   quantity: number;
   skuCode: SKUCode;
   jobId: string;
+  createdAt: string;
 };
 
 export type JobType = {

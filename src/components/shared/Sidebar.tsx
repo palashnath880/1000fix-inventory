@@ -84,6 +84,12 @@ export default function Sidebar() {
           Icon: Assessment,
           show: true,
         },
+        {
+          href: "/job-entry-summary",
+          name: "Job Entry Summary",
+          Icon: Assessment,
+          show: user?.role === "admin",
+        },
       ],
     },
     {
