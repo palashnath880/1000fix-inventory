@@ -26,6 +26,7 @@ import { EngineerStock } from "../../../types/types";
 import moment from "moment";
 import engineerStockApi from "../../../api/engineerStock";
 import { exportExcel } from "../../../utils/utils";
+import { SkuTable } from "../../../components/shared/CustomTable";
 
 export default function TransferReport() {
   // engineers
@@ -148,12 +149,7 @@ export default function TransferReport() {
                     <TableCell>Send Date</TableCell>
                     {role === "admin" && <TableCell>Branch</TableCell>}
                     <TableCell>Engineer</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Model</TableCell>
-                    <TableCell>Item</TableCell>
-                    <TableCell>UOM</TableCell>
-                    <TableCell>SKU </TableCell>
-                    <TableCell>Quantity </TableCell>
+                    <SkuTable isHeader quantity />
                     <TableCell>Status</TableCell>
                   </TableRow>
                 </TableHead>
@@ -168,17 +164,13 @@ export default function TransferReport() {
                         <TableCell>{item.branch?.name}</TableCell>
                       )}
                       <TableCell>{item.engineer?.name}</TableCell>
-                      <TableCell>
-                        {item?.skuCode?.item?.model?.category?.name}
-                      </TableCell>
-                      <TableCell>{item?.skuCode?.item?.model?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.uom}</TableCell>
-                      <TableCell>{item?.skuCode?.name}</TableCell>
-                      <TableCell>{item?.quantity}</TableCell>
+                      <SkuTable
+                        skuCode={item.skuCode}
+                        quantity={item.quantity}
+                      />
                       <TableCell>
                         {item?.status === "open" ? (
-                          <Chip color="warning" label="Open" />
+                          <Chip color="warning" label="Part in Transit" />
                         ) : item.status === "received" ? (
                           <Chip color="success" label="Received" />
                         ) : (
