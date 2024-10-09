@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Autocomplete,
   Button,
   Checkbox,
   CircularProgress,
@@ -8,25 +7,22 @@ import {
   FormControlLabel,
   IconButton,
   Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import { Controller, SubmitHandler, useForm, useWatch } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useAppSelector } from "../../hooks";
 import { Add, Close, LocalShipping } from "@mui/icons-material";
 import { StockTransferInputs } from "../../types/reactHookForm.types";
 import { useEffect, useState } from "react";
-import { fetchBranch } from "../../features/branchSlice";
-import { OwnStockType } from "../../types/types";
+import { Branch, OwnStockType, User } from "../../types/types";
 import { toast } from "react-toastify";
 import stockApi from "../../api/stock";
 import { AxiosError } from "axios";
 import engineerStockApi from "../../api/engineerStock";
+import { SkuSelect } from "../shared/Inputs";
+import SelectInput from "./SelectInput";
 
 export default function StockTransferForm() {
   // states
@@ -34,15 +30,16 @@ export default function StockTransferForm() {
   const [stockLoading, setStockLoading] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [transferList, setTransferList] = useState<StockTransferInputs[]>([]);
+  const [stockToEn, setStockToEn] = useState<boolean>(false);
+  const [engineer, setEngineer] = useState<User | null>(null);
+  const [branch, setBranch] = useState<Branch | null>(null);
 
   // react redux
   const { data: branchesArr } = useAppSelector((state) => state.branches);
   const { data: users } = useAppSelector((state) => state.users);
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
   const { user } = useAppSelector((state) => state.auth);
   const branches = branchesArr.filter((i) => i.id !== user?.branch?.id);
   const engineers = users.filter((i) => i.role === "engineer");
-  const dispatch = useAppDispatch();
 
   // react hook form
   const {
@@ -52,22 +49,24 @@ export default function StockTransferForm() {
     formState: { errors },
     reset,
     setValue,
-    watch,
   } = useForm<StockTransferInputs>({ defaultValues: { stockToEn: false } });
-  const stockToEn = useWatch({
-    control: control,
-    name: "stockToEn",
-    defaultValue: false,
-  });
 
   // add to transfer list
   const addToList: SubmitHandler<StockTransferInputs> = (data) => {
+    console.log(data);
+
     if (!ownStock) return;
     if (ownStock?.quantity < parseFloat(data?.quantity)) {
       toast.error(`Invalid quantity`);
       return;
     }
-    const list = [...transferList, data];
+    if (stockToEn) data.engineer = engineer;
+    if (!stockToEn) data.branch = branch;
+    const list: StockTransferInputs[] = [
+      ...transferList,
+      { ...data, stockToEn },
+    ];
+
     setTransferList(list);
     setOwnStock(null);
     setValue("skuCode", null);
@@ -75,7 +74,7 @@ export default function StockTransferForm() {
   };
 
   // remove form the transfer list
-  const removeFromList = (index: number) => {
+  const remove = (index: number) => {
     const list = [...transferList];
     list.splice(index, 1);
     setTransferList(list);
@@ -160,192 +159,136 @@ export default function StockTransferForm() {
     }
   };
 
-  // fetch branches and get stock by sku id
+  // when stockToEn state is changed
   useEffect(() => {
-    // fetch branch
-    dispatch(fetchBranch(""));
-
-    watch((_, { name }) => {
-      if (name === "stockToEn") {
-        setValue("branch", null);
-        setValue("engineer", null);
-      }
-    });
-  }, [dispatch, watch]);
+    setEngineer(null);
+    setBranch(null);
+    reset();
+  }, [stockToEn]);
 
   return (
     <div className="flex items-start gap-5">
       {/* stock add form */}
-      <div className="px-5 py-5 bg-slate-200 flex-1 rounded-md">
+      <Paper elevation={3} className="px-5 py-5 !bg-slate-50 flex-1">
         <Typography variant="h6">Stock Transfer Form</Typography>
         <Divider className="!my-2" />
         <form onSubmit={handleSubmit(addToList)}>
           <div className="flex flex-col gap-4 pt-3">
-            <Controller
-              control={control}
-              name="stockToEn"
-              render={({ field: { value, onChange } }) => (
-                <FormControlLabel
-                  className="!w-max"
-                  checked={value}
-                  control={
-                    <Checkbox onChange={(e) => onChange(e.target.checked)} />
-                  }
-                  label="Transfer to engineer"
-                />
-              )}
+            {/* stock transfer to engineer checkbox */}
+            <FormControlLabel
+              className="!w-max"
+              checked={stockToEn}
+              control={
+                <Checkbox onChange={(e) => setStockToEn(e.target.checked)} />
+              }
+              label="Transfer to engineer"
             />
 
+            {/* select receiver */}
             {stockToEn ? (
-              <Controller
-                control={control}
-                name="engineer"
-                rules={{ required: true }}
-                render={({
-                  field: { value, onChange },
-                  fieldState: { error },
-                }) => (
-                  <Autocomplete
-                    options={engineers}
-                    value={value || null}
-                    onChange={(_, val) => onChange(val)}
-                    isOptionEqualToValue={(opt, val) => opt.id === val.id}
-                    getOptionLabel={(opt) => opt.name}
-                    noOptionsText="No engineer matched"
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Select engineer"
-                        placeholder="Select engineer"
-                        error={Boolean(error)}
-                      />
-                    )}
-                  />
-                )}
+              <SelectInput
+                loading={false}
+                options={engineers}
+                label="Select Engineer"
+                noOptionsText="No engineer matched"
+                value={engineer?.id || ""}
+                onChange={(val) =>
+                  setEngineer(engineers.find((i) => i.id === val) || null)
+                }
               />
             ) : (
-              <Controller
-                control={control}
-                name="branch"
-                rules={{ required: true }}
-                render={({
-                  field: { value, onChange },
-                  fieldState: { error },
-                }) => (
-                  <Autocomplete
-                    options={branches}
-                    value={value || null}
-                    onChange={(_, val) => onChange(val)}
-                    isOptionEqualToValue={(opt, val) => opt.id === val.id}
-                    getOptionLabel={(opt) => opt.name}
-                    noOptionsText="No branch matched"
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Select branch"
-                        placeholder="Select branch"
-                        error={Boolean(error)}
-                      />
-                    )}
-                  />
-                )}
+              <SelectInput
+                loading={false}
+                options={branches}
+                label="Select Branch"
+                noOptionsText="No branch matched"
+                value={branch?.id || ""}
+                onChange={(val) =>
+                  setBranch(branches.find((i) => i.id === val) || null)
+                }
               />
             )}
 
-            {/* sku code selector */}
-            <Controller
-              control={control}
-              name="skuCode"
-              rules={{ required: true }}
-              render={({
-                field: { value, onChange },
-                fieldState: { error },
-              }) => (
-                <Autocomplete
-                  disabled={stockLoading}
-                  options={skuCodes}
-                  value={value || null}
-                  onChange={(_, val) => {
-                    stockBySkuId(val?.id || "");
-                    onChange(val);
-                  }}
-                  isOptionEqualToValue={(opt, val) => opt.id === val.id}
-                  getOptionLabel={(opt) => opt.name}
-                  noOptionsText="No sku matched"
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Select SKU Code"
-                      placeholder="Select SKU Code"
+            {(engineer || branch) && (
+              <>
+                {/* sku code selector */}
+                <Controller
+                  control={control}
+                  name="skuCode"
+                  rules={{ required: true }}
+                  render={({
+                    field: { value, onChange },
+                    fieldState: { error },
+                  }) => (
+                    <SkuSelect
                       error={Boolean(error)}
+                      value={value}
+                      disabled={stockLoading}
+                      onChange={({ sku }) => {
+                        onChange(sku);
+                        stockBySkuId(sku?.id);
+                      }}
                     />
                   )}
                 />
-              )}
-            />
-            <Typography>
-              <b>Available Quantity:</b> {ownStock?.quantity || 0}
-            </Typography>
-            <Typography>
-              <b>Average Price:</b> {ownStock?.avgPrice || 0}
-            </Typography>
-            <TextField
-              fullWidth
-              type="text"
-              label="Quantity"
-              placeholder="Quantity"
-              error={Boolean(errors["quantity"])}
-              {...register("quantity", {
-                required: true,
-                pattern: /^\d+(\.\d+)?$/,
-                min: 1,
-              })}
-            />
+                <Typography>
+                  <b>Available Quantity:</b> {ownStock?.quantity || 0}
+                </Typography>
+                <Typography>
+                  <b>Average Price:</b> {ownStock?.avgPrice || 0}
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="text"
+                  label="Quantity"
+                  placeholder="Quantity"
+                  error={Boolean(errors["quantity"])}
+                  {...register("quantity", {
+                    required: true,
+                    pattern: /^\d+(\.\d+)?$/,
+                    min: 1,
+                  })}
+                />
 
-            <Button variant="contained" startIcon={<Add />} type="submit">
-              Add To Transfer List
-            </Button>
+                <Button variant="contained" startIcon={<Add />} type="submit">
+                  Add To Transfer List
+                </Button>
+              </>
+            )}
           </div>
         </form>
-      </div>
+      </Paper>
 
       {/* stock transfer list */}
-      <div className="px-5 py-5 bg-slate-200 flex-1 rounded-md">
+      <Paper className="px-5 py-5 !bg-slate-50 flex-1" elevation={3}>
         <Typography variant="h6">Stock Transfer List</Typography>
         <Divider className="!my-2" />
         <div className="pt-3 flex flex-col gap-3">
           {transferList?.map((list, index) => (
-            <Paper key={index}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell className="!font-bold">
-                      {list.stockToEn ? "Engineer" : "Branch"}
-                    </TableCell>
-                    <TableCell className="!font-bold">SKU Code</TableCell>
-                    <TableCell className="!font-bold">Quantity</TableCell>
-                    <TableCell>
-                      <IconButton
-                        color="error"
-                        title="remove from the entry list"
-                        onClick={() => removeFromList(index)}
-                      >
-                        <Close />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>
-                      {list.stockToEn ? list.engineer?.name : list.branch?.name}
-                    </TableCell>
-                    <TableCell>{list.skuCode?.name}</TableCell>
-                    <TableCell>{list.quantity}</TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+            <Paper key={index} className="!p-4 flex items-center">
+              <div className="flex flex-col flex-1">
+                <p className="!text-sm flex gap-2">
+                  <b className="w-20">
+                    {list.stockToEn ? "Engineer" : "Branch"}
+                  </b>
+                  <span className="flex-1">
+                    : {list.stockToEn ? list.engineer?.name : list.branch?.name}
+                  </span>
+                </p>
+                <p className="!text-sm flex gap-2">
+                  <b className="w-20">SKU Code</b>
+                  <span className="flex-1">: {list.skuCode?.name}</span>
+                </p>
+                <p className="!text-sm flex gap-2">
+                  <b className="w-20">Quantity</b>
+                  <span className="flex-1">: {list.quantity}</span>
+                </p>
+              </div>
+              <Tooltip title="Remove from the transfer list">
+                <IconButton color="error" onClick={() => remove(index)}>
+                  <Close />
+                </IconButton>
+              </Tooltip>
             </Paper>
           ))}
 
@@ -364,7 +307,7 @@ export default function StockTransferForm() {
             Transfer Stock
           </Button>
         </div>
-      </div>
+      </Paper>
     </div>
   );
 }
