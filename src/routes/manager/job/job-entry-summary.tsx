@@ -49,6 +49,9 @@ export default function JobEntrySummary() {
   const total = data
     ? data.reduce((total, item) => total + item.quantity, 0)
     : 0;
+  const price = data
+    ? data.reduce((total, item) => total + item.quantity * item.price, 0)
+    : 0;
 
   return (
     <div className="pb-10">
@@ -122,8 +125,11 @@ export default function JobEntrySummary() {
                     <TableCell colSpan={7} className="!text-end">
                       <b>Total</b>
                     </TableCell>
-                    <TableCell colSpan={2}>
+                    <TableCell>
                       <b>{total}</b>
+                    </TableCell>
+                    <TableCell>
+                      <b>{price}</b>
                     </TableCell>
                   </TableRow>
                 </TableBody>
