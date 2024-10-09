@@ -21,6 +21,7 @@ import stockApi from "../../../api/stock";
 import { StockType } from "../../../types/types";
 import { Header } from "../../../components/shared/TopBar";
 import { exportExcel } from "../../../utils/utils";
+import { SkuTable } from "../../../components/shared/CustomTable";
 
 export default function StockTransfer() {
   // search queries
@@ -106,13 +107,8 @@ export default function StockTransfer() {
                       <TableRow>
                         <TableCell>#</TableCell>
                         <TableCell>Send Date</TableCell>
-                        <TableCell>Branch</TableCell>
-                        <TableCell>Category</TableCell>
-                        <TableCell>Model</TableCell>
-                        <TableCell>Item</TableCell>
-                        <TableCell>UOM</TableCell>
-                        <TableCell>SKU Code</TableCell>
-                        <TableCell>Quantity</TableCell>
+                        <TableCell>CSC</TableCell>
+                        <SkuTable isHeader quantity />
                         <TableCell>Status</TableCell>
                       </TableRow>
                     </TableHead>
@@ -124,16 +120,10 @@ export default function StockTransfer() {
                             {moment(report.createdAt).format("lll")}
                           </TableCell>
                           <TableCell>{report?.receiver?.name}</TableCell>
-                          <TableCell>
-                            {report?.skuCode?.item?.model?.category?.name}
-                          </TableCell>
-                          <TableCell>
-                            {report?.skuCode?.item?.model?.name}
-                          </TableCell>
-                          <TableCell>{report?.skuCode?.item?.name}</TableCell>
-                          <TableCell>{report?.skuCode?.item?.uom}</TableCell>
-                          <TableCell>{report?.skuCode?.name}</TableCell>
-                          <TableCell>{report.quantity}</TableCell>
+                          <SkuTable
+                            skuCode={report.skuCode}
+                            quantity={report.quantity}
+                          />
                           <TableCell>
                             {report.status === "open" ||
                             report.status === "approved"

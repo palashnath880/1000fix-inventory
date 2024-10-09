@@ -49,7 +49,7 @@ export default function StockReceive() {
                   <TableRow>
                     <TableCell>#</TableCell>
                     <TableCell>Send Date</TableCell>
-                    <TableCell>Branch</TableCell>
+                    <TableCell>CSC</TableCell>
                     <TableCell>Category</TableCell>
                     <TableCell>Model</TableCell>
                     <TableCell>Item</TableCell>

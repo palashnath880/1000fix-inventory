@@ -62,7 +62,7 @@ export default function Users() {
                   <TableCell>Email</TableCell>
                   <TableCell>Username</TableCell>
                   <TableCell>Role</TableCell>
-                  <TableCell>Branch</TableCell>
+                  <TableCell>CSC</TableCell>
                   <TableCell>Registered At</TableCell>
                   <TableCell></TableCell>
                 </TableRow>

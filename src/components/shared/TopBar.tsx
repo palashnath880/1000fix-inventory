@@ -46,7 +46,7 @@ export default function TopBar() {
             {user?.branch?.isHead && (
               <Chip
                 color="success"
-                label="Head Branch"
+                label="HO CSC"
                 variant="outlined"
                 className="!py-0 !h-auto"
                 component={"span"}

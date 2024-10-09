@@ -105,7 +105,7 @@ export default function Sidebar() {
         },
         {
           href: "/branch-stock",
-          name: "Branch Stock",
+          name: "CSC Stock",
           Icon: HomeWork,
           show: user?.role === "admin",
         },
@@ -221,7 +221,7 @@ export default function Sidebar() {
         },
         {
           href: "/branch",
-          name: "Branch",
+          name: "CSC",
           Icon: Settings,
           show: true,
         },
