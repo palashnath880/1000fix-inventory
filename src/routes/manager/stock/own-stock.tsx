@@ -21,6 +21,7 @@ import { Download, Refresh } from "@mui/icons-material";
 import { OwnStockType } from "../../../types/types";
 import { Header } from "../../../components/shared/TopBar";
 import { exportExcel } from "../../../utils/utils";
+import { SkuTable } from "../../../components/shared/CustomTable";
 
 export default function OwnStock() {
   // react redux
@@ -156,11 +157,7 @@ export default function OwnStock() {
                 <TableHead>
                   <TableRow>
                     <TableCell>#</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Model</TableCell>
-                    <TableCell>Item</TableCell>
-                    <TableCell>UOM</TableCell>
-                    <TableCell>SKU Code</TableCell>
+                    <SkuTable isHeader />
                     <TableCell>AVG Price</TableCell>
                     <TableCell>Quantity</TableCell>
                     <TableCell>Defective</TableCell>
@@ -172,13 +169,7 @@ export default function OwnStock() {
                   {data?.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell>{index + 1}</TableCell>
-                      <TableCell>
-                        {item?.skuCode?.item?.model?.category?.name}
-                      </TableCell>
-                      <TableCell>{item?.skuCode?.item?.model?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.uom}</TableCell>
-                      <TableCell>{item?.skuCode?.name}</TableCell>
+                      <SkuTable skuCode={item.skuCode} />
                       <TableCell>{item?.avgPrice}</TableCell>
                       <TableCell>{item?.quantity}</TableCell>
                       <TableCell>{item?.defective}</TableCell>

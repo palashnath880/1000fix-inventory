@@ -19,6 +19,7 @@ import { BranchStockType } from "../../../types/types";
 import { Download, Refresh } from "@mui/icons-material";
 import stockApi from "../../../api/stock";
 import { exportExcel } from "../../../utils/utils";
+import { SkuTable } from "../../../components/shared/CustomTable";
 
 export default function BranchStock() {
   // react redux
@@ -129,11 +130,7 @@ export default function BranchStock() {
                   <TableRow>
                     <TableCell>#</TableCell>
                     <TableCell>Branch</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Model</TableCell>
-                    <TableCell>Item</TableCell>
-                    <TableCell>UOM</TableCell>
-                    <TableCell>SKU Code</TableCell>
+                    <SkuTable isHeader />
                     <TableCell>AVG Price</TableCell>
                     <TableCell>Quantity</TableCell>
                     <TableCell>Defective</TableCell>
@@ -145,13 +142,7 @@ export default function BranchStock() {
                     <TableRow key={index}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>{item.branch.name}</TableCell>
-                      <TableCell>
-                        {item?.skuCode?.item?.model?.category?.name}
-                      </TableCell>
-                      <TableCell>{item?.skuCode?.item?.model?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.uom}</TableCell>
-                      <TableCell>{item?.skuCode?.name}</TableCell>
+                      <SkuTable skuCode={item.skuCode} />
                       <TableCell>{item?.avgPrice}</TableCell>
                       <TableCell>{item?.quantity}</TableCell>
                       <TableCell>{item?.defective}</TableCell>
