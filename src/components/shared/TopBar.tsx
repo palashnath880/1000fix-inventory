@@ -41,6 +41,10 @@ export default function TopBar() {
     <div className="px-5 py-2 shadow-lg bg-slate-100">
       <div className="flex items-center justify-between gap-4">
         <div className="flex flex-col w-1/3">
+          <Typography className="!font-medium !text-lg">{title}</Typography>
+          {subtitle && <Typography variant="body2">{subtitle}</Typography>}
+        </div>
+        <div className="flex flex-col w-1/3 items-center">
           <Typography className="!font-semibold !text-base">
             {user?.branch?.name}{" "}
             {user?.branch?.isHead && (
@@ -57,10 +61,7 @@ export default function TopBar() {
             {user?.branch?.address}
           </Typography>
         </div>
-        <div className="flex flex-col w-1/3 items-center">
-          <Typography className="!font-medium !text-lg">{title}</Typography>
-          {subtitle && <Typography variant="body2">{subtitle}</Typography>}
-        </div>
+
         <div className="flex items-center justify-end gap-3 w-1/3">
           <PopupState variant="popover">
             {(popupState) => (
