@@ -179,7 +179,7 @@ export default function JobEntryList() {
                       <TableCell>
                         {item?.items?.map((_, subIndex) => (
                           <span key={subIndex} className="!block">
-                            <b>Part {subIndex + 1}</b> Item:{" "}
+                            <b>Item {subIndex + 1}</b> Item Name:{" "}
                             {_.skuCode?.item?.name} SKU Code: {_.skuCode?.name}{" "}
                             Price: {_.price} Quantity: {_.quantity};
                           </span>
