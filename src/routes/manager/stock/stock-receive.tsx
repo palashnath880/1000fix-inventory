@@ -15,6 +15,8 @@ import { StockType } from "../../../types/types";
 import moment from "moment";
 import StockReceiveActions from "../../../components/stock/StockReceiveActions";
 import { Header } from "../../../components/shared/TopBar";
+import { SkuTable } from "../../../components/shared/CustomTable";
+import CSCReceivedReport from "../../../components/stock/CSCReceivedReport";
 
 export default function StockReceive() {
   // react query
@@ -50,12 +52,7 @@ export default function StockReceive() {
                     <TableCell>#</TableCell>
                     <TableCell>Send Date</TableCell>
                     <TableCell>CSC</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Model</TableCell>
-                    <TableCell>Item</TableCell>
-                    <TableCell>UOM</TableCell>
-                    <TableCell>SKU Code</TableCell>
-                    <TableCell>Quantity</TableCell>
+                    <SkuTable isHeader quantity />
                     <TableCell></TableCell>
                   </TableRow>
                 </TableHead>
@@ -67,14 +64,10 @@ export default function StockReceive() {
                         {moment(item.createdAt).format("ll")}
                       </TableCell>
                       <TableCell>{item?.sender?.name}</TableCell>
-                      <TableCell>
-                        {item?.skuCode?.item?.model?.category?.name}
-                      </TableCell>
-                      <TableCell>{item?.skuCode?.item?.model?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.uom}</TableCell>
-                      <TableCell>{item?.skuCode?.name}</TableCell>
-                      <TableCell>{item?.quantity}</TableCell>
+                      <SkuTable
+                        skuCode={item.skuCode}
+                        quantity={item.quantity}
+                      />
                       <TableCell>
                         <StockReceiveActions refetch={refetch} stock={item} />
                       </TableCell>
@@ -90,6 +83,8 @@ export default function StockReceive() {
           )}
         </>
       )}
+
+      <CSCReceivedReport />
     </div>
   );
 }

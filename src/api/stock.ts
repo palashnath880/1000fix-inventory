@@ -19,6 +19,8 @@ const stockApi = {
   transferList: (from: string, to: string) =>
     instance.get(`/stock/transfer?fromDate=${from}&toDate=${to}`),
   receiveList: () => instance.get(`/stock/receive`),
+  receiveReport: (from: string, to: string) =>
+    instance.get(`/stock/receive/report?fromDate=${from}&toDate=${to}`),
   statusUpdate: (Id: string, data: any) =>
     instance.put(`/stock/status/${Id}`, data),
   approval: () => instance.get(`/stock/approval`),
