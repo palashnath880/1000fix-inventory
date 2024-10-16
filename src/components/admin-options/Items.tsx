@@ -40,6 +40,7 @@ export default function Items() {
   //  react redux
   const { data: items, loading } = useAppSelector((state) => state.utils.items);
   const { data: models } = useAppSelector((state) => state.utils.models);
+  const { data: uoms } = useAppSelector((state) => state.utils.uoms);
   const dispatch = useAppDispatch();
 
   // popup state
@@ -62,7 +63,7 @@ export default function Items() {
       setErrorMsg("");
       await itemApi.create({
         name: data.name,
-        uom: data.uom,
+        uom: data.uom?.name || "",
         modelId: data?.model?.id || "",
       });
       toast.success(`Item added successfully`);
@@ -129,13 +130,32 @@ export default function Items() {
                   error={Boolean(errors["name"])}
                   {...register("name", { required: true })}
                 />
-                <TextField
-                  label="UOM"
-                  fullWidth
-                  type="text"
-                  placeholder="UOM"
-                  error={Boolean(errors["uom"])}
-                  {...register("uom", { required: true })}
+
+                <Controller
+                  control={control}
+                  name="uom"
+                  rules={{ required: true }}
+                  render={({
+                    fieldState: { error },
+                    field: { value, onChange },
+                  }) => (
+                    <Autocomplete
+                      options={uoms}
+                      value={value || null}
+                      onChange={(_, val) => onChange(val)}
+                      getOptionLabel={(option) => option.name}
+                      isOptionEqualToValue={(a, b) => a.id === b.id}
+                      noOptionsText="No uom matched"
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Select uom"
+                          placeholder="Select uom"
+                          error={Boolean(error)}
+                        />
+                      )}
+                    />
+                  )}
                 />
 
                 <Controller
