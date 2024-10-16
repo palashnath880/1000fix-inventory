@@ -1,11 +1,10 @@
-import { Add, Close, Delete } from "@mui/icons-material";
+import { Add, Close } from "@mui/icons-material";
 import {
   Alert,
   Button,
   Dialog,
   IconButton,
   Paper,
-  Popover,
   Skeleton,
   Table,
   TableBody,
@@ -17,7 +16,6 @@ import {
 } from "@mui/material";
 import {
   bindDialog,
-  bindPopover,
   bindTrigger,
   usePopupState,
 } from "material-ui-popup-state/hooks";
@@ -28,79 +26,10 @@ import { AxiosError } from "axios";
 import categoryApi from "../../api/category";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { fetchCategories } from "../../features/categorySlice";
+import { fetchCategories } from "../../features/utilsSlice";
 import moment from "moment";
-import PopupState from "material-ui-popup-state";
 import { Category } from "../../types/types";
-
-const DeleteAction = ({
-  category,
-  refetch,
-}: {
-  category: Category;
-  refetch: () => void;
-}) => {
-  // category delete handler
-  const deleteHandler = async () => {
-    const toastId = toast.loading(`Deleting ${category.name}`);
-
-    try {
-      await categoryApi.delete(category.id);
-      toast.update(toastId, {
-        autoClose: 3000,
-        type: "success",
-        isLoading: false,
-        render: `${category.name} deleted`,
-      });
-      refetch();
-    } catch (err) {
-      console.error(err);
-      toast.update(toastId, {
-        autoClose: 3000,
-        type: "error",
-        isLoading: false,
-        render: `Sorry! ${category.name} couldn't be deleted`,
-      });
-    }
-  };
-
-  return (
-    <PopupState variant="popover">
-      {(popupState) => (
-        <>
-          <IconButton color="error" {...bindTrigger(popupState)}>
-            <Delete />
-          </IconButton>
-          <Popover {...bindPopover(popupState)}>
-            <div className="px-5 py-5 w-[250px] flex flex-col items-center">
-              <Typography variant="subtitle1" className="!text-center">
-                Are you sure to delete <b>{category.name}</b>
-              </Typography>
-              <div className="flex items-center gap-2 w-full mt-2">
-                <Button
-                  variant="contained"
-                  color="success"
-                  className="!flex-1"
-                  onClick={deleteHandler}
-                >
-                  Yes
-                </Button>
-                <Button
-                  variant="contained"
-                  color="error"
-                  className="!flex-1"
-                  onClick={popupState.close}
-                >
-                  No
-                </Button>
-              </div>
-            </div>
-          </Popover>
-        </>
-      )}
-    </PopupState>
-  );
-};
+import DeleteConfirm from "../shared/DeleteConfirm";
 
 export default function Categories() {
   // states
@@ -109,7 +38,7 @@ export default function Categories() {
 
   // dispatch
   const { data: categories, loading } = useAppSelector(
-    (state) => state.categories
+    (state) => state.utils.categories
   );
   const dispatch = useAppDispatch();
 
@@ -140,6 +69,30 @@ export default function Categories() {
       setErrorMsg(msg);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // category delete handler
+  const deleteHandler = async (category: Category) => {
+    const toastId = toast.loading(`Deleting ${category.name}`);
+
+    try {
+      await categoryApi.delete(category.id);
+      toast.update(toastId, {
+        autoClose: 3000,
+        type: "success",
+        isLoading: false,
+        render: `${category.name} deleted`,
+      });
+      dispatch(fetchCategories());
+    } catch (err) {
+      console.error(err);
+      toast.update(toastId, {
+        autoClose: 3000,
+        type: "error",
+        isLoading: false,
+        render: `Sorry! ${category.name} couldn't be deleted`,
+      });
     }
   };
 
@@ -222,9 +175,9 @@ export default function Categories() {
                               {moment(category.createdAt).format("ll")}
                             </TableCell>
                             <TableCell>
-                              <DeleteAction
-                                category={category}
-                                refetch={() => dispatch(fetchCategories())}
+                              <DeleteConfirm
+                                title={`Are you sure to delete ${category.name}`}
+                                confirm={() => deleteHandler(category)}
                               />
                             </TableCell>
                           </TableRow>

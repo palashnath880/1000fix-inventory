@@ -20,7 +20,7 @@ import { Close, Delete, Edit } from "@mui/icons-material";
 import branchApi from "../../api/branch";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { fetchBranch } from "../../features/branchSlice";
+import { fetchBranch } from "../../features/utilsSlice";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { isArraysMatched } from "../../utils/utils";

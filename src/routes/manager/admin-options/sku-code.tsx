@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Chip,
   Paper,
@@ -9,24 +10,27 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import Categories from "../../components/shared/Categories";
-import Models from "../../components/shared/Models";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import AddSKUCode from "../../components/sku-code/AddSKUCode";
-import Items from "../../components/shared/Items";
+import Categories from "../../../components/admin-options/Categories";
+import Models from "../../../components/admin-options/Models";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import AddSKUCode from "../../../components/admin-options/AddSKUCode";
+import Items from "../../../components/admin-options/Items";
 import moment from "moment";
-import { SKUCode as SkuCodeType } from "../../types/types";
+import { SKUCode as SkuCodeType } from "../../../types/types";
 import { toast } from "react-toastify";
-import skuCodeApi from "../../api/skuCode";
-import { fetchSku } from "../../features/skuCodeSlice";
-import DeleteConfirm from "../../components/shared/DeleteConfirm";
+import skuCodeApi from "../../../api/skuCode";
+import { fetchSku } from "../../../features/utilsSlice";
+import DeleteConfirm from "../../../components/shared/DeleteConfirm";
+import { SkuTable } from "../../../components/shared/CustomTable";
+import UOMs from "../../../components/admin-options/UOMs";
 
 export default function SKUCode() {
   // sku codes
-  const { data: skuCodes, loading } = useAppSelector((state) => state.skuCodes);
+  const { data: skuCodes, loading } = useAppSelector(
+    (state) => state.utils.skuCodes
+  );
   const dispatch = useAppDispatch();
 
-  // item delete handler
   const deleteHandler = async (skuCode: SkuCodeType) => {
     const toastId = toast.loading(`Deleting ${skuCode.name}`);
 
@@ -38,7 +42,7 @@ export default function SKUCode() {
         isLoading: false,
         render: `${skuCode.name} deleted`,
       });
-      dispatch(fetchSku(""));
+      dispatch(fetchSku());
     } catch (err) {
       console.error(err);
       toast.update(toastId, {
@@ -52,10 +56,13 @@ export default function SKUCode() {
 
   return (
     <>
-      <div className="flex gap-4">
-        <Categories />
-        <Models />
-        <Items />
+      <div className="flex gap-4 justify-between">
+        <div className="flex gap-4">
+          <Categories />
+          <Models />
+          <Items />
+          <UOMs />
+        </div>
 
         <AddSKUCode />
       </div>
@@ -77,12 +84,8 @@ export default function SKUCode() {
               <TableHead>
                 <TableRow>
                   <TableCell>#</TableCell>
-                  <TableCell>SKU Code</TableCell>
+                  <SkuTable isHeader />
                   <TableCell>Generate Defective</TableCell>
-                  <TableCell>Item</TableCell>
-                  <TableCell>UOM</TableCell>
-                  <TableCell>Model</TableCell>
-                  <TableCell>Category</TableCell>
                   <TableCell>Created At</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
@@ -91,7 +94,7 @@ export default function SKUCode() {
                 {skuCodes.map((skuCode, index) => (
                   <TableRow key={skuCode.id}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{skuCode.name}</TableCell>
+                    <SkuTable skuCode={skuCode} />
                     <TableCell>
                       {skuCode.isDefective ? (
                         <Chip label="Yes" color="success" />
@@ -99,10 +102,6 @@ export default function SKUCode() {
                         <Chip label="No" color="error" />
                       )}
                     </TableCell>
-                    <TableCell>{skuCode.item?.name}</TableCell>
-                    <TableCell>{skuCode.item?.uom}</TableCell>
-                    <TableCell>{skuCode.item?.model?.name}</TableCell>
-                    <TableCell>{skuCode.item?.model?.category?.name}</TableCell>
                     <TableCell>
                       {moment(skuCode.createdAt).format("lll")}
                     </TableCell>

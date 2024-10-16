@@ -38,6 +38,12 @@ export type Item = {
   model: Model;
 };
 
+export type UOM = {
+  name: string;
+  id: string;
+  createdAt: string;
+};
+
 export type SKUCode = {
   name: string;
   id: string;

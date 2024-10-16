@@ -40,7 +40,7 @@ export default function OwnFaultyStock() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   // react redux
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
+  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
   const { user } = useAppSelector((state) => state.auth);
 
   // search queries

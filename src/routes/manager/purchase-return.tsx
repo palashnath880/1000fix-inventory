@@ -33,7 +33,7 @@ export default function PurchaseReturn() {
   const [list, setList] = useState<StockReturnInputs[]>([]);
 
   // react-redux
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
+  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
 
   // react hook form
   const {

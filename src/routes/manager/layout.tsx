@@ -1,15 +1,19 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { fetchSku } from "../../features/skuCodeSlice";
-import { fetchUsers } from "../../features/userSlice";
-import { fetchItems } from "../../features/itemSlice";
-import { fetchModels } from "../../features/modelSlice";
-import { fetchCategories } from "../../features/categorySlice";
+
 import TopBar from "../../components/shared/TopBar";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../../components/shared/Sidebar";
-import { fetchBranch } from "../../features/branchSlice";
 import { Alert, Paper, Typography } from "@mui/material";
+import {
+  fetchUOMs,
+  fetchBranch,
+  fetchCategories,
+  fetchItems,
+  fetchModels,
+  fetchSku,
+} from "../../features/utilsSlice";
+import { fetchUsers } from "../../features/userSlice";
 
 export default function Layout() {
   const { user } = useAppSelector((state) => state.auth);
@@ -22,7 +26,8 @@ export default function Layout() {
     dispatch(fetchModels());
     dispatch(fetchItems());
     dispatch(fetchUsers(""));
-    dispatch(fetchSku(""));
+    dispatch(fetchSku());
+    dispatch(fetchUOMs());
   }, [dispatch]);
 
   return (

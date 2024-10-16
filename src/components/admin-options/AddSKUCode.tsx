@@ -17,7 +17,7 @@ import { SKUInputs } from "../../types/reactHookForm.types";
 import { AxiosError } from "axios";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { fetchSku } from "../../features/skuCodeSlice";
+import { fetchSku } from "../../features/utilsSlice";
 import skuCodeApi from "../../api/skuCode";
 import { toast } from "react-toastify";
 
@@ -30,7 +30,7 @@ export default function AddSKUCode() {
   const addPopup = usePopupState({ variant: "popover", popupId: "addSkuCode" });
 
   // react redux
-  const { data: items } = useAppSelector((state) => state.items);
+  const { data: items } = useAppSelector((state) => state.utils.items);
   const dispatch = useAppDispatch();
 
   // react hook form
@@ -56,7 +56,7 @@ export default function AddSKUCode() {
       toast.success(`SKU code added successfully`);
       reset();
       setValue("item", null);
-      dispatch(fetchSku(""));
+      dispatch(fetchSku());
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       const msg =

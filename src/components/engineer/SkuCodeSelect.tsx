@@ -23,7 +23,7 @@ export default function SkuCodeSelect({
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // react redux
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
+  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
   const { user } = useAppSelector((state) => state.auth);
 
   // fetch stock by sku id

@@ -35,7 +35,7 @@ export default function StockTransferForm() {
   const [branch, setBranch] = useState<Branch | null>(null);
 
   // react redux
-  const { data: branchesArr } = useAppSelector((state) => state.branches);
+  const { data: branchesArr } = useAppSelector((state) => state.utils.branches);
   const { data: users } = useAppSelector((state) => state.users);
   const { user } = useAppSelector((state) => state.auth);
   const branches = branchesArr.filter((i) => i.id !== user?.branch?.id);

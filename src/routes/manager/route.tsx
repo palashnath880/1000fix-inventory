@@ -1,7 +1,7 @@
 import { Navigate, RouteObject } from "react-router-dom";
 import Home from "./home";
-import SKUCode from "./sku-code";
-import Branch from "./branch";
+import SKUCode from "./admin-options/sku-code";
+import Branch from "./admin-options/branch";
 import Users from "./users";
 import StockEntry from "./stock-entry";
 import OwnStock from "./stock/own-stock";

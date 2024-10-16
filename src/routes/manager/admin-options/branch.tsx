@@ -22,12 +22,12 @@ import {
   usePopupState,
 } from "material-ui-popup-state/hooks";
 import { useEffect, useState } from "react";
-import branchApi from "../../api/branch";
+import branchApi from "../../../api/branch";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { fetchBranch } from "../../features/branchSlice";
-import BranchActions from "../../components/branch/BranchActions";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { fetchBranch } from "../../../features/utilsSlice";
+import BranchActions from "../../../components/branch/BranchActions";
 
 type Inputs = {
   name: string;
@@ -40,7 +40,9 @@ export default function Branch() {
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   // branch
-  const { loading, data: branches } = useAppSelector((state) => state.branches);
+  const { loading, data: branches } = useAppSelector(
+    (state) => state.utils.branches
+  );
   const dispatch = useAppDispatch();
 
   // react hook form

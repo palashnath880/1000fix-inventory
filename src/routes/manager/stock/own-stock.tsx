@@ -25,9 +25,11 @@ import { SkuTable } from "../../../components/shared/CustomTable";
 
 export default function OwnStock() {
   // react redux
-  const { data: categories } = useAppSelector((state) => state.categories);
-  const { data: models } = useAppSelector((state) => state.models);
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
+  const { data: categories } = useAppSelector(
+    (state) => state.utils.categories
+  );
+  const { data: models } = useAppSelector((state) => state.utils.models);
+  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
 
   // search queries
   const [search, setSearch] = useSearchParams();

@@ -35,7 +35,7 @@ const AddItem = ({
   const [skuCode, setSkuCode] = useState<SKUCode | null>(null);
 
   // sku codes
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
+  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
 
   // add handler
   const addHandler = (close: () => void) => {

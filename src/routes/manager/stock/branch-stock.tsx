@@ -23,10 +23,12 @@ import { SkuTable } from "../../../components/shared/CustomTable";
 
 export default function BranchStock() {
   // react redux
-  const { data: categories } = useAppSelector((state) => state.categories);
-  const { data: models } = useAppSelector((state) => state.models);
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
-  const { data: branches } = useAppSelector((state) => state.branches);
+  const { data: categories } = useAppSelector(
+    (state) => state.utils.categories
+  );
+  const { data: models } = useAppSelector((state) => state.utils.models);
+  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
+  const { data: branches } = useAppSelector((state) => state.utils.branches);
 
   // search queries
   const [search, setSearch] = useSearchParams();

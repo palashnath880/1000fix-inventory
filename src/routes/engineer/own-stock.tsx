@@ -21,6 +21,7 @@ import engineerStockApi from "../../api/engineerStock";
 import { OwnStockType } from "../../types/types";
 import { exportExcel } from "../../utils/utils";
 import DefectiveReturn from "../../components/engineer/DefectiveReturn";
+import { SkuTable } from "../../components/shared/CustomTable";
 
 export default function OwnStock() {
   // search params
@@ -28,7 +29,7 @@ export default function OwnStock() {
   const skuId = search.get("skuId") || "";
 
   // react redux
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
+  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
 
   // react -query
   const { data, isLoading, isSuccess, refetch } = useQuery<OwnStockType[]>({
@@ -96,11 +97,7 @@ export default function OwnStock() {
                     <TableHead>
                       <TableRow>
                         <TableCell>#</TableCell>
-                        <TableCell>Category</TableCell>
-                        <TableCell>Model</TableCell>
-                        <TableCell>Item</TableCell>
-                        <TableCell>UOM</TableCell>
-                        <TableCell>SKU Code</TableCell>
+                        <SkuTable isHeader />
                         <TableCell>AVG Price</TableCell>
                         <TableCell>Good</TableCell>
                         <TableCell>Defective</TableCell>
@@ -111,15 +108,7 @@ export default function OwnStock() {
                       {data?.map((stock, index) => (
                         <TableRow key={index}>
                           <TableCell>{index + 1}</TableCell>
-                          <TableCell>
-                            {stock?.skuCode?.item?.model?.category?.name}
-                          </TableCell>
-                          <TableCell>
-                            {stock?.skuCode?.item?.model?.name}
-                          </TableCell>
-                          <TableCell>{stock?.skuCode?.item?.name}</TableCell>
-                          <TableCell>{stock?.skuCode?.item?.uom}</TableCell>
-                          <TableCell>{stock?.skuCode?.name}</TableCell>
+                          <SkuTable skuCode={stock.skuCode} />
                           <TableCell>{stock?.avgPrice}</TableCell>
                           <TableCell>{stock?.quantity}</TableCell>
                           <TableCell>{stock?.defective || 0}</TableCell>

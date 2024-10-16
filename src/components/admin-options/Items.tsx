@@ -28,8 +28,8 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { Item } from "../../types/types";
-import DeleteConfirm from "./DeleteConfirm";
-import { fetchItems } from "../../features/itemSlice";
+import DeleteConfirm from "../shared/DeleteConfirm";
+import { fetchItems } from "../../features/utilsSlice";
 import itemApi from "../../api/item";
 
 export default function Items() {
@@ -38,8 +38,8 @@ export default function Items() {
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   //  react redux
-  const { data: items, loading } = useAppSelector((state) => state.items);
-  const { data: models } = useAppSelector((state) => state.models);
+  const { data: items, loading } = useAppSelector((state) => state.utils.items);
+  const { data: models } = useAppSelector((state) => state.utils.models);
   const dispatch = useAppDispatch();
 
   // popup state

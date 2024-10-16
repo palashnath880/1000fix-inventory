@@ -27,10 +27,10 @@ import { AxiosError } from "axios";
 import modelApi from "../../api/model";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import moment from "moment";
-import { fetchModels } from "../../features/modelSlice";
+import { fetchModels } from "../../features/utilsSlice";
 import { toast } from "react-toastify";
 import { Model } from "../../types/types";
-import DeleteConfirm from "./DeleteConfirm";
+import DeleteConfirm from "../shared/DeleteConfirm";
 
 export default function Models() {
   // states
@@ -38,8 +38,12 @@ export default function Models() {
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   //  react redux
-  const { data: models, loading } = useAppSelector((state) => state.models);
-  const { data: categories } = useAppSelector((state) => state.categories);
+  const { data: models, loading } = useAppSelector(
+    (state) => state.utils.models
+  );
+  const { data: categories } = useAppSelector(
+    (state) => state.utils.categories
+  );
   const dispatch = useAppDispatch();
 
   // popup state

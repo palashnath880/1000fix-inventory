@@ -22,9 +22,11 @@ import { exportExcel } from "../../../utils/utils";
 
 export default function EngineerStock() {
   // react redux
-  const { data: categories } = useAppSelector((state) => state.categories);
-  const { data: models } = useAppSelector((state) => state.models);
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
+  const { data: categories } = useAppSelector(
+    (state) => state.utils.categories
+  );
+  const { data: models } = useAppSelector((state) => state.utils.models);
+  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
   const { data: users } = useAppSelector((state) => state.users);
   const engineers = users.filter((i) => i.role === "engineer");
 

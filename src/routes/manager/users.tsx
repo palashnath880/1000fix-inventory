@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@mui/material";
 import moment from "moment";
-import UserActions from "../../components/users/UserActions";
+import UserActions from "../../components/admin-options/UserActions";
 import SearchInput from "../../components/shared/SearchInput";
 import { useSearchParams } from "react-router-dom";
 import AddUser from "../../components/users/AddUser";

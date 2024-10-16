@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import ReportDateInputs from "../../components/shared/ReportDateInputs";
 import { useSearchParams } from "react-router-dom";
-import StockEntryForm from "../../components/stock/StockEntryForm";
+import StockEntryForm from "../../components/admin-options/StockEntryForm";
 import { useQuery } from "@tanstack/react-query";
 import stockApi from "../../api/stock";
 import moment from "moment";

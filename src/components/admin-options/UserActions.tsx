@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import userApi from "../../api/user";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchUsers } from "../../features/userSlice";
-import { fetchBranch } from "../../features/branchSlice";
+import { fetchBranch } from "../../features/utilsSlice";
 
 export default function UserActions({ user }: { user: User }) {
   const auth = useAppSelector((state) => state.auth);

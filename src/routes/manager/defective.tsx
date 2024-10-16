@@ -97,9 +97,11 @@ export default function Defective() {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   // react redux
-  const { data: categories } = useAppSelector((state) => state.categories);
-  const { data: models } = useAppSelector((state) => state.models);
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
+  const { data: categories } = useAppSelector(
+    (state) => state.utils.categories
+  );
+  const { data: models } = useAppSelector((state) => state.utils.models);
+  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
   const { user } = useAppSelector((state) => state.auth);
 
   // search queries

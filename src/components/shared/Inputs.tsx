@@ -17,7 +17,7 @@ export const SkuSelect = ({
   value,
   onChange,
 }: SkuSelectProps) => {
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
+  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
 
   const input =
     typeof value === "string"

@@ -11,7 +11,7 @@ import {
   Menu,
   ShowChart,
 } from "@mui/icons-material";
-import { fetchSku } from "../../features/skuCodeSlice";
+import { fetchSku } from "../../features/utilsSlice";
 import {
   AppBar,
   Avatar,
@@ -75,7 +75,7 @@ export default function Layout() {
   ];
 
   useEffect(() => {
-    dispatch(fetchSku(""));
+    dispatch(fetchSku());
   }, [dispatch]);
 
   return (

@@ -47,7 +47,7 @@ export default function JobEntryItem({
   const [stock, setStock] = useState<OwnStockType | null>(null);
 
   // react redux
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
+  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
 
   // react hook form
   const {

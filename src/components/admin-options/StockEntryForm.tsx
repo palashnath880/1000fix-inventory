@@ -16,9 +16,9 @@ import {
 } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import type { StockFormInputs } from "../../types/reactHookForm.types";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { useEffect, useState } from "react";
-import { fetchSku } from "../../features/skuCodeSlice";
+import { useAppSelector } from "../../hooks";
+import { useState } from "react";
+// import { fetchSku } from "../../features/utilsSlice";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import stockApi from "../../api/stock";
@@ -30,8 +30,7 @@ export default function StockEntryForm() {
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   // react-redux
-  const { data: skuCodes } = useAppSelector((state) => state.skuCodes);
-  const dispatch = useAppDispatch();
+  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
 
   // react hook form
   const {
@@ -80,11 +79,6 @@ export default function StockEntryForm() {
       setIsLoading(false);
     }
   };
-
-  // fetch branches and sku codes
-  useEffect(() => {
-    dispatch(fetchSku(""));
-  }, [dispatch]);
 
   return (
     <div className="flex gap-5 items-start">
