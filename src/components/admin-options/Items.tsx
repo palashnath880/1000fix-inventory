@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Add, Close } from "@mui/icons-material";
 import {
   Alert,
@@ -20,9 +21,8 @@ import {
   bindTrigger,
   usePopupState,
 } from "material-ui-popup-state/hooks";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import type { ItemInputs } from "../../types/reactHookForm.types";
-import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { ItemInputs } from "../../types/reactHookForm.types";
 import { AxiosError } from "axios";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import moment from "moment";
@@ -31,12 +31,9 @@ import { Item } from "../../types/types";
 import DeleteConfirm from "../shared/DeleteConfirm";
 import { fetchItems } from "../../features/utilsSlice";
 import itemApi from "../../api/item";
+import { useMutation } from "@tanstack/react-query";
 
 export default function Items() {
-  // states
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = useState<string>("");
-
   //  react redux
   const { data: items, loading } = useAppSelector((state) => state.utils.items);
   const { data: models } = useAppSelector((state) => state.utils.models);
@@ -57,28 +54,21 @@ export default function Items() {
   } = useForm<ItemInputs>();
 
   // add handler
-  const addHandler: SubmitHandler<ItemInputs> = async (data) => {
-    try {
-      setIsLoading(true);
-      setErrorMsg("");
-      await itemApi.create({
+  const add = useMutation<any, AxiosError<{ message: string }>, ItemInputs>({
+    mutationFn: (data) =>
+      itemApi.create({
         name: data.name,
+        modelId: data.model?.id || "",
         uom: data.uom?.name || "",
-        modelId: data?.model?.id || "",
-      });
+      }),
+    onSuccess: () => {
       toast.success(`Item added successfully`);
       reset();
       setValue("model", null);
+      setValue("uom", null);
       dispatch(fetchItems());
-    } catch (err) {
-      const error = err as AxiosError<{ message: string }>;
-      const msg =
-        error?.response?.data?.message || "Sorry! Something went wrong";
-      setErrorMsg(msg);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
 
   // item delete handler
   const deleteHandler = async (item: Item) => {
@@ -120,7 +110,7 @@ export default function Items() {
           </div>
           <div className="pt-4 px-4 flex flex-col flex-1 overflow-hidden gap-5">
             {/* item add form */}
-            <form onSubmit={handleSubmit(addHandler)}>
+            <form onSubmit={handleSubmit((data) => add.mutate(data))}>
               <div className="flex flex-col gap-4">
                 <TextField
                   label="Item Name"
@@ -185,20 +175,23 @@ export default function Items() {
                   )}
                 />
 
-                {errorMsg && (
+                {/* error message */}
+                {add.isError && (
                   <Typography
                     variant="body2"
                     className="!text-center !text-red-400"
                   >
-                    {errorMsg}
+                    {add.error.response?.data.message ||
+                      "Sorry! Something went wrong"}
                   </Typography>
                 )}
+
                 <Button
                   fullWidth
                   type="submit"
                   variant="contained"
                   startIcon={<Add />}
-                  disabled={isLoading}
+                  disabled={add.isPending}
                 >
                   Add Item
                 </Button>
