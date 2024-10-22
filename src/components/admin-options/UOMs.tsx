@@ -5,22 +5,17 @@ import {
   AppBar,
   Button,
   CircularProgress,
-  Dialog,
+  Drawer,
   IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
   Skeleton,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
-import {
-  bindDialog,
-  bindTrigger,
-  usePopupState,
-} from "material-ui-popup-state/hooks";
+
 import { useForm } from "react-hook-form";
 import { AxiosError } from "axios";
 import { useAppDispatch, useAppSelector } from "../../hooks";
@@ -31,6 +26,7 @@ import DeleteConfirm from "../shared/DeleteConfirm";
 import { useMutation } from "@tanstack/react-query";
 import uomApi from "../../api/uom";
 import { fetchUOMs } from "../../features/utilsSlice";
+import { useState } from "react";
 
 type Inputs = {
   name: string;
@@ -39,12 +35,12 @@ type Inputs = {
 type Error = AxiosError<{ message: string }>;
 
 export default function UOMs() {
+  // states
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   //  react redux
   const { data: uoms, loading } = useAppSelector((state) => state.utils.uoms);
   const dispatch = useAppDispatch();
-
-  // popup state
-  const popup = usePopupState({ variant: "popover", popupId: "categories" });
 
   // react hook form
   const {
@@ -97,14 +93,15 @@ export default function UOMs() {
 
   return (
     <>
-      <Button {...bindTrigger(popup)} startIcon={<PlaylistAdd />}>
+      <Button startIcon={<PlaylistAdd />} onClick={() => setIsOpen(true)}>
         UOM
       </Button>
 
-      <Dialog
-        {...bindDialog(popup)}
-        className="!p-5"
-        PaperProps={{ className: "!min-w-full sm:!min-w-[500px] !m-0" }}
+      <Drawer
+        open={isOpen}
+        anchor="right"
+        onClose={() => setIsOpen(false)}
+        PaperProps={{ className: `!w-[450px]` }}
       >
         <div className="flex flex-col overflow-hidden">
           <AppBar position="static" color="secondary">
@@ -112,7 +109,7 @@ export default function UOMs() {
               <Typography variant="h6" className="!font-semibold">
                 UOMs
               </Typography>
-              <IconButton onClick={popup.close}>
+              <IconButton onClick={() => setIsOpen(false)}>
                 <Close />
               </IconButton>
             </div>
@@ -171,37 +168,33 @@ export default function UOMs() {
               {!loading && (
                 <>
                   {Array.isArray(uoms) && uoms.length > 0 ? (
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>#</TableCell>
-                          <TableCell>Name</TableCell>
-                          <TableCell>Created At</TableCell>
-                          <TableCell></TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {uoms?.map((uom, index) => (
-                          <TableRow key={uom.id}>
-                            <TableCell>{index + 1}</TableCell>
-                            <TableCell>{uom.name}</TableCell>
-                            <TableCell>
-                              {moment(uom.createdAt).format("lll")}
-                            </TableCell>
-                            <TableCell>
-                              <DeleteConfirm
-                                title={
-                                  <>
-                                    Are you sure to delete <b>{uom.name}</b>
-                                  </>
-                                }
-                                confirm={() => deleteUOM.mutate(uom)}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                    <List>
+                      {uoms?.map((uom, index) => (
+                        <ListItem
+                          key={uom.id}
+                          secondaryAction={
+                            <DeleteConfirm
+                              title={
+                                <>
+                                  Are you sure to delete <b>{uom.name}</b>
+                                </>
+                              }
+                              confirm={() => deleteUOM.mutate(uom)}
+                            />
+                          }
+                          className="!py-0 !border-b !px-0"
+                        >
+                          <ListItemAvatar className="!min-w-[36px]">
+                            {index + 1}
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={uom.name}
+                            secondary={moment(uom.createdAt).format("lll")}
+                            secondaryTypographyProps={{ className: "!text-xs" }}
+                          />
+                        </ListItem>
+                      ))}
+                    </List>
                   ) : (
                     <Alert severity="error">
                       <Typography variant="body1">No uom available</Typography>
@@ -212,7 +205,7 @@ export default function UOMs() {
             </div>
           </div>
         </div>
-      </Dialog>
+      </Drawer>
     </>
   );
 }
