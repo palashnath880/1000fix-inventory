@@ -62,6 +62,18 @@ export default function SkuCodeSelect({
       isOptionEqualToValue={(opt, val) => opt.id === val.id}
       getOptionLabel={(opt) => opt.name}
       noOptionsText="No sku matched"
+      renderOption={(props, opt) => (
+        <li
+          {...props}
+          key={opt.id}
+          className={`${props.className} flex-col !items-start`}
+        >
+          {opt.name}
+          <small>
+            Item: {opt.item?.name}; UOM: {opt.item?.uom}
+          </small>
+        </li>
+      )}
       renderInput={(params) => (
         <TextField
           {...params}
