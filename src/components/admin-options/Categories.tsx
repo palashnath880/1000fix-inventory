@@ -1,24 +1,19 @@
-import { Add, Close } from "@mui/icons-material";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Add, Category as CategoryIcon, Close } from "@mui/icons-material";
 import {
   Alert,
+  AppBar,
   Button,
-  Dialog,
+  Drawer,
   IconButton,
-  Paper,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
   Skeleton,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
-import {
-  bindDialog,
-  bindTrigger,
-  usePopupState,
-} from "material-ui-popup-state/hooks";
 import { SubmitHandler, useForm } from "react-hook-form";
 import type { CategoryInputs } from "../../types/reactHookForm.types";
 import { useState } from "react";
@@ -28,22 +23,21 @@ import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchCategories } from "../../features/utilsSlice";
 import moment from "moment";
-import { Category } from "../../types/types";
+import type { Category } from "../../types/types";
 import DeleteConfirm from "../shared/DeleteConfirm";
+import { useMutation } from "@tanstack/react-query";
 
 export default function Categories() {
   // states
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   // dispatch
   const { data: categories, loading } = useAppSelector(
     (state) => state.utils.categories
   );
   const dispatch = useAppDispatch();
-
-  // popup state
-  const popup = usePopupState({ variant: "popover", popupId: "categories" });
 
   // react hook form
   const {
@@ -73,45 +67,57 @@ export default function Categories() {
   };
 
   // category delete handler
-  const deleteHandler = async (category: Category) => {
-    const toastId = toast.loading(`Deleting ${category.name}`);
-
-    try {
-      await categoryApi.delete(category.id);
-      toast.update(toastId, {
+  const deleteCate = useMutation<any, any, Category, { id: number | string }>({
+    mutationFn: (category) => categoryApi.delete(category.id),
+    onMutate: (category) => {
+      const toastId = toast.loading(`Deleting ${category.name}`);
+      return { id: toastId };
+    },
+    onSuccess: (_, category, { id }) => {
+      toast.update(id, {
         autoClose: 3000,
         type: "success",
         isLoading: false,
         render: `${category.name} deleted`,
       });
       dispatch(fetchCategories());
-    } catch (err) {
-      console.error(err);
-      toast.update(toastId, {
+    },
+    onError: (_, category, context) => {
+      if (!context?.id) return;
+      toast.update(context?.id, {
         autoClose: 3000,
         type: "error",
         isLoading: false,
         render: `Sorry! ${category.name} couldn't be deleted`,
       });
-    }
-  };
+    },
+  });
 
   return (
     <>
-      <Button variant="contained" {...bindTrigger(popup)}>
+      <Button startIcon={<CategoryIcon />} onClick={() => setIsOpen(true)}>
         Categories
       </Button>
 
-      <Dialog {...bindDialog(popup)}>
-        <Paper className="!py-5 w-[96%] sm:w-[500px] max-h-full flex flex-col overflow-hidden">
-          <div className="flex justify-between gap-5 items-center px-4 pb-2 border-b">
-            <Typography variant="h5">Categories</Typography>
-            <IconButton onClick={popup.close}>
-              <Close />
-            </IconButton>
-          </div>
+      <Drawer
+        open={isOpen}
+        anchor="right"
+        onClose={() => setIsOpen(false)}
+        PaperProps={{ className: `!w-[450px]` }}
+      >
+        <div className="flex flex-col overflow-hidden">
+          <AppBar position="static" color="secondary">
+            <div className="flex justify-between gap-5 items-center px-4 py-2">
+              <Typography variant="h6" className="!font-semibold">
+                Categories
+              </Typography>
+              <IconButton onClick={() => setIsOpen(false)}>
+                <Close />
+              </IconButton>
+            </div>
+          </AppBar>
+
           <div className="pt-4 px-4 flex flex-col flex-1 overflow-hidden gap-5">
-            {/* category add form */}
             <form onSubmit={handleSubmit(addHandler)}>
               <div className="flex flex-col gap-4">
                 <TextField
@@ -133,7 +139,6 @@ export default function Categories() {
                 <Button
                   fullWidth
                   type="submit"
-                  variant="contained"
                   startIcon={<Add />}
                   disabled={isLoading}
                 >
@@ -143,10 +148,8 @@ export default function Categories() {
             </form>
 
             {/* category list */}
-            <Paper className="!overflow-y-auto flex-1 overflow-hidden">
-              <div className="px-2 py-3">
-                <Typography variant="h6">Category List</Typography>
-              </div>
+            <div className="!overflow-y-auto flex-1 pb-10 overflow-hidden">
+              {/* loader  */}
               {loading && (
                 <div className="">
                   {[...Array(3)].map((_, index) => (
@@ -154,38 +157,40 @@ export default function Categories() {
                   ))}
                 </div>
               )}
+
+              {/* display categories */}
               {!loading && (
                 <>
                   {Array.isArray(categories) && categories.length > 0 ? (
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>#</TableCell>
-                          <TableCell>Name</TableCell>
-                          <TableCell>Created At</TableCell>
-                          <TableCell></TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {categories.map((category, index) => (
-                          <TableRow key={category.id}>
-                            <TableCell>{index + 1}</TableCell>
-                            <TableCell>{category.name}</TableCell>
-                            <TableCell>
-                              {moment(category.createdAt).format("ll")}
-                            </TableCell>
-                            <TableCell>
-                              <DeleteConfirm
-                                title={`Are you sure to delete ${category.name}`}
-                                confirm={() => deleteHandler(category)}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                    <List>
+                      {categories?.map((category, index) => (
+                        <ListItem
+                          key={category.id}
+                          secondaryAction={
+                            <DeleteConfirm
+                              title={
+                                <>
+                                  Are you sure to delete <b>{category.name}</b>
+                                </>
+                              }
+                              confirm={() => deleteCate.mutate(category)}
+                            />
+                          }
+                          className="!py-0 !border-b !px-0"
+                        >
+                          <ListItemAvatar className="!min-w-[36px]">
+                            {index + 1}
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={category.name}
+                            secondary={moment(category.createdAt).format("lll")}
+                            secondaryTypographyProps={{ className: "!text-xs" }}
+                          />
+                        </ListItem>
+                      ))}
+                    </List>
                   ) : (
-                    <Alert severity="error" icon={false}>
+                    <Alert severity="error">
                       <Typography variant="body1">
                         No category available
                       </Typography>
@@ -193,10 +198,10 @@ export default function Categories() {
                   )}
                 </>
               )}
-            </Paper>
+            </div>
           </div>
-        </Paper>
-      </Dialog>
+        </div>
+      </Drawer>
     </>
   );
 }
