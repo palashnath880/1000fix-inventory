@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 export type User = {
   id: string;
   name: string;
@@ -160,3 +162,5 @@ export type FaultyItem = {
   skuCode: SKUCode | null;
   endAt: string;
 };
+
+export type AxiosErr = AxiosError<{ message: string }>;

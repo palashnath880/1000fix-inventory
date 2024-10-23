@@ -1,32 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import { OwnStockType } from "../../types/types";
+import { AxiosErr, OwnStockType } from "../../types/types";
 import { StockReturnInputs } from "../../types/reactHookForm.types";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import engineerStockApi from "../../api/engineerStock";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Button,
   CircularProgress,
   Divider,
   IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 import { Add, Close } from "@mui/icons-material";
 import SkuCodeSelect from "./SkuCodeSelect";
 import QuantitySelector from "./QuantitySelector";
-import { AxiosError } from "axios";
+import { useMutation } from "@tanstack/react-query";
 
 export default function StockReturnForm() {
   // states
   const [ownStock, setOwnStock] = useState<OwnStockType | null>(null);
-  const [submitting, setSubmitting] = useState<boolean>(false);
   const [returnList, setReturnList] = useState<StockReturnInputs[]>([]);
 
   // react hook form
@@ -60,28 +57,25 @@ export default function StockReturnForm() {
     reset();
   };
 
-  const stockReturn = async () => {
-    try {
-      setSubmitting(true);
-      const list = returnList.map((i) => {
-        const obj: any = {
-          quantity: parseFloat(i.quantity),
-          skuCodeId: i.skuCode?.id,
-        };
-        return obj;
-      });
-      await engineerStockApi.return({ list });
+  // stock return controller
+  const stockReturn = useMutation<any, AxiosErr, StockReturnInputs[]>({
+    mutationFn: (list) => {
+      const newList = list.map((i) => ({
+        quantity: parseFloat(i.quantity),
+        skuCodeId: i.skuCode?.id,
+        note: i.note,
+      }));
+      return engineerStockApi.return({ list: newList });
+    },
+    onSuccess: () => {
       setReturnList([]);
       toast.success(`Stock returned.`);
-    } catch (err) {
-      const error = err as AxiosError<{ message: string }>;
-      const msg =
-        error?.response?.data?.message || "Sorry! Something went wrong";
+    },
+    onError: (err) => {
+      const msg = err?.response?.data?.message || "Sorry! Something went wrong";
       toast.error(msg);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+    },
+  });
 
   return (
     <div className="mt-5 flex flex-col gap-5">
@@ -122,8 +116,15 @@ export default function StockReturnForm() {
                 }),
               }}
             />
+            <TextField
+              multiline
+              minRows={3}
+              label="Remarks"
+              placeholder="Remarks"
+              {...register("note", { required: false })}
+            />
 
-            <Button variant="contained" startIcon={<Add />} type="submit">
+            <Button startIcon={<Add />} type="submit">
               Add To Return List
             </Button>
           </div>
@@ -136,40 +137,43 @@ export default function StockReturnForm() {
         <Divider className="!my-2" />
         <div className="pt-3 flex flex-col gap-3">
           {returnList?.map((list, index) => (
-            <Paper key={index}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell className="!font-bold">SKU Code</TableCell>
-                    <TableCell className="!font-bold">Quantity</TableCell>
-                    <TableCell>
-                      <IconButton
-                        color="error"
-                        title="remove from the return list"
-                        onClick={() => removeFromList(index)}
-                      >
-                        <Close />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>{list.skuCode?.name}</TableCell>
-                    <TableCell>{list.quantity}</TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Paper>
+            <Accordion key={index}>
+              <AccordionSummary
+                sx={{
+                  ".MuiAccordionSummary-content": {
+                    justifyContent: "space-between",
+                  },
+                }}
+              >
+                <Typography>
+                  {list.skuCode?.item?.name}
+                  <br />
+                  Quantity: {list.quantity}
+                </Typography>
+                <IconButton
+                  color="error"
+                  title="remove from the return list"
+                  onClick={() => removeFromList(index)}
+                >
+                  <Close />
+                </IconButton>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography variant="body2">
+                  <b>SKU Code:</b> {list.skuCode?.name}
+                </Typography>
+                <Typography variant="body2">
+                  <b>Remarks:</b> {list.note}
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
           ))}
 
           <Button
-            variant="contained"
-            disabled={returnList?.length <= 0 || submitting}
-            onClick={stockReturn}
+            disabled={returnList?.length <= 0 || stockReturn.isPending}
+            onClick={() => stockReturn.mutate(returnList)}
           >
-            {submitting ? (
+            {stockReturn.isPending ? (
               <CircularProgress size={22} color="inherit" />
             ) : (
               "Return Stock"
