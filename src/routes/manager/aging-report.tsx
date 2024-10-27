@@ -19,6 +19,7 @@ import reportApi from "../../api/report";
 import { SkuTable } from "../../components/shared/CustomTable";
 import { SKUCode } from "../../types/types";
 import moment from "moment";
+import { exportExcel } from "../../utils/utils";
 
 type QueryType = {
   skuCode: SKUCode;
@@ -31,7 +32,7 @@ export default function AgingReport() {
   const skuId = search.get("skuId") || "";
 
   // react query
-  const { data, isLoading, isSuccess } = useQuery<QueryType[]>({
+  const { data, isLoading, isSuccess, refetch } = useQuery<QueryType[]>({
     queryKey: ["agingReport", skuId],
     queryFn: async () => {
       const res = await reportApi.getAgingReport(skuId);
@@ -51,8 +52,20 @@ export default function AgingReport() {
           />
         </div>
         <div className="flex items-center gap-4">
-          <Button startIcon={<Refresh />}>Refresh</Button>
-          <Button startIcon={<Download />}>Download</Button>
+          <Button
+            startIcon={<Refresh />}
+            disabled={isLoading}
+            onClick={() => refetch()}
+          >
+            Refresh
+          </Button>
+          <Button
+            startIcon={<Download />}
+            disabled={!data || data?.length <= 0}
+            onClick={() => exportExcel("report", `Aging report`)}
+          >
+            Download
+          </Button>
         </div>
       </div>
 
@@ -65,7 +78,7 @@ export default function AgingReport() {
         <div className="mt-5">
           {Array.isArray(data) && data?.length >= 0 ? (
             <TableContainer component={Paper}>
-              <Table>
+              <Table id="report">
                 <TableHead>
                   <TableRow>
                     <TableCell>#</TableCell>
