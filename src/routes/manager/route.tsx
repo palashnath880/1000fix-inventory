@@ -2,7 +2,7 @@ import { Navigate, RouteObject } from "react-router-dom";
 import Home from "./home";
 import SKUCode from "./admin-options/sku-code";
 import Branch from "./admin-options/branch";
-import Users from "./users";
+import Users from "./admin-options/users";
 import StockEntry from "./stock-entry";
 import OwnStock from "./stock/own-stock";
 import StockTransfer from "./stock/stock-transfer";
