@@ -19,14 +19,14 @@ const myTheme = createTheme({
   },
   palette: {
     primary: {
-      main: "#031C30",
+      main: "#2F3760",
     },
     secondary: {
       main: "#f8f8ff",
     },
     text: {
       // secondary: "#f8f8ff",
-      secondary: "#031C30",
+      secondary: "#2F3760",
       primary: "#031C30",
     },
   },
