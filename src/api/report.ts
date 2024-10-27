@@ -7,6 +7,8 @@ const reportApi = {
     instance.get(
       `/report/en-return-report/${type}?fromDate=${from}&toDate=${to}`
     ),
+  getAgingReport: (skuId: string) =>
+    instance.get(`/report/aging?skuId=${skuId}`),
 };
 
 export default reportApi;

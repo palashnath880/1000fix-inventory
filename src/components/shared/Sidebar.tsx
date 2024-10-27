@@ -203,6 +203,12 @@ export default function Sidebar() {
       show: user?.role === "admin",
     },
     {
+      href: "/aging-report",
+      name: "Aging Report",
+      Icon: Article,
+      show: true,
+    },
+    {
       name: "Admin Options",
       Icon: AdminPanelSettings,
       show: role === "admin",

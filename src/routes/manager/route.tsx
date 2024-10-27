@@ -28,6 +28,7 @@ import EnDefective from "./engineers/defective";
 import CSCFaultyStock from "./stock/faulty-stock";
 import FaultyReport from "./stock/faulty-report";
 import JobEntrySummary from "./job/job-entry-summary";
+import AgingReport from "./aging-report";
 
 const ManagerRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAppSelector((state) => state.auth);
@@ -165,6 +166,10 @@ const routes: RouteObject[] = [
       {
         path: "/scrap-report",
         element: <ScrapReport />,
+      },
+      {
+        path: "/aging-report",
+        element: <AgingReport />,
       },
       {
         path: "/engineer",
