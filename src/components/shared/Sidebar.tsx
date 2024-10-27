@@ -234,7 +234,7 @@ export default function Sidebar() {
         {
           href: "/users",
           name: "Users",
-          Icon: Settings,
+          Icon: Group,
           show: true,
         },
       ],
@@ -242,8 +242,8 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="h-full bg-primary px-4 py-5 overflow-y-auto overflow-x-hidden w-[260px] scrollbar">
-      <div className="h-full flex flex-col gap-5">
+    <aside className="h-full bg-primary px-4 overflow-y-auto overflow-x-hidden w-[260px] scrollbar">
+      <div className="py-5 flex flex-col gap-5">
         <div className="flex flex-col items-center">
           <Link to={"/"} title="1000fix Inventory">
             <img className="!w-36 !h-auto" src={logo} />
