@@ -16,14 +16,19 @@ import { SkuSelect } from "../../components/shared/Inputs";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import reportApi from "../../api/report";
-import { SkuTable } from "../../components/shared/CustomTable";
 import { SKUCode } from "../../types/types";
-import moment from "moment";
 import { exportExcel } from "../../utils/utils";
 
 type QueryType = {
   skuCode: SKUCode;
-  report: { quantity: number; createdAt: string }[];
+  quantity: number;
+  "1-60": number;
+  "61-120": number;
+  "121-180": number;
+  "181-240": number;
+  "241-300": number;
+  "301-360": number;
+  "361+": number;
 };
 
 export default function AgingReport() {
@@ -82,31 +87,32 @@ export default function AgingReport() {
                 <TableHead>
                   <TableRow>
                     <TableCell>#</TableCell>
-                    <SkuTable isHeader quantity />
-                    <TableCell></TableCell>
+                    <TableCell>Item</TableCell>
+                    <TableCell>Current Stock</TableCell>
+                    <TableCell>A( 1-60 )</TableCell>
+                    <TableCell>B( 61-120 )</TableCell>
+                    <TableCell>C( 121-180 )</TableCell>
+                    <TableCell>D( 181-240 )</TableCell>
+                    <TableCell>E( 242-300 )</TableCell>
+                    <TableCell>F( 301-360 )</TableCell>
+                    <TableCell>G( 361-Above)</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {data.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell>{index + 1}</TableCell>
-                      <SkuTable
-                        skuCode={item.skuCode}
-                        quantity={
-                          item.report.reduce(
-                            (total, val) => total + val.quantity,
-                            0
-                          ) || 0
-                        }
-                      />
                       <TableCell>
-                        {item.report.map((i, subIndex) => (
-                          <p key={subIndex} className="!block">
-                            {i.quantity} quantity entry at{" "}
-                            {moment(i.createdAt).format("ll")}
-                          </p>
-                        ))}
+                        ({item.skuCode?.name}) {item.skuCode?.item?.name}
                       </TableCell>
+                      <TableCell>{item.quantity}</TableCell>
+                      <TableCell>{item["1-60"] || 0}</TableCell>
+                      <TableCell>{item["61-120"] || 0}</TableCell>
+                      <TableCell>{item["121-180"] || 0}</TableCell>
+                      <TableCell>{item["181-240"] || 0}</TableCell>
+                      <TableCell>{item["241-300"] || 0}</TableCell>
+                      <TableCell>{item["301-360"] || 0}</TableCell>
+                      <TableCell>{item["361+"] || 0}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
