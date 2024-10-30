@@ -186,7 +186,6 @@ export default function OwnStock() {
                     <TableCell colSpan={2}>{totalGood || 0}</TableCell>
                     <TableCell>{totalDefective || 0}</TableCell>
                     <TableCell>{totalFaulty || 0}</TableCell>
-                    <TableCell></TableCell>
                   </TableRow>
                 </TableBody>
               </Table>

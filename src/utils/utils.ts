@@ -70,7 +70,12 @@ export const exportExcel = (tableId: string, filename: string = "report") => {
       const columnData = [];
       for (let column of columns) {
         const content = column.textContent;
+        const colspan = column.getAttribute("colspan");
+
         columnData.push(content);
+        if (colspan && parseInt(colspan) > 0) {
+          [...Array(parseInt(colspan) - 1)].map(() => columnData.push(""));
+        }
       }
       data.push(columnData);
     }
