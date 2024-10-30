@@ -153,10 +153,10 @@ export default function BranchStock() {
                     </TableRow>
                   ))}
                   <TableRow>
-                    <TableCell colSpan={8} className="!text-end">
+                    <TableCell colSpan={7} className="!text-end">
                       <b>Total</b>
                     </TableCell>
-                    <TableCell>{totalGood || 0}</TableCell>
+                    <TableCell colSpan={2}>{totalGood || 0}</TableCell>
                     <TableCell>{totalDefective || 0}</TableCell>
                     <TableCell>{totalFaulty || 0}</TableCell>
                   </TableRow>
