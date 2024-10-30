@@ -132,9 +132,8 @@ export default function BranchStock() {
                   <TableRow>
                     <TableCell>#</TableCell>
                     <TableCell>Branch</TableCell>
-                    <SkuTable isHeader />
+                    <SkuTable isHeader quantity />
                     <TableCell>AVG Price</TableCell>
-                    <TableCell>Quantity</TableCell>
                     <TableCell>Defective</TableCell>
                     <TableCell>Faulty</TableCell>
                   </TableRow>
@@ -144,9 +143,11 @@ export default function BranchStock() {
                     <TableRow key={index}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>{item.branch.name}</TableCell>
-                      <SkuTable skuCode={item.skuCode} />
+                      <SkuTable
+                        skuCode={item.skuCode}
+                        quantity={item?.quantity}
+                      />
                       <TableCell>{item?.avgPrice}</TableCell>
-                      <TableCell>{item?.quantity}</TableCell>
                       <TableCell>{item?.defective}</TableCell>
                       <TableCell>{item?.faulty}</TableCell>
                     </TableRow>
