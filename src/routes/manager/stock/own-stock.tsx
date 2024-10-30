@@ -180,10 +180,10 @@ export default function OwnStock() {
                     </TableRow>
                   ))}
                   <TableRow>
-                    <TableCell colSpan={7} className="!text-end">
+                    <TableCell colSpan={6} className="!text-end">
                       <b>Total</b>
                     </TableCell>
-                    <TableCell>{totalGood || 0}</TableCell>
+                    <TableCell colSpan={2}>{totalGood || 0}</TableCell>
                     <TableCell>{totalDefective || 0}</TableCell>
                     <TableCell>{totalFaulty || 0}</TableCell>
                     <TableCell></TableCell>
