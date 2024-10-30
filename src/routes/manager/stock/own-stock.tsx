@@ -159,9 +159,8 @@ export default function OwnStock() {
                 <TableHead>
                   <TableRow>
                     <TableCell>#</TableCell>
-                    <SkuTable isHeader />
+                    <SkuTable isHeader quantity />
                     <TableCell>AVG Price</TableCell>
-                    <TableCell>Quantity</TableCell>
                     <TableCell>Defective</TableCell>
                     <TableCell>Faulty</TableCell>
                     <TableCell></TableCell>
@@ -171,9 +170,11 @@ export default function OwnStock() {
                   {data?.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell>{index + 1}</TableCell>
-                      <SkuTable skuCode={item.skuCode} />
+                      <SkuTable
+                        skuCode={item.skuCode}
+                        quantity={item?.quantity}
+                      />
                       <TableCell>{item?.avgPrice}</TableCell>
-                      <TableCell>{item?.quantity}</TableCell>
                       <TableCell>{item?.defective}</TableCell>
                       <TableCell>{item?.faulty}</TableCell>
                     </TableRow>
