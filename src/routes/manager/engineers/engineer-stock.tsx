@@ -19,6 +19,7 @@ import engineerStockApi from "../../../api/engineerStock";
 import { EnStockType } from "../../../types/types";
 import { Download, Refresh } from "@mui/icons-material";
 import { exportExcel } from "../../../utils/utils";
+import { SkuTable } from "../../../components/shared/CustomTable";
 
 export default function EngineerStock() {
   // react redux
@@ -132,13 +133,8 @@ export default function EngineerStock() {
                   <TableRow>
                     <TableCell>#</TableCell>
                     <TableCell>Engineer</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Model</TableCell>
-                    <TableCell>Item</TableCell>
-                    <TableCell>UOM</TableCell>
-                    <TableCell>SKU Code</TableCell>
+                    <SkuTable isHeader quantity />
                     <TableCell>AVG Price</TableCell>
-                    <TableCell>Quantity</TableCell>
                     <TableCell>Defective</TableCell>
                   </TableRow>
                 </TableHead>
@@ -147,23 +143,19 @@ export default function EngineerStock() {
                     <TableRow key={index}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>{item.engineer.name}</TableCell>
-                      <TableCell>
-                        {item?.skuCode?.item?.model?.category?.name}
-                      </TableCell>
-                      <TableCell>{item?.skuCode?.item?.model?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.uom}</TableCell>
-                      <TableCell>{item?.skuCode?.name}</TableCell>
+                      <SkuTable
+                        skuCode={item.skuCode}
+                        quantity={item.quantity}
+                      />
                       <TableCell>{item?.avgPrice}</TableCell>
-                      <TableCell>{item?.quantity}</TableCell>
                       <TableCell>{item?.defective}</TableCell>
                     </TableRow>
                   ))}
                   <TableRow>
-                    <TableCell colSpan={8} className="!text-end">
+                    <TableCell colSpan={7} className="!text-end">
                       <b>Total</b>
                     </TableCell>
-                    <TableCell>{total || 0}</TableCell>
+                    <TableCell colSpan={2}>{total || 0}</TableCell>
                     <TableCell>{defective || 0}</TableCell>
                   </TableRow>
                 </TableBody>
