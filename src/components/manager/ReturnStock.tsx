@@ -17,6 +17,7 @@ import { Refresh } from "@mui/icons-material";
 import moment from "moment";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { SkuTable } from "../shared/CustomTable";
 
 const Actions = ({
   stock,
@@ -76,11 +77,7 @@ export default function ReturnStock({ type }: { type: "faulty" | "return" }) {
   return (
     <>
       <div className="flex items-center justify-end gap-4">
-        <Button
-          startIcon={<Refresh />}
-          variant="contained"
-          onClick={() => refetch()}
-        >
+        <Button startIcon={<Refresh />} onClick={() => refetch()}>
           Refresh
         </Button>
       </div>
@@ -104,12 +101,7 @@ export default function ReturnStock({ type }: { type: "faulty" | "return" }) {
                     <TableCell>#</TableCell>
                     <TableCell>Return Date</TableCell>
                     <TableCell>Engineer</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Model</TableCell>
-                    <TableCell>Item</TableCell>
-                    <TableCell>UOM</TableCell>
-                    <TableCell>SKU</TableCell>
-                    <TableCell>Quantity</TableCell>
+                    <SkuTable isHeader quantity />
                     {type === "faulty" && <TableCell>Reason</TableCell>}
                     <TableCell></TableCell>
                   </TableRow>
@@ -122,14 +114,10 @@ export default function ReturnStock({ type }: { type: "faulty" | "return" }) {
                         {moment(item.createdAt).format("lll")}
                       </TableCell>
                       <TableCell>{item.engineer?.name}</TableCell>
-                      <TableCell>
-                        {item.skuCode?.item?.model?.category?.name}
-                      </TableCell>
-                      <TableCell>{item.skuCode?.item?.model?.name}</TableCell>
-                      <TableCell>{item.skuCode?.item?.name}</TableCell>
-                      <TableCell>{item.skuCode?.item?.uom}</TableCell>
-                      <TableCell>{item.skuCode?.name}</TableCell>
-                      <TableCell>{item.quantity}</TableCell>
+                      <SkuTable
+                        skuCode={item.skuCode}
+                        quantity={item.quantity}
+                      />
                       {type === "faulty" && <TableCell>{item.note}</TableCell>}
                       <TableCell>
                         <Actions stock={item} refetch={refetch} />

@@ -28,7 +28,7 @@ export default function ReturnStockReport({
 }) {
   // queries
   const { fromDate, toDate } = useSearch({
-    from: "/",
+    from: type === "return" ? "/csc/engineer/return" : "/csc/engineer/faulty",
     select: (s: { fromDate: string; toDate: string }) => ({
       fromDate: s.fromDate || "",
       toDate: s.toDate || "",
