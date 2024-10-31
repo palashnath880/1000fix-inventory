@@ -343,14 +343,7 @@ export default function Sidebar() {
                   ) : (
                     <MenuItem
                       key={index}
-                      component={
-                        menu.href && (
-                          <Link
-                            to={menu.href}
-                            activeProps={{ className: `!bg-[#f8f8ff85]` }}
-                          />
-                        )
-                      }
+                      component={menu.href && <Link to={menu.href} />}
                       icon={<menu.Icon fontSize="medium" />}
                     >
                       {menu.name}
