@@ -155,19 +155,19 @@ export default function Sidebar() {
           show: true,
         },
         {
-          href: "/csc/engineer/faulty-stock",
+          href: "/csc/engineer/faulty",
           name: "Faulty Stock",
           Icon: DisabledByDefault,
           show: true,
         },
         {
-          href: "/csc/engineer/return-stock",
+          href: "/csc/engineer/return",
           name: "Return Stock",
           Icon: KeyboardReturn,
           show: true,
         },
         {
-          href: "/csc/engineer/Defective",
+          href: "/csc/engineer/defective",
           name: "Defective",
           Icon: KeyboardReturn,
           show: true,
