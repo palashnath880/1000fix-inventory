@@ -94,37 +94,37 @@ export default function Sidebar() {
       show: true,
       menus: [
         {
-          href: "/csc/own-stock",
+          href: "/csc/stock/own",
           name: "Own Stock",
           Icon: Inventory,
           show: true,
         },
         {
-          href: "/csc/branch-stock",
+          href: "/csc/stock/branch",
           name: "CSC Stock",
           Icon: HomeWork,
           show: user?.role === "admin",
         },
         {
-          href: "/csc/stock-transfer",
+          href: "/csc/stock/transfer",
           name: "Stock Transfer",
           Icon: LocalShipping,
           show: true,
         },
         {
-          href: "/csc/stock-receive",
+          href: "/csc/stock/receive",
           name: "Stock Receive",
           Icon: CallReceived,
           show: role === "manager",
         },
         {
-          href: "/csc/stock-return",
+          href: "/csc/stock/return",
           name: "Stock Return",
           Icon: KeyboardReturn,
           show: role === "manager",
         },
         {
-          href: "/csc/stock-approval",
+          href: "/csc/stock/approval",
           name: "Stock Approval",
           Icon: Approval,
           show: role === "admin",
