@@ -32,7 +32,7 @@ import {
 } from "react-pro-sidebar";
 import { useAppSelector } from "../../hooks";
 import logo from "../../assets/logo.png";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 
 type Menu = {
   href?: string;
@@ -45,6 +45,66 @@ type Menu = {
     Icon: SvgIconComponent;
     show?: boolean;
   }[];
+};
+
+const MySubMenu = ({
+  Icon,
+  name,
+  menus,
+}: {
+  name: string;
+  Icon: SvgIconComponent;
+  show?: boolean;
+  menus?: {
+    href: string;
+    name: string;
+    Icon: SvgIconComponent;
+    show?: boolean;
+  }[];
+}) => {
+  // location
+  const location = useLocation();
+  const pathname = location.pathname;
+
+  return (
+    <SubMenu
+      icon={<Icon fontSize="medium" />}
+      label={name}
+      rootStyles={{
+        "& .ps-submenu-content": {
+          backgroundColor: "transparent !important",
+          paddingLeft: 20,
+        },
+        "& .ps-submenu-expand-icon": {
+          paddingRight: 10,
+          display: "flex",
+        },
+      }}
+      defaultOpen={!!menus?.find((i) => i.href === pathname)}
+    >
+      {menus?.map(
+        (menu, index) =>
+          menu.show && (
+            <MenuItem
+              key={index}
+              component={
+                menu.href && (
+                  <Link
+                    to={menu.href}
+                    activeProps={{
+                      className: `!bg-[#f8f8ff85]`,
+                    }}
+                  />
+                )
+              }
+              icon={<menu.Icon fontSize="medium" />}
+            >
+              {menu.name}
+            </MenuItem>
+          )
+      )}
+    </SubMenu>
+  );
 };
 
 export default function Sidebar() {
@@ -279,43 +339,18 @@ export default function Sidebar() {
                 (menu, index) =>
                   menu.show &&
                   (menu?.menus ? (
-                    <SubMenu
-                      key={index}
-                      icon={<menu.Icon fontSize="medium" />}
-                      label={menu.name}
-                      rootStyles={{
-                        "& .ps-submenu-content": {
-                          backgroundColor: "transparent !important",
-                          paddingLeft: 20,
-                        },
-                        "& .ps-submenu-expand-icon": {
-                          paddingRight: 10,
-                          display: "flex",
-                        },
-                      }}
-                      // defaultOpen={
-                      //   !!menu?.menus?.find((i) => i.href === pathname)
-                      // }
-                    >
-                      {menu?.menus?.map(
-                        (submenu, subIndex) =>
-                          submenu.show && (
-                            <MenuItem
-                              key={subIndex}
-                              component={
-                                submenu.href && <Link to={submenu.href} />
-                              }
-                              icon={<submenu.Icon fontSize="medium" />}
-                            >
-                              {submenu.name}
-                            </MenuItem>
-                          )
-                      )}
-                    </SubMenu>
+                    <MySubMenu {...menu} />
                   ) : (
                     <MenuItem
                       key={index}
-                      component={menu.href && <Link to={menu.href} />}
+                      component={
+                        menu.href && (
+                          <Link
+                            to={menu.href}
+                            activeProps={{ className: `!bg-[#f8f8ff85]` }}
+                          />
+                        )
+                      }
                       icon={<menu.Icon fontSize="medium" />}
                     >
                       {menu.name}
