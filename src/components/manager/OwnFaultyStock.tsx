@@ -1,4 +1,3 @@
-import { useSearchParams } from "react-router-dom";
 import { useAppSelector } from "../../hooks";
 import { OwnStockType, SKUCode } from "../../types/types";
 import { useQuery } from "@tanstack/react-query";
@@ -26,6 +25,7 @@ import { useState } from "react";
 import OwnFaultyDrawer from "../../components/manager/OwnFaultyDrawer";
 import { SkuTable } from "../shared/CustomTable";
 import faultyApi from "../../api/faulty";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 
 type StateType = {
   skuCodeId: string;
@@ -44,8 +44,11 @@ export default function OwnFaultyStock() {
   const { user } = useAppSelector((state) => state.auth);
 
   // search queries
-  const [search, setSearch] = useSearchParams();
-  const skuCode = search.get("skuCode") || "";
+  const { skuCode } = useSearch({
+    from: "/csc/stock/faulty/",
+    select: (s: { skuCode: string }) => ({ skuCode: s.skuCode || "" }),
+  });
+  const navigate = useNavigate({ from: "/csc/stock/faulty" });
 
   // fetch stock
   const { data, isLoading, refetch, isSuccess } = useQuery<OwnStockType[]>({
@@ -69,7 +72,9 @@ export default function OwnFaultyStock() {
             options={skuCodes}
             sx={{ width: 280 }}
             noOptionsText="No sku matched"
-            onChange={(_, val) => setSearch({ skuCode: val?.id || "" })}
+            onChange={(_, val) =>
+              navigate({ search: { skuCode: val?.id || "" } })
+            }
             value={skuCodes.find((i) => i.id === skuCode) || null}
             isOptionEqualToValue={(opt, val) => opt.id === val.id}
             getOptionLabel={(opt) => opt.name}

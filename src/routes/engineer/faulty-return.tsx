@@ -24,8 +24,9 @@ import { AxiosError } from "axios";
 import ReturnReport from "../../components/engineer/ReturnReport";
 import SkuCodeSelect from "../../components/engineer/SkuCodeSelect";
 import QuantitySelector from "../../components/engineer/QuantitySelector";
+import { createFileRoute } from "@tanstack/react-router";
 
-export default function FaultyReturn() {
+function FaultyReturn() {
   // states
   const [ownStock, setOwnStock] = useState<OwnStockType | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -197,3 +198,7 @@ export default function FaultyReturn() {
     </div>
   );
 }
+
+export const Route = createFileRoute("/engineer/faulty-return")({
+  component: FaultyReturn,
+});

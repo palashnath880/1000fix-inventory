@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import ReportDateInputs from "../../components/shared/ReportDateInputs";
-import { useSearchParams } from "react-router-dom";
+
 import { useQuery } from "@tanstack/react-query";
 import engineerStockApi from "../../api/engineerStock";
 import moment from "moment";
@@ -20,14 +20,24 @@ import { EngineerStock } from "../../types/types";
 import { useAppSelector } from "../../hooks";
 import { Download } from "@mui/icons-material";
 import { exportExcel } from "../../utils/utils";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
-export default function StockReport() {
+export const Route = createFileRoute("/engineer/stock-report")({
+  component: StockReport,
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      fromDate: (search.fromDate as string) || "",
+      toDate: (search.toDate as string) || "",
+    };
+  },
+});
+
+function StockReport() {
   const { user } = useAppSelector((state) => state.auth);
 
   // search queries
-  const [search, setSearch] = useSearchParams();
-  const fromDate = search.get("fromDate") || "";
-  const toDate = search.get("toDate") || "";
+  const { fromDate = "", toDate = "" } = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
 
   // react query
   const { data, isLoading, isSuccess } = useQuery<EngineerStock[]>({
@@ -52,7 +62,9 @@ export default function StockReport() {
       <div className="mt-5">
         <ReportDateInputs
           value={{ from: fromDate, to: toDate }}
-          onSearch={({ from, to }) => setSearch({ fromDate: from, toDate: to })}
+          onSearch={({ from, to }) =>
+            navigate({ search: { fromDate: from, toDate: to } })
+          }
         />
       </div>
 

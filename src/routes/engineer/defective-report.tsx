@@ -12,19 +12,21 @@ import {
   Typography,
 } from "@mui/material";
 import ReportDateInputs from "../../components/shared/ReportDateInputs";
-import { useSearchParams } from "react-router-dom";
+
 import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
 import engineerStockApi from "../../api/engineerStock";
 import { EngineerStock } from "../../types/types";
 import { Download, Refresh } from "@mui/icons-material";
 import { exportExcel } from "../../utils/utils";
+import { createFileRoute } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 
-export default function DefectiveReport() {
+function DefectiveReport() {
   // queries
-  const [search, setSearch] = useSearchParams();
-  const fromDate = search.get("fromDate") || "";
-  const toDate = search.get("toDate") || "";
+  // search queries
+  const { fromDate = "", toDate = "" } = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
 
   // react query
   const { data, isLoading, isSuccess, refetch } = useQuery<EngineerStock[]>({
@@ -48,7 +50,9 @@ export default function DefectiveReport() {
       <div className="mt-3 flex flex-col gap-3">
         <ReportDateInputs
           value={{ from: fromDate, to: toDate }}
-          onSearch={({ from, to }) => setSearch({ fromDate: from, toDate: to })}
+          onSearch={({ from, to }) =>
+            navigate({ search: { fromDate: from, toDate: to } })
+          }
         />
         <Typography variant="body2" className="!text-yellow-700">
           Showing today's report by default
@@ -129,3 +133,13 @@ export default function DefectiveReport() {
     </div>
   );
 }
+
+export const Route = createFileRoute("/engineer/defective-report")({
+  component: DefectiveReport,
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      fromDate: (search.fromDate as string) || "",
+      toDate: (search.toDate as string) || "",
+    };
+  },
+});

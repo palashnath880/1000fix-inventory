@@ -13,8 +13,9 @@ import engineerStockApi from "../../api/engineerStock";
 import { StockType } from "../../types/types";
 import moment from "moment";
 import StockActions from "../../components/engineer/StockActions";
+import { createFileRoute } from "@tanstack/react-router";
 
-export default function StockReceive() {
+function StockReceive() {
   // react query
   const {
     data = [],
@@ -101,3 +102,7 @@ export default function StockReceive() {
     </div>
   );
 }
+
+export const Route = createFileRoute("/engineer/stock-receive")({
+  component: StockReceive,
+});

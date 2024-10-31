@@ -2,6 +2,9 @@
 
 import moment from "moment";
 import { utils, writeFile } from "xlsx";
+import { AuthContext } from "../types/types";
+import { toast } from "react-toastify";
+import { redirect } from "@tanstack/react-router";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const getFileRoutes = () => {
@@ -93,4 +96,11 @@ export const exportExcel = (tableId: string, filename: string = "report") => {
 
   /* export to XLSX */
   writeFile(wb, filename);
+};
+
+export const verifyAdmin = ({ auth: { user } }: { auth: AuthContext }) => {
+  if (user?.role !== "admin") {
+    toast.warn(`You have no permission to access this page.`);
+    return redirect({ to: "/csc" });
+  }
 };

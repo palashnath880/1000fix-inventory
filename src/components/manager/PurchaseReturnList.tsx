@@ -18,16 +18,18 @@ import { StockType } from "../../types/types";
 import moment from "moment";
 import { exportExcel } from "../../utils/utils";
 import ReportDateInputs from "../shared/ReportDateInputs";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 
 export default function PurchaseReturnList() {
   // queries
-
-  const [search, setSearch] = useSearchParams();
-  const { fromDate, toDate } = {
-    fromDate: search.get("fromDate") || "",
-    toDate: search.get("toDate") || "",
-  };
+  const { fromDate, toDate } = useSearch({
+    from: "/csc/purchase-return",
+    select: (s: { fromDate: string; toDate: string }) => ({
+      fromDate: s.fromDate || "",
+      toDate: s.toDate || "",
+    }),
+  });
+  const navigate = useNavigate({ from: "/csc/purchase-return" });
 
   // react query
   const { data, isLoading, refetch, isSuccess } = useQuery<StockType[]>({
@@ -52,7 +54,7 @@ export default function PurchaseReturnList() {
             isLoading={isLoading}
             value={{ from: fromDate, to: toDate }}
             onSearch={({ from, to }) =>
-              setSearch({ fromDate: from, toDate: to })
+              navigate({ search: { fromDate: from, toDate: to } })
             }
           />
           <Typography variant="body2" className="!text-yellow-700">

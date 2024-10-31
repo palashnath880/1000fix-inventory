@@ -17,9 +17,9 @@ import {
 import { Download, Refresh } from "@mui/icons-material";
 import moment from "moment";
 import ReportDateInputs from "../shared/ReportDateInputs";
-import { useSearchParams } from "react-router-dom";
 import { exportExcel } from "../../utils/utils";
 import reportApi from "../../api/report";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 
 export default function ReturnStockReport({
   type,
@@ -27,9 +27,14 @@ export default function ReturnStockReport({
   type: "faulty" | "return";
 }) {
   // queries
-  const [search, setSearch] = useSearchParams();
-  const fromDate = search.get("fromDate") || "";
-  const toDate = search.get("toDate") || "";
+  const { fromDate, toDate } = useSearch({
+    from: "/",
+    select: (s: { fromDate: string; toDate: string }) => ({
+      fromDate: s.fromDate || "",
+      toDate: s.toDate || "",
+    }),
+  });
+  const navigate = useNavigate({ from: "/" });
 
   // react query
   const { data, isLoading, isSuccess, refetch } = useQuery<EngineerStock[]>({
@@ -58,7 +63,9 @@ export default function ReturnStockReport({
         <ReportDateInputs
           isLoading={isLoading}
           value={{ from: fromDate, to: toDate }}
-          onSearch={({ from, to }) => setSearch({ fromDate: from, toDate: to })}
+          onSearch={({ from, to }) =>
+            navigate({ search: { fromDate: from, toDate: to } })
+          }
         />
         <div className="flex justify-end gap-4">
           <Button startIcon={<Refresh />} onClick={() => refetch()}>

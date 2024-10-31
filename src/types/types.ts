@@ -164,3 +164,9 @@ export type FaultyItem = {
 };
 
 export type AxiosErr = AxiosError<{ message: string }>;
+
+export type AuthContext = {
+  loading: boolean;
+  isLogged: boolean;
+  user: null | User;
+};

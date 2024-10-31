@@ -13,19 +13,24 @@ import {
   Typography,
 } from "@mui/material";
 import ReportDateInputs from "../shared/ReportDateInputs";
-import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { StockType } from "../../types/types";
 import { SkuTable } from "../shared/CustomTable";
 import moment from "moment";
 import { exportExcel } from "../../utils/utils";
 import stockApi from "../../api/stock";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 
 export default function CSCReceivedReport() {
   // queries
-  const [search, setSearch] = useSearchParams();
-  const fromDate = search.get("fromDate") || "";
-  const toDate = search.get("toDate") || "";
+  const { fromDate, toDate } = useSearch({
+    from: "/",
+    select: (s: { fromDate: string; toDate: string }) => ({
+      fromDate: s.fromDate || "",
+      toDate: s.toDate || "",
+    }),
+  });
+  const navigate = useNavigate({ from: "/" });
 
   // received / reject report
   const { data, isLoading, isSuccess, refetch } = useQuery<StockType[]>({
@@ -47,7 +52,9 @@ export default function CSCReceivedReport() {
       <div className="flex justify-between items-center mt-3">
         <ReportDateInputs
           value={{ from: fromDate, to: toDate }}
-          onSearch={({ from, to }) => setSearch({ fromDate: from, toDate: to })}
+          onSearch={({ from, to }) =>
+            navigate({ search: { fromDate: from, toDate: to } })
+          }
         />
         <div className="flex items-center gap-4">
           <Button

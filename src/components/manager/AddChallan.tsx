@@ -21,7 +21,7 @@ import { SKUCode } from "../../types/types";
 import { useAppSelector } from "../../hooks";
 import challanApi from "../../api/challan";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 
 const AddItem = ({
   add,
@@ -163,7 +163,7 @@ export default function AddChallan({ refetch }: { refetch?: () => void }) {
       }));
 
       const res = await challanApi.create(dataObj);
-      if (res.data?.id) navigate(`/challan/${res.data.id}`);
+      if (res.data?.id) navigate({ to: `/csc/challan/${res.data.id}` });
       setValue("items", []);
       reset();
       toast.success(`Challan created successfully`);
@@ -183,11 +183,7 @@ export default function AddChallan({ refetch }: { refetch?: () => void }) {
       <PopupState variant="popover">
         {(popupState) => (
           <>
-            <Button
-              variant="contained"
-              startIcon={<Add />}
-              {...bindTrigger(popupState)}
-            >
+            <Button startIcon={<Add />} {...bindTrigger(popupState)}>
               Add Challan
             </Button>
 

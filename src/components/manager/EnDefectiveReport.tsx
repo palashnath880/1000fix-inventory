@@ -13,7 +13,6 @@ import {
   Typography,
 } from "@mui/material";
 import ReportDateInputs from "../shared/ReportDateInputs";
-import { useSearchParams } from "react-router-dom";
 import { Download, Refresh } from "@mui/icons-material";
 import { useQuery } from "@tanstack/react-query";
 import { SkuTable } from "../shared/CustomTable";
@@ -21,12 +20,18 @@ import moment from "moment";
 import { EngineerStock } from "../../types/types";
 import engineerStockApi from "../../api/engineerStock";
 import { exportExcel } from "../../utils/utils";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 
 export default function EnDefectiveReport() {
   // queries
-  const [search, setSearch] = useSearchParams();
-  const fromDate = search.get("fromDate") || "";
-  const toDate = search.get("toDate") || "";
+  const { fromDate, toDate } = useSearch({
+    from: "/csc/engineer/defective",
+    select: (s: { fromDate: string; toDate: string }) => ({
+      fromDate: s.fromDate || "",
+      toDate: s.toDate || "",
+    }),
+  });
+  const navigate = useNavigate({ from: "/csc/engineer/defective" });
 
   // react query
   const { isLoading, refetch, isSuccess, data } = useQuery<EngineerStock[]>({
@@ -48,7 +53,9 @@ export default function EnDefectiveReport() {
         <ReportDateInputs
           isLoading={isLoading}
           value={{ from: fromDate, to: toDate }}
-          onSearch={({ from, to }) => setSearch({ fromDate: from, toDate: to })}
+          onSearch={({ from, to }) =>
+            navigate({ search: { fromDate: from, toDate: to } })
+          }
         />
         <div className="flex justify-end items-center gap-4">
           <Button

@@ -30,9 +30,9 @@ import {
   Sidebar as ReactSidebar,
   SubMenu,
 } from "react-pro-sidebar";
-import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAppSelector } from "../../hooks";
 import logo from "../../assets/logo.png";
+import { Link } from "@tanstack/react-router";
 
 type Menu = {
   href?: string;
@@ -54,14 +54,10 @@ export default function Sidebar() {
   // mui theme
   const theme = useTheme();
 
-  // path name
-  const location = useLocation();
-  const pathname = location.pathname;
-
   // menus array
   const menus: Menu[] = [
     {
-      href: "/",
+      href: "/csc/",
       name: "Home",
       Icon: Home,
       show: true,
@@ -73,19 +69,19 @@ export default function Sidebar() {
       show: true,
       menus: [
         {
-          href: "/job-entry",
+          href: "/csc/job/entry",
           name: "Create Job",
           Icon: EditNote,
           show: true,
         },
         {
-          href: "/job-entry-list",
+          href: "/csc/job/entry-list",
           name: "Job Entry Report",
           Icon: Assessment,
           show: true,
         },
         {
-          href: "/job-entry-summary",
+          href: "/csc/job/entry-summary",
           name: "Job Entry Summary",
           Icon: Assessment,
           show: user?.role === "admin",
@@ -98,43 +94,43 @@ export default function Sidebar() {
       show: true,
       menus: [
         {
-          href: "/own-stock",
+          href: "/csc/own-stock",
           name: "Own Stock",
           Icon: Inventory,
           show: true,
         },
         {
-          href: "/branch-stock",
+          href: "/csc/branch-stock",
           name: "CSC Stock",
           Icon: HomeWork,
           show: user?.role === "admin",
         },
         {
-          href: "/stock-transfer",
+          href: "/csc/stock-transfer",
           name: "Stock Transfer",
           Icon: LocalShipping,
           show: true,
         },
         {
-          href: "/stock-receive",
+          href: "/csc/stock-receive",
           name: "Stock Receive",
           Icon: CallReceived,
           show: role === "manager",
         },
         {
-          href: "/stock-return",
+          href: "/csc/stock-return",
           name: "Stock Return",
           Icon: KeyboardReturn,
           show: role === "manager",
         },
         {
-          href: "/stock-approval",
+          href: "/csc/stock-approval",
           name: "Stock Approval",
           Icon: Approval,
           show: role === "admin",
         },
         {
-          href: "/stock/faulty",
+          href: "/csc/stock/faulty",
           name: "Faulty Stock",
           Icon: Approval,
           show: true,
@@ -147,31 +143,31 @@ export default function Sidebar() {
       show: true,
       menus: [
         {
-          href: "/engineer/stock",
+          href: "/csc/engineer/stock",
           name: "Engineer Stock",
           Icon: BarChart,
           show: true,
         },
         {
-          href: "/engineer/transfer-report",
+          href: "/csc/engineer/transfer-report",
           name: "Transfer Report",
           Icon: Article,
           show: true,
         },
         {
-          href: "/engineer/faulty-stock",
+          href: "/csc/engineer/faulty-stock",
           name: "Faulty Stock",
           Icon: DisabledByDefault,
           show: true,
         },
         {
-          href: "/engineer/return-stock",
+          href: "/csc/engineer/return-stock",
           name: "Return Stock",
           Icon: KeyboardReturn,
           show: true,
         },
         {
-          href: "/engineer/Defective",
+          href: "/csc/engineer/Defective",
           name: "Defective",
           Icon: KeyboardReturn,
           show: true,
@@ -179,31 +175,31 @@ export default function Sidebar() {
       ],
     },
     {
-      href: "/defective",
+      href: "/csc/defective",
       name: "Defective",
       Icon: Cancel,
       show: true,
     },
     {
-      href: "/challan",
+      href: "/csc/challan",
       name: "Challan",
       Icon: AdfScanner,
       show: user?.role === "admin",
     },
     {
-      href: "/purchase-return",
+      href: "/csc/purchase-return",
       name: "Purchase Return",
       Icon: AssignmentReturn,
       show: user?.role === "admin",
     },
     {
-      href: "/scrap-report",
+      href: "/csc/scrap-report",
       name: "Scrap Report",
       Icon: AutoDelete,
       show: user?.role === "admin",
     },
     {
-      href: "/aging-report",
+      href: "/csc/aging-report",
       name: "Aging Report",
       Icon: Article,
       show: true,
@@ -214,25 +210,25 @@ export default function Sidebar() {
       show: role === "admin",
       menus: [
         {
-          href: "/sku-code",
+          href: "/csc/admin-options/sku-code",
           name: "SKU Code",
           Icon: Settings,
           show: true,
         },
         {
-          href: "/stock-entry",
+          href: "/csc/admin-options/stock-entry",
           name: "Stock Entry",
           Icon: Settings,
           show: true,
         },
         {
-          href: "/branch",
+          href: "/csc/admin-options/branch",
           name: "CSC",
           Icon: Settings,
           show: true,
         },
         {
-          href: "/users",
+          href: "/csc/admin-options/users",
           name: "Users",
           Icon: Group,
           show: true,
@@ -245,7 +241,7 @@ export default function Sidebar() {
     <aside className="h-full bg-primary px-4 overflow-y-auto overflow-x-hidden w-[260px] scrollbar">
       <div className="py-5 flex flex-col gap-5">
         <div className="flex flex-col items-center">
-          <Link to={"/"} title="1000fix Inventory">
+          <Link to={"/csc"} title="1000fix Inventory">
             <img className="!w-36 !h-auto" src={logo} />
           </Link>
         </div>
@@ -297,9 +293,9 @@ export default function Sidebar() {
                           display: "flex",
                         },
                       }}
-                      defaultOpen={
-                        !!menu?.menus?.find((i) => i.href === pathname)
-                      }
+                      // defaultOpen={
+                      //   !!menu?.menus?.find((i) => i.href === pathname)
+                      // }
                     >
                       {menu?.menus?.map(
                         (submenu, subIndex) =>
@@ -307,7 +303,7 @@ export default function Sidebar() {
                             <MenuItem
                               key={subIndex}
                               component={
-                                submenu.href && <NavLink to={submenu.href} />
+                                submenu.href && <Link to={submenu.href} />
                               }
                               icon={<submenu.Icon fontSize="medium" />}
                             >
@@ -319,7 +315,7 @@ export default function Sidebar() {
                   ) : (
                     <MenuItem
                       key={index}
-                      component={menu.href && <NavLink to={menu.href} />}
+                      component={menu.href && <Link to={menu.href} />}
                       icon={<menu.Icon fontSize="medium" />}
                     >
                       {menu.name}

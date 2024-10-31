@@ -1,41 +1,37 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Add, Close } from "@mui/icons-material";
 import {
   Alert,
+  AppBar,
   Autocomplete,
   Button,
-  Dialog,
+  CircularProgress,
+  Drawer,
   IconButton,
-  Paper,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
   Skeleton,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
-import {
-  bindDialog,
-  bindTrigger,
-  usePopupState,
-} from "material-ui-popup-state/hooks";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+
+import { Controller, useForm } from "react-hook-form";
 import type { ModelInputs } from "../../types/reactHookForm.types";
 import { useState } from "react";
-import { AxiosError } from "axios";
 import modelApi from "../../api/model";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import moment from "moment";
 import { fetchModels } from "../../features/utilsSlice";
 import { toast } from "react-toastify";
-import { Model } from "../../types/types";
+import { AxiosErr, Model } from "../../types/types";
 import DeleteConfirm from "../shared/DeleteConfirm";
+import { useMutation } from "@tanstack/react-query";
 
 export default function Models() {
   // states
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   //  react redux
   const { data: models, loading } = useAppSelector(
@@ -45,9 +41,6 @@ export default function Models() {
     (state) => state.utils.categories
   );
   const dispatch = useAppDispatch();
-
-  // popup state
-  const popup = usePopupState({ variant: "popover", popupId: "categories" });
 
   // react hook form
   const {
@@ -59,70 +52,62 @@ export default function Models() {
     setValue,
   } = useForm<ModelInputs>();
 
-  // add handler
-  const addHandler: SubmitHandler<ModelInputs> = async (data) => {
-    try {
-      setIsLoading(true);
-      setErrorMsg("");
-      await modelApi.create({
+  // add model handler
+  const add = useMutation<any, AxiosErr, ModelInputs>({
+    mutationFn: (data) => {
+      return modelApi.create({
         name: data.name,
-        categoryId: data?.category?.id || "",
+        categoryId: data.category?.id || "",
       });
-      toast.success(`Model added successfully`);
+    },
+    onSuccess: (_, data) => {
+      toast.success(`${data.name} added successfully`);
       reset();
       setValue("category", null);
       dispatch(fetchModels());
-    } catch (err) {
-      const error = err as AxiosError<{ message: string }>;
-      const msg =
-        error?.response?.data?.message || "Sorry! Something went wrong";
-      setErrorMsg(msg);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
+  // add error message
+  const errorMsg: string =
+    add.error?.response?.data.message || "Sorry! Something went wrong";
 
-  // category delete handler
-  const deleteHandler = async (model: Model) => {
-    const toastId = toast.loading(`Deleting ${model.name}`);
-
-    try {
-      await modelApi.delete(model.id);
-      toast.update(toastId, {
-        autoClose: 3000,
-        type: "success",
-        isLoading: false,
-        render: `${model.name} deleted`,
-      });
+  // model delete handler
+  const dltModel = useMutation<any, AxiosErr, Model>({
+    mutationFn: ({ id }) => modelApi.delete(id),
+    onSuccess: (_, { name }) => {
+      toast.success(`${name} deleted`);
       dispatch(fetchModels());
-    } catch (err) {
-      console.error(err);
-      toast.update(toastId, {
-        autoClose: 3000,
-        type: "error",
-        isLoading: false,
-        render: `Sorry! ${model.name} couldn't be deleted`,
-      });
-    }
-  };
+    },
+    onError: (_, { name }) => {
+      toast.error(`Sorry! ${name} couldn't be deleted`);
+    },
+  });
 
   return (
     <>
-      <Button variant="contained" {...bindTrigger(popup)}>
-        Models
-      </Button>
+      <Button onClick={() => setIsOpen(true)}>Models</Button>
 
-      <Dialog {...bindDialog(popup)}>
-        <Paper className="!py-5 w-[96%] sm:w-[500px] max-h-full flex flex-col overflow-hidden">
-          <div className="flex justify-between gap-5 items-center px-4 pb-2 border-b">
-            <Typography variant="h5">Models</Typography>
-            <IconButton onClick={popup.close}>
-              <Close />
-            </IconButton>
-          </div>
+      <Drawer
+        open={isOpen}
+        anchor="right"
+        onClose={() => setIsOpen(false)}
+        PaperProps={{ className: `!w-[450px]` }}
+      >
+        <div className="flex flex-col overflow-hidden">
+          <AppBar position="static" color="secondary">
+            <div className="flex justify-between gap-5 items-center px-4 py-2">
+              <Typography variant="h6" className="!font-semibold">
+                Models
+              </Typography>
+              <IconButton onClick={() => setIsOpen(false)}>
+                <Close />
+              </IconButton>
+            </div>
+          </AppBar>
+
           <div className="pt-4 px-4 flex flex-col flex-1 overflow-hidden gap-5">
-            {/* model add form */}
-            <form onSubmit={handleSubmit(addHandler)}>
+            {/* uom add form */}
+            <form onSubmit={handleSubmit((data) => add.mutate(data))}>
               <div className="flex flex-col gap-4">
                 <TextField
                   label="Model Name"
@@ -160,7 +145,8 @@ export default function Models() {
                   )}
                 />
 
-                {errorMsg && (
+                {/* error message show */}
+                {add.isError && (
                   <Typography
                     variant="body2"
                     className="!text-center !text-red-400"
@@ -171,20 +157,22 @@ export default function Models() {
                 <Button
                   fullWidth
                   type="submit"
-                  variant="contained"
-                  startIcon={<Add />}
-                  disabled={isLoading}
+                  startIcon={
+                    !add.isPending ? (
+                      <Add />
+                    ) : (
+                      <CircularProgress size={20} color="inherit" />
+                    )
+                  }
+                  disabled={add.isPending}
                 >
-                  Add Category
+                  {!add.isPending && "Add Model"}
                 </Button>
               </div>
             </form>
 
             {/* model list */}
-            <Paper className="!overflow-y-auto flex-1 overflow-hidden">
-              <div className="px-2 py-3">
-                <Typography variant="h6">Model List</Typography>
-              </div>
+            <div className="!overflow-y-auto flex-1 pb-10 overflow-hidden">
               {/* loader  */}
               {loading && (
                 <div className="">
@@ -193,47 +181,44 @@ export default function Models() {
                   ))}
                 </div>
               )}
-              {/* display models */}
+              {/* display uom */}
               {!loading && (
                 <>
                   {Array.isArray(models) && models.length > 0 ? (
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>#</TableCell>
-                          <TableCell>Name</TableCell>
-                          <TableCell>Created At</TableCell>
-                          <TableCell></TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {models?.map((model, index) => (
-                          <TableRow key={model.id}>
-                            <TableCell>{index + 1}</TableCell>
-                            <TableCell>
-                              {model.name}
-                              <br />
-                              <span>
-                                <b>Category:</b> {model.category?.name}
-                              </span>
-                            </TableCell>
-                            <TableCell>
-                              {moment(model.createdAt).format("ll")}
-                            </TableCell>
-                            <TableCell>
-                              <DeleteConfirm
-                                title={
-                                  <>
-                                    Are you sure to delete <b>{model.name}</b>
-                                  </>
-                                }
-                                confirm={() => deleteHandler(model)}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                    <List>
+                      {models?.map((model, index) => (
+                        <ListItem
+                          key={model.id}
+                          secondaryAction={
+                            <DeleteConfirm
+                              title={
+                                <>
+                                  Are you sure to delete <b>{model.name}</b>
+                                </>
+                              }
+                              confirm={() => dltModel.mutate(model)}
+                            />
+                          }
+                          className="!py-0 !border-b !px-0"
+                        >
+                          <ListItemAvatar className="!min-w-[36px]">
+                            {index + 1}
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={
+                              <>
+                                {model.name}
+                                <small className="ml-2">
+                                  {moment(model.createdAt).format("lll")}
+                                </small>
+                              </>
+                            }
+                            secondary={<>Category: {model.category.name}</>}
+                            secondaryTypographyProps={{ className: "!text-xs" }}
+                          />
+                        </ListItem>
+                      ))}
+                    </List>
                   ) : (
                     <Alert severity="error">
                       <Typography variant="body1">
@@ -243,10 +228,10 @@ export default function Models() {
                   )}
                 </>
               )}
-            </Paper>
+            </div>
           </div>
-        </Paper>
-      </Dialog>
+        </div>
+      </Drawer>
     </>
   );
 }
