@@ -15,34 +15,25 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import {
-  Controller,
-  SubmitHandler,
-  useFieldArray,
-  useForm,
-  useWatch,
-} from "react-hook-form";
+import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { JobEntryInputs } from "../../../types/reactHookForm.types";
 import { Add, Remove } from "@mui/icons-material";
 import { bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
 import JobEntryItem from "../../../components/job/JobEntryItem";
-import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import jobApi from "../../../api/job";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../../hooks";
 import { Header } from "../../../components/shared/TopBar";
 import { createFileRoute } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosErr } from "../../../types/types";
 
 export const Route = createFileRoute("/csc/job/entry")({
   component: Entry,
 });
 
 function Entry() {
-  // state
-  const [loading, setLoading] = useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = useState<string>("");
-
   // add item popup
   const addPopup = usePopupState({ variant: "popover", popupId: "addItem" });
 
@@ -79,11 +70,12 @@ function Entry() {
   });
 
   // job entry handler
-  const handler: SubmitHandler<JobEntryInputs> = async (data) => {
-    try {
-      setLoading(true);
-      setErrorMsg("");
-
+  const { isPending, error, isError, mutate } = useMutation<
+    any,
+    AxiosErr,
+    JobEntryInputs
+  >({
+    mutationFn: (data) => {
       const dataObj: any = { ...data };
       if (data.sellFrom === "engineer" && data.engineer) {
         dataObj.engineerId = data.engineer.id;
@@ -94,19 +86,15 @@ function Entry() {
         skuCodeId: i.skuCode?.id,
       }));
 
-      await jobApi.create(dataObj);
+      return jobApi.create(dataObj);
+    },
+    onSuccess: () => {
       setValue("items", []);
       reset();
       toast.success(`Job created successfully`);
-    } catch (err) {
-      const error = err as AxiosError<{ message: string }>;
-      const msg =
-        error?.response?.data?.message || "Sorry! Something went wrong";
-      setErrorMsg(msg);
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+  });
+  const msg = error?.response?.data?.message || "Sorry! Something went wrong";
 
   useEffect(() => {
     watch((_, { name }) => {
@@ -125,7 +113,7 @@ function Entry() {
         <Typography variant="h6">Job Entry Form</Typography>
         <Divider className="!mt-3" />
         <div>
-          <form onSubmit={handleSubmit(handler)}>
+          <form onSubmit={handleSubmit((data) => mutate(data))}>
             <div className="flex flex-col gap-4 mt-4">
               <TextField
                 fullWidth
@@ -281,13 +269,13 @@ function Entry() {
                 )}
               </div>
 
-              {errorMsg && (
+              {isError && (
                 <Typography className="!text-red-500 !text-center">
-                  {errorMsg}
+                  {msg}
                 </Typography>
               )}
 
-              <Button type="submit" disabled={loading}>
+              <Button type="submit" disabled={isPending}>
                 Job Entry
               </Button>
             </div>
