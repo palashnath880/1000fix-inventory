@@ -24,7 +24,9 @@ import { Route as CscScrapReportImport } from './routes/csc/scrap-report'
 import { Route as CscPurchaseReturnImport } from './routes/csc/purchase-return'
 import { Route as CscAgingReportImport } from './routes/csc/aging-report'
 import { Route as CscAdminOptionsImport } from './routes/csc/admin-options'
+import { Route as authUpdatePwdImport } from './routes/__auth/update-pwd'
 import { Route as authLoginImport } from './routes/__auth/login'
+import { Route as authForgotPasswordImport } from './routes/__auth/forgot-password'
 import { Route as CscDefectiveIndexImport } from './routes/csc/defective/index'
 import { Route as CscChallanIndexImport } from './routes/csc/challan/index'
 import { Route as CscStockTransferImport } from './routes/csc/stock/transfer'
@@ -127,9 +129,21 @@ const CscAdminOptionsRoute = CscAdminOptionsImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const authUpdatePwdRoute = authUpdatePwdImport.update({
+  id: '/update-pwd',
+  path: '/update-pwd',
+  getParentRoute: () => authRoute,
+} as any)
+
 const authLoginRoute = authLoginImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => authRoute,
+} as any)
+
+const authForgotPasswordRoute = authForgotPasswordImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => authRoute,
 } as any)
 
@@ -283,11 +297,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authImport
       parentRoute: typeof rootRoute
     }
+    '/__auth/forgot-password': {
+      id: '/__auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof authForgotPasswordImport
+      parentRoute: typeof authImport
+    }
     '/__auth/login': {
       id: '/__auth/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof authLoginImport
+      parentRoute: typeof authImport
+    }
+    '/__auth/update-pwd': {
+      id: '/__auth/update-pwd'
+      path: '/update-pwd'
+      fullPath: '/update-pwd'
+      preLoaderRoute: typeof authUpdatePwdImport
       parentRoute: typeof authImport
     }
     '/csc/admin-options': {
@@ -527,11 +555,15 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface authRouteChildren {
+  authForgotPasswordRoute: typeof authForgotPasswordRoute
   authLoginRoute: typeof authLoginRoute
+  authUpdatePwdRoute: typeof authUpdatePwdRoute
 }
 
 const authRouteChildren: authRouteChildren = {
+  authForgotPasswordRoute: authForgotPasswordRoute,
   authLoginRoute: authLoginRoute,
+  authUpdatePwdRoute: authUpdatePwdRoute,
 }
 
 const authRouteWithChildren = authRoute._addFileChildren(authRouteChildren)
@@ -557,7 +589,9 @@ const CscAdminOptionsRouteWithChildren = CscAdminOptionsRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof authRouteWithChildren
+  '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
+  '/update-pwd': typeof authUpdatePwdRoute
   '/csc/admin-options': typeof CscAdminOptionsRouteWithChildren
   '/csc/aging-report': typeof CscAgingReportRoute
   '/csc/purchase-return': typeof CscPurchaseReturnRoute
@@ -596,7 +630,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof authRouteWithChildren
+  '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
+  '/update-pwd': typeof authUpdatePwdRoute
   '/csc/admin-options': typeof CscAdminOptionsRouteWithChildren
   '/csc/aging-report': typeof CscAgingReportRoute
   '/csc/purchase-return': typeof CscPurchaseReturnRoute
@@ -636,7 +672,9 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/__auth': typeof authRouteWithChildren
+  '/__auth/forgot-password': typeof authForgotPasswordRoute
   '/__auth/login': typeof authLoginRoute
+  '/__auth/update-pwd': typeof authUpdatePwdRoute
   '/csc/admin-options': typeof CscAdminOptionsRouteWithChildren
   '/csc/aging-report': typeof CscAgingReportRoute
   '/csc/purchase-return': typeof CscPurchaseReturnRoute
@@ -677,7 +715,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/forgot-password'
     | '/login'
+    | '/update-pwd'
     | '/csc/admin-options'
     | '/csc/aging-report'
     | '/csc/purchase-return'
@@ -715,7 +755,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | ''
+    | '/forgot-password'
     | '/login'
+    | '/update-pwd'
     | '/csc/admin-options'
     | '/csc/aging-report'
     | '/csc/purchase-return'
@@ -753,7 +795,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/__auth'
+    | '/__auth/forgot-password'
     | '/__auth/login'
+    | '/__auth/update-pwd'
     | '/csc/admin-options'
     | '/csc/aging-report'
     | '/csc/purchase-return'
@@ -909,11 +953,21 @@ export const routeTree = rootRoute
     "/__auth": {
       "filePath": "__auth.tsx",
       "children": [
-        "/__auth/login"
+        "/__auth/forgot-password",
+        "/__auth/login",
+        "/__auth/update-pwd"
       ]
+    },
+    "/__auth/forgot-password": {
+      "filePath": "__auth/forgot-password.tsx",
+      "parent": "/__auth"
     },
     "/__auth/login": {
       "filePath": "__auth/login.tsx",
+      "parent": "/__auth"
+    },
+    "/__auth/update-pwd": {
+      "filePath": "__auth/update-pwd.tsx",
       "parent": "/__auth"
     },
     "/csc/admin-options": {

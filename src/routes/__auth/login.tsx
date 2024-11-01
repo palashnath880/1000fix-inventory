@@ -2,7 +2,9 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
+  Checkbox,
   CircularProgress,
+  FormControlLabel,
   IconButton,
   InputAdornment,
   Paper,
@@ -15,7 +17,7 @@ import type { LoginInputs } from "../../types/reactHookForm.types";
 import authApi from "../../api/auth";
 import { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosErr } from "../../types/types";
 import { toast } from "react-toastify";
@@ -27,6 +29,7 @@ export const Route = createFileRoute("/__auth/login")({
 function Login() {
   // states
   const [isShow, setIsShow] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
   // react hook form
   const {
@@ -93,6 +96,25 @@ function Login() {
                 },
               }}
             />
+
+            <div className="flex justify-between items-center">
+              <FormControlLabel
+                label="Remember me"
+                checked={isChecked}
+                control={
+                  <Checkbox onChange={(e) => setIsChecked(e.target.checked)} />
+                }
+              />
+              <Typography
+                variant="body2"
+                component={Link}
+                to="/forgot-password"
+                className="underline hover:no-underline"
+              >
+                Forgot Password?
+              </Typography>
+            </div>
+
             {/* error message */}
             {isError && (
               <Typography className="!text-center !text-red-500">
