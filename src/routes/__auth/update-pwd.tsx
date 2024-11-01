@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { AxiosErr } from "../../types/types";
 import authApi from "../../api/auth";
@@ -25,6 +25,7 @@ export const Route = createFileRoute("/__auth/update-pwd")({
 
 function UpdatePwd() {
   const { tokenId } = Route.useSearch();
+  const navigate = useNavigate({ from: "/update-pwd" });
 
   // states
   const [password, setPassword] = useState<{ new: string; confirm: string }>({
@@ -70,6 +71,7 @@ function UpdatePwd() {
     onSuccess: () => {
       setPassword({ confirm: "", new: "" });
       toast.success(`Password reset successfully.`);
+      navigate({ to: "/login" });
     },
   });
 
