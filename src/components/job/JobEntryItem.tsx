@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Autocomplete,
   Button,
   Dialog,
   Divider,
@@ -9,9 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
 import { OwnStockType, SKUCode, User } from "../../types/types";
-import { useAppSelector } from "../../hooks";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { JobItemInputs } from "../../types/reactHookForm.types";
 import { Add, Close } from "@mui/icons-material";
@@ -19,6 +16,8 @@ import stockApi from "../../api/stock";
 import { toast } from "react-toastify";
 import { bindDialog } from "material-ui-popup-state";
 import engineerStockApi from "../../api/engineerStock";
+import { useMutation } from "@tanstack/react-query";
+import { SkuSelect } from "../shared/Inputs";
 
 type JobEntryItemProps = {
   popup: any;
@@ -42,13 +41,6 @@ export default function JobEntryItem({
   add,
   engineer,
 }: JobEntryItemProps) {
-  // states
-  const [loading, setLoading] = useState<boolean>(false);
-  const [stock, setStock] = useState<OwnStockType | null>(null);
-
-  // react redux
-  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
-
   // react hook form
   const {
     control,
@@ -60,55 +52,60 @@ export default function JobEntryItem({
   } = useForm<JobItemInputs>();
 
   // stock by sku code
-  const stockBySkuId = async (skuId: string) => {
-    if (!skuId) {
-      setStock(null);
-      return;
-    }
-    try {
-      setLoading(true);
-
-      let data: any = {};
+  const {
+    data,
+    isPending,
+    mutate,
+    reset: stockReset,
+  } = useMutation<OwnStockType | null, any, string | undefined>({
+    mutationFn: async (skuId) => {
+      if (!skuId) return null;
       if (engineer) {
         const res = await engineerStockApi.stockBySku(engineer.id, skuId);
-        data = res.data;
-      } else {
-        const res = await stockApi.getBySkuId(skuId);
-        data = res.data;
+        return res.data;
       }
-      setStock(data);
-      setValue("price", data.avgPrice.toString());
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+
+      const res = await stockApi.getBySkuId(skuId);
+      return res.data;
+    },
+    onSuccess: (data) => {
+      if (data?.avgPrice) setValue("price", data.avgPrice.toString());
+    },
+    onError: () => toast.error(`Sorry! Something went wrong`),
+  });
 
   // add item handler
-  const addItem: SubmitHandler<JobItemInputs> = (data) => {
-    if (!stock) return;
+  const addItem: SubmitHandler<JobItemInputs> = ({
+    price,
+    quantity,
+    skuCode,
+  }) => {
+    if (!data) return;
 
+    if (fields.find((i) => i.skuCodeId === skuCode?.id)) {
+      toast.error(`This item already added`);
+      return;
+    }
     const stockQuantity: number =
-      typeof stock?.quantity === "string"
-        ? parseFloat(stock?.quantity)
-        : stock?.quantity;
+      typeof data?.quantity === "string"
+        ? parseFloat(data?.quantity)
+        : data?.quantity;
 
-    if (parseFloat(data?.quantity) > stockQuantity) {
+    if (parseFloat(quantity) > stockQuantity) {
       toast.error("Invalid quantity");
       return;
     }
 
     const item: any = {
-      price: data.price,
-      quantity: data.quantity,
-      skuCode: data.skuCode,
-      skuCodeId: data.skuCode?.id,
+      price,
+      quantity,
+      skuCode,
+      skuCodeId: skuCode?.id,
     };
     add(item);
     reset();
     setValue("skuCode", null);
-    setStock(null);
+    stockReset();
     popup?.close();
   };
 
@@ -132,58 +129,36 @@ export default function JobEntryItem({
                 field: { value, onChange },
                 fieldState: { error },
               }) => (
-                <Autocomplete
-                  options={skuCodes}
-                  disabled={loading}
-                  value={value || null}
-                  getOptionLabel={(opt) => opt.name}
-                  getOptionDisabled={(opt) =>
-                    !!fields.find((i) => i.skuCodeId === opt.id)
-                  }
-                  isOptionEqualToValue={(opt, val) => opt.id === val.id}
-                  onChange={(_, value) => {
-                    onChange(value);
-                    stockBySkuId(value?.id || "");
+                <SkuSelect
+                  disabled={isPending}
+                  error={Boolean(error)}
+                  value={value}
+                  onChange={({ sku }) => {
+                    mutate(sku?.id);
+                    onChange(sku);
                   }}
-                  noOptionsText="No SKU code matched"
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Select SKU Code"
-                      placeholder="Select SKU Code"
-                      error={Boolean(error)}
-                    />
-                  )}
                 />
               )}
             />
 
-            {stock && (
+            {data && (
               <>
                 <div className="flex flex-col gap-0">
-                  <Typography>
-                    <span className="font-semibold">Category:</span>{" "}
-                    {stock?.skuCode?.item?.model?.category?.name}
-                  </Typography>
-                  <Typography>
-                    <span className="font-semibold">Model:</span>{" "}
-                    {stock?.skuCode?.item?.model?.name}
-                  </Typography>
-                  <Typography>
+                  <Typography variant="body2">
                     <span className="font-semibold">Item:</span>{" "}
-                    {stock?.skuCode?.item?.name}
+                    {data?.skuCode?.item?.name}
                   </Typography>
-                  <Typography>
+                  <Typography variant="body2">
                     <span className="font-semibold">UOM:</span>{" "}
-                    {stock?.skuCode?.item?.uom}
+                    {data?.skuCode?.item?.uom}
                   </Typography>
-                  <Typography>
+                  <Typography variant="body2">
                     <span className="font-semibold">Price:</span>{" "}
-                    {stock?.avgPrice}
+                    {data?.avgPrice}
                   </Typography>
-                  <Typography>
+                  <Typography variant="body2">
                     <span className="font-semibold">Available Quantity:</span>{" "}
-                    {stock?.quantity}
+                    {data?.quantity}
                   </Typography>
                 </div>
                 <TextField
@@ -200,7 +175,11 @@ export default function JobEntryItem({
               </>
             )}
 
-            <Button type="submit" startIcon={<Add />} disabled={loading}>
+            <Button
+              type="submit"
+              startIcon={<Add />}
+              disabled={isPending || !data}
+            >
               Add Item
             </Button>
           </div>
