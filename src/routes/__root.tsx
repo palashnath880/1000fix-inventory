@@ -17,14 +17,18 @@ function Root() {
 
   return (
     <>
-      {auth.user?.role === "engineer" ? (
-        <EngineerLayout>
-          <Outlet />
-        </EngineerLayout>
+      {auth.isLogged ? (
+        auth.user?.role === "engineer" ? (
+          <EngineerLayout>
+            <Outlet />
+          </EngineerLayout>
+        ) : (
+          <CSCLayout context={auth}>
+            <Outlet />
+          </CSCLayout>
+        )
       ) : (
-        <CSCLayout context={auth}>
-          <Outlet />
-        </CSCLayout>
+        <Outlet />
       )}
 
       <style>{`.Toastify__close-button{align-self:center !important;}`}</style>

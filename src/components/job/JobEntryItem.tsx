@@ -157,6 +157,7 @@ export default function JobEntryItem({
                 />
               )}
             />
+
             {stock && (
               <>
                 <div className="flex flex-col gap-0">
@@ -198,12 +199,8 @@ export default function JobEntryItem({
                 />
               </>
             )}
-            <Button
-              variant="contained"
-              type="submit"
-              startIcon={<Add />}
-              disabled={loading}
-            >
+
+            <Button type="submit" startIcon={<Add />} disabled={loading}>
               Add Item
             </Button>
           </div>

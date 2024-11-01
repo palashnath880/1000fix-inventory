@@ -14,7 +14,7 @@ export const Route = createFileRoute("/")({
         return redirect({ to: "/csc" });
       }
     } else {
-      return redirect({ to: "/login", from: "/" });
+      return redirect({ to: "/login" });
     }
   },
 });

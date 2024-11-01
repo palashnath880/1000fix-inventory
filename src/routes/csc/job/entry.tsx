@@ -287,7 +287,7 @@ function Entry() {
                 </Typography>
               )}
 
-              <Button type="submit" variant="contained" disabled={loading}>
+              <Button type="submit" disabled={loading}>
                 Job Entry
               </Button>
             </div>
