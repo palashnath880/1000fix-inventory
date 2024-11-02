@@ -18,7 +18,7 @@ import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
 import reportApi from "../../api/report";
 import { Scrap } from "../../types/types";
-import { exportExcel } from "../../utils/utils";
+import { exportExcel, verifyAdmin } from "../../utils/utils";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 function Report() {
@@ -136,4 +136,5 @@ export const Route = createFileRoute("/csc/scrap-report")({
       toDate: (search.toDate as string) || "",
     };
   },
+  beforeLoad: ({ context: { auth } }) => verifyAdmin({ auth }),
 });
