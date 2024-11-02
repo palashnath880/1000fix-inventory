@@ -1,4 +1,4 @@
-import { ArrowDropDown } from "@mui/icons-material";
+import { ArrowDropDown, Refresh } from "@mui/icons-material";
 import { Button, Menu, MenuItem, Paper, Typography } from "@mui/material";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { useQuery } from "@tanstack/react-query";
@@ -27,7 +27,7 @@ export default function JobEntryGraph() {
   const daysArr = [...Array(monthDays)].map((_, index) => index + 1);
 
   // react - query
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["jobEntryGraph", month],
     queryFn: async () => {
       if (!month) return {};
@@ -55,36 +55,41 @@ export default function JobEntryGraph() {
         <Typography className="!text-base !font-semibold">
           Total job entry in <b>{month}</b>
         </Typography>
-        <PopupState variant="popover">
-          {(popup) => (
-            <>
-              <Button
-                variant="outlined"
-                endIcon={<ArrowDropDown />}
-                className="!text-sm !w-[130px]"
-                {...bindTrigger(popup)}
-              >
-                {month}
-              </Button>
-              <Menu
-                {...bindMenu(popup)}
-                MenuListProps={{ className: "!w-[130px]" }}
-              >
-                {months.map((item, index) => (
-                  <MenuItem
-                    onClick={() => {
-                      setMonth(item);
-                      popup.close();
-                    }}
-                    key={index}
-                  >
-                    {item}
-                  </MenuItem>
-                ))}
-              </Menu>
-            </>
-          )}
-        </PopupState>
+        <div className="flex items-center gap-3">
+          <Button startIcon={<Refresh />} onClick={() => refetch()}>
+            Refresh
+          </Button>
+          <PopupState variant="popover">
+            {(popup) => (
+              <>
+                <Button
+                  variant="outlined"
+                  endIcon={<ArrowDropDown />}
+                  className="!text-sm !w-[130px]"
+                  {...bindTrigger(popup)}
+                >
+                  {month}
+                </Button>
+                <Menu
+                  {...bindMenu(popup)}
+                  MenuListProps={{ className: "!w-[130px]" }}
+                >
+                  {months.map((item, index) => (
+                    <MenuItem
+                      onClick={() => {
+                        setMonth(item);
+                        popup.close();
+                      }}
+                      key={index}
+                    >
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </>
+            )}
+          </PopupState>
+        </div>
       </div>
       <div className="aspect-[16/8] lg:aspect-[16/5]">
         <LineChart
