@@ -5,7 +5,6 @@ import {
   Dialog,
   IconButton,
   InputAdornment,
-  Paper,
   TextField,
   Typography,
 } from "@mui/material";
@@ -17,6 +16,41 @@ import authApi from "../../api/auth";
 
 type PasswordState = { prev: string; new: string; confirm: string };
 type ShowState = { prev: boolean; new: boolean; confirm: boolean };
+
+const PassInput = ({
+  isShow,
+  onChange,
+  value,
+  setIsShow,
+  placeholder,
+}: {
+  value: string;
+  isShow: boolean;
+  onChange: (p1: string) => void;
+  setIsShow: (p1: boolean) => void;
+  placeholder: string;
+}) => {
+  return (
+    <TextField
+      fullWidth
+      placeholder={placeholder}
+      type={isShow ? "text" : "password"}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      slotProps={{
+        input: {
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={() => setIsShow(!isShow)}>
+                {isShow ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        },
+      }}
+    />
+  );
+};
 
 export default function ChangePassword({
   children,
@@ -90,140 +124,94 @@ export default function ChangePassword({
         {(popup) => (
           <>
             {children(popup)}
-            <Dialog {...bindDialog(popup)}>
-              <Paper className="px-4 py-5 sm:!w-[400px] max-sm:!w-[95vw]">
-                <div className="flex items-center justify-between gap-3">
-                  <Typography variant="h6">Change Password</Typography>
-                  <IconButton onClick={popup.close}>
-                    <Close />
-                  </IconButton>
-                </div>
-                <div>
-                  <div className="flex flex-col gap-3 mt-5">
-                    <TextField
-                      fullWidth
-                      placeholder="Previous Password"
-                      type={isShow.prev ? "text" : "password"}
-                      value={password.prev}
-                      onChange={(e) =>
-                        setPassword((state) => ({
-                          ...state,
-                          prev: e.target.value,
-                        }))
-                      }
-                      slotProps={{
-                        input: {
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                onClick={() =>
-                                  setIsShow((state) => ({
-                                    ...state,
-                                    prev: !state.prev,
-                                  }))
-                                }
-                              >
-                                {isShow.prev ? (
-                                  <Visibility />
-                                ) : (
-                                  <VisibilityOff />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        },
-                      }}
-                    />
-                    <TextField
-                      fullWidth
-                      placeholder="New Password"
-                      type={isShow.new ? "text" : "password"}
-                      value={password.new}
-                      onChange={(e) =>
-                        setPassword((state) => ({
-                          ...state,
-                          new: e.target.value,
-                        }))
-                      }
-                      slotProps={{
-                        input: {
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                onClick={() =>
-                                  setIsShow((state) => ({
-                                    ...state,
-                                    new: !state.new,
-                                  }))
-                                }
-                              >
-                                {isShow.new ? (
-                                  <Visibility />
-                                ) : (
-                                  <VisibilityOff />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        },
-                      }}
-                    />
-                    <TextField
-                      fullWidth
-                      placeholder="Confirm New Password"
-                      type={isShow.confirm ? "text" : "password"}
-                      value={password.confirm}
-                      onChange={(e) =>
-                        setPassword((state) => ({
-                          ...state,
-                          confirm: e.target.value,
-                        }))
-                      }
-                      slotProps={{
-                        input: {
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                onClick={() =>
-                                  setIsShow((state) => ({
-                                    ...state,
-                                    confirm: !state.confirm,
-                                  }))
-                                }
-                              >
-                                {isShow.confirm ? (
-                                  <Visibility />
-                                ) : (
-                                  <VisibilityOff />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        },
-                      }}
-                    />
-                    <div>
-                      {validation.map((item, index) => (
-                        <Typography key={index} variant="body2">
-                          <Check
-                            fontSize="small"
-                            color={item?.pattern ? "success" : "primary"}
-                          />{" "}
-                          {item.text}
-                        </Typography>
-                      ))}
-                    </div>
+            <Dialog
+              {...bindDialog(popup)}
+              PaperProps={{
+                className:
+                  "!px-4 !py-4 sm:!w-[400px] max-sm:!mx-0 max-sm:!w-[95vw] ",
+              }}
+            >
+              <div className="flex items-center justify-between gap-3">
+                <Typography variant="h6">Change Password</Typography>
+                <IconButton onClick={popup.close}>
+                  <Close />
+                </IconButton>
+              </div>
+              <div className="flex flex-col gap-3 mt-5">
+                <PassInput
+                  placeholder="Previous Password"
+                  isShow={isShow.prev}
+                  value={password.prev}
+                  onChange={(val) =>
+                    setPassword((state) => ({
+                      ...state,
+                      prev: val,
+                    }))
+                  }
+                  setIsShow={(val) =>
+                    setIsShow((state) => ({
+                      ...state,
+                      prev: val,
+                    }))
+                  }
+                />
 
-                    <Button
-                      variant="contained"
-                      disabled={isValid || isLoading || !password.prev}
-                      onClick={() => passwordHandler(popup.close)}
-                    >
-                      Update Password
-                    </Button>
-                  </div>
+                <PassInput
+                  placeholder="New Password"
+                  isShow={isShow.new}
+                  value={password.new}
+                  onChange={(val) =>
+                    setPassword((state) => ({
+                      ...state,
+                      new: val,
+                    }))
+                  }
+                  setIsShow={(val) =>
+                    setIsShow((state) => ({
+                      ...state,
+                      new: val,
+                    }))
+                  }
+                />
+
+                <PassInput
+                  placeholder="Confirm Password"
+                  isShow={isShow.confirm}
+                  value={password.confirm}
+                  onChange={(val) =>
+                    setPassword((state) => ({
+                      ...state,
+                      confirm: val,
+                    }))
+                  }
+                  setIsShow={(val) =>
+                    setIsShow((state) => ({
+                      ...state,
+                      confirm: val,
+                    }))
+                  }
+                />
+
+                <div>
+                  {validation.map((item, index) => (
+                    <Typography key={index} variant="body2">
+                      <Check
+                        fontSize="small"
+                        color={item?.pattern ? "success" : "primary"}
+                      />{" "}
+                      {item.text}
+                    </Typography>
+                  ))}
                 </div>
-              </Paper>
+
+                <Button
+                  variant="contained"
+                  disabled={isValid || isLoading || !password.prev}
+                  onClick={() => passwordHandler(popup.close)}
+                >
+                  Update Password
+                </Button>
+              </div>
             </Dialog>
           </>
         )}
