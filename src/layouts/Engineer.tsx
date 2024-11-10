@@ -20,11 +20,12 @@ import {
   Toolbar,
   Typography,
   Menu as PopupMenu,
+  ListItem,
+  ListItemButton,
 } from "@mui/material";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import React, { useEffect, useState } from "react";
 import ChangePassword from "../components/shared/ChangePassword";
-import { MenuItem } from "react-pro-sidebar";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { fetchSku } from "../features/utilsSlice";
 import { useNavigate } from "@tanstack/react-router";
@@ -109,27 +110,25 @@ export default function EngineerLayout({
                     />
                     <PopupMenu {...bindMenu(popup)}>
                       <ChangePassword>
-                        {(popup) => (
-                          <MenuItem
-                            className="!min-w-[150px]"
-                            {...bindTrigger(popup)}
-                          >
-                            <ListItemIcon>
-                              <Https />
-                            </ListItemIcon>
-                            <ListItemText>Change Password</ListItemText>
-                          </MenuItem>
+                        {(popupState) => (
+                          <ListItem className="!min-w-[150px] !px-0 !py-0">
+                            <ListItemButton {...bindTrigger(popupState)}>
+                              <ListItemIcon sx={{ minWidth: 40 }}>
+                                <Https />
+                              </ListItemIcon>
+                              <ListItemText>Change Password</ListItemText>
+                            </ListItemButton>
+                          </ListItem>
                         )}
                       </ChangePassword>
-                      <MenuItem
-                        className="!min-w-[150px]"
-                        onClick={() => dispatch(logOut())}
-                      >
-                        <ListItemIcon>
-                          <Logout />
-                        </ListItemIcon>
-                        <ListItemText>Logout</ListItemText>
-                      </MenuItem>
+                      <ListItem className="!min-w-[150px] !px-0 !py-0">
+                        <ListItemButton onClick={() => dispatch(logOut())}>
+                          <ListItemIcon sx={{ minWidth: 40 }}>
+                            <Logout />
+                          </ListItemIcon>
+                          <ListItemText>Logout</ListItemText>
+                        </ListItemButton>
+                      </ListItem>
                     </PopupMenu>
                   </>
                 )}
@@ -153,18 +152,19 @@ export default function EngineerLayout({
         <div className="py-2 !rounded-t-2xl !bg-slate-50 ">
           <List>
             {menus.map((menu, index) => (
-              <MenuItem
-                key={index}
-                onClick={() => {
-                  navigate({ to: menu.href });
-                  setIsOpen(false);
-                }}
-              >
-                <ListItemIcon>
-                  <menu.Icon />
-                </ListItemIcon>
-                <ListItemText>{menu.name}</ListItemText>
-              </MenuItem>
+              <ListItem key={index} className="!px-0 !py-0">
+                <ListItemButton
+                  onClick={() => {
+                    navigate({ to: menu.href });
+                    setIsOpen(false);
+                  }}
+                >
+                  <ListItemIcon>
+                    <menu.Icon />
+                  </ListItemIcon>
+                  <ListItemText>{menu.name}</ListItemText>
+                </ListItemButton>
+              </ListItem>
             ))}
           </List>
         </div>
