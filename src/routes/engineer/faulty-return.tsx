@@ -5,12 +5,9 @@ import {
   CircularProgress,
   Divider,
   IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
+  List,
+  ListItem,
+  ListItemText,
   TextField,
   Typography,
 } from "@mui/material";
@@ -136,7 +133,7 @@ function FaultyReturn() {
                 {...register("note", { required: true })}
               />
 
-              <Button variant="contained" startIcon={<Add />} type="submit">
+              <Button startIcon={<Add />} type="submit">
                 Add To Return List
               </Button>
             </div>
@@ -147,40 +144,38 @@ function FaultyReturn() {
         <div className="px-3 py-4 bg-slate-200 flex-1 rounded-md">
           <Typography variant="h6">Stock Return List</Typography>
           <Divider className="!my-2" />
-          <div className="pt-3 flex flex-col gap-3">
-            {returnList?.map((list, index) => (
-              <Paper key={index}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className="!font-bold">SKU Code</TableCell>
-                      <TableCell className="!font-bold">Quantity</TableCell>
-                      <TableCell className="!font-bold">Reason</TableCell>
-                      <TableCell>
-                        <IconButton
-                          color="error"
-                          title="remove from the return list"
-                          onClick={() => removeFromList(index)}
-                        >
-                          <Close />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>{list.skuCode?.name}</TableCell>
-                      <TableCell>{list.quantity}</TableCell>
-                      <TableCell>{list.note}</TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </Paper>
-            ))}
+          <div className="flex flex-col gap-3">
+            <List className="!mt-0">
+              {returnList?.map((list, index) => (
+                <ListItem
+                  key={index}
+                  secondaryAction={
+                    <IconButton
+                      color="error"
+                      title="remove from the return list"
+                      onClick={() => removeFromList(index)}
+                    >
+                      <Close />
+                    </IconButton>
+                  }
+                  className="!px-0 !py-1"
+                >
+                  <ListItemText
+                    primary={
+                      <Typography>
+                        {list.skuCode?.item?.name}
+                        <small className="ml-2">
+                          Quantity: {list.quantity}{" "}
+                        </small>
+                      </Typography>
+                    }
+                    secondary={list.note}
+                  />
+                </ListItem>
+              ))}
+            </List>
 
             <Button
-              variant="contained"
               disabled={returnList?.length <= 0 || submitting}
               onClick={faultyReturn}
             >
