@@ -20,6 +20,7 @@ import ReportDateInputs from "../shared/ReportDateInputs";
 import { Download } from "@mui/icons-material";
 import { exportExcel } from "../../utils/utils";
 import { useNavigate, useSearch } from "@tanstack/react-router";
+import { SkuTable } from "../shared/CustomTable";
 
 export default function ReturnReport({
   report,
@@ -31,13 +32,22 @@ export default function ReturnReport({
 
   // search queries
   const { fromDate, toDate } = useSearch({
-    from: "/engineer/stock-return",
+    from:
+      report !== "faulty"
+        ? "/engineer/stock-return"
+        : "/engineer/faulty-return",
     select: (s: { fromDate: string; toDate: string }) => ({
       fromDate: s?.fromDate || "",
       toDate: s?.toDate || "",
     }),
   });
-  const navigate = useNavigate({ from: "/engineer/stock-return" });
+
+  const navigate = useNavigate({
+    from:
+      report !== "faulty"
+        ? "/engineer/stock-return"
+        : "/engineer/faulty-return",
+  });
 
   // react queries
   const { data, isLoading, isSuccess } = useQuery<EngineerStock[]>({
@@ -103,12 +113,7 @@ export default function ReturnReport({
                   <TableRow>
                     <TableCell>#</TableCell>
                     <TableCell>Send Date</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Model</TableCell>
-                    <TableCell>Item</TableCell>
-                    <TableCell>UOM</TableCell>
-                    <TableCell>SKU</TableCell>
-                    <TableCell>Quantity</TableCell>
+                    <SkuTable isHeader quantity />
                     <TableCell>Status</TableCell>
                     {report === "faulty" && <TableCell>Note</TableCell>}
                     <TableCell>Received/Rejected Date</TableCell>
@@ -121,14 +126,13 @@ export default function ReturnReport({
                       <TableCell>
                         {moment(item.createdAt).format("lll")}
                       </TableCell>
+                      <SkuTable
+                        skuCode={item.skuCode}
+                        quantity={item.quantity}
+                      />
                       <TableCell>
                         {item?.skuCode?.item?.model?.category?.name}
                       </TableCell>
-                      <TableCell>{item?.skuCode?.item?.model?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.uom}</TableCell>
-                      <TableCell>{item?.skuCode?.name}</TableCell>
-                      <TableCell>{item?.quantity}</TableCell>
                       <TableCell className="!capitalize">
                         {item?.status}
                       </TableCell>
