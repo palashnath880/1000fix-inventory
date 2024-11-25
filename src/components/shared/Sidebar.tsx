@@ -339,7 +339,7 @@ export default function Sidebar() {
                 (menu, index) =>
                   menu.show &&
                   (menu?.menus ? (
-                    <MySubMenu {...menu} />
+                    <MySubMenu {...menu} key={index} />
                   ) : (
                     <MenuItem
                       key={index}
