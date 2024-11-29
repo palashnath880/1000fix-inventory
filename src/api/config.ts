@@ -38,7 +38,8 @@ instance.interceptors.response.use(
           }
         );
         if (data?.ac_token && error?.config?.headers) {
-          error.config.headers.Authorization = `Bearer ${data?.ac_token}`;
+          Cookies.set("ac_token", data.ac_token);
+          error.config.headers.Authorization = `Bearer ${data.ac_token}`;
         }
         return instance.request(error.config);
       } catch {
