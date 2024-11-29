@@ -30,14 +30,11 @@ instance.interceptors.response.use(
   async (error: AxiosError) => {
     if (error.response?.status === 401 && error?.config) {
       try {
-        const token = Cookies.get("re_token");
         const { data } = await axios.post(
           `${API_URL}/auth/refresh-token`,
           {},
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            withCredentials: true,
           }
         );
         if (data?.ac_token && error?.config?.headers) {
