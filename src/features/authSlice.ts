@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { User } from "../types/types";
-import authApi from "../api/auth";
 import Cookies from "js-cookie";
+import userApi from "../api/user";
 
 type Auth = {
   loading: boolean;
@@ -13,8 +13,12 @@ const initialState: Auth = {
   user: null,
 };
 
-const loadUser = createAsyncThunk(`auth/user`, async () => {
-  const res = await authApi.verify();
+const authUser = createAsyncThunk(`user/me`, async () => {
+  const re_token = Cookies.get("re_token");
+  if (!re_token) {
+    return null;
+  }
+  const res = await userApi.getMe();
   return res.data;
 });
 
@@ -23,24 +27,25 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     logOut: () => {
-      Cookies.remove("auth_token");
-      window.location.href = "/";
+      Cookies.remove("ac_token");
+      Cookies.remove("re_token");
+      window.location.href = "/login";
     },
   },
   extraReducers(builder) {
     builder
-      .addCase(loadUser.pending, () => ({
+      .addCase(authUser.pending, () => ({
         loading: true,
         user: null,
       }))
-      .addCase(loadUser.fulfilled, (_, action) => ({
+      .addCase(authUser.fulfilled, (_, action) => ({
         loading: false,
         user: action.payload,
       }))
-      .addCase(loadUser.rejected, () => ({ user: null, loading: false }));
+      .addCase(authUser.rejected, () => ({ user: null, loading: false }));
   },
 });
 
 export const { logOut } = authSlice.actions;
-export { loadUser };
+export { authUser };
 export default authSlice.reducer;

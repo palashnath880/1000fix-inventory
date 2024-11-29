@@ -47,8 +47,9 @@ function Login() {
   >({
     mutationFn: (data) => authApi.login(data),
     onSuccess: ({ data }) => {
-      if (data?.token) {
-        Cookies.set("auth_token", data.token, { expires: 7 });
+      if (data) {
+        Cookies.set("ac_token", data.ac_token, { expires: 7 });
+        Cookies.set("re_token", data.re_token, { expires: 7 });
         reset();
         window.location.href = "/";
       } else {

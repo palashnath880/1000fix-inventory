@@ -7,6 +7,7 @@ const userApi = {
   delete: (id: string) => instance.delete(`/user/${id}`),
   resetPwd: (data: { id: string; password: string }) =>
     instance.put(`/user/update-pwd/`, data),
+  getMe: () => instance.get(`/user/me`),
 };
 
 export default userApi;

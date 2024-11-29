@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-router";
 import { routeTree } from "../routeTree.gen";
 import { useEffect } from "react";
-import { loadUser } from "../features/authSlice";
+import { authUser } from "../features/authSlice";
 import Loader from "../components/shared/Loader";
 
 const router = createRouter({ routeTree, context: { auth: undefined! } });
@@ -23,8 +23,8 @@ export default function RouterProvider() {
   const isLogged = Boolean(auth.user);
 
   useEffect(() => {
-    dispatch(loadUser());
-  }, []);
+    dispatch(authUser());
+  }, [dispatch]);
 
   if (auth.loading) return <Loader />;
 
