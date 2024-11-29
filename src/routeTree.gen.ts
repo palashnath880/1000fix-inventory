@@ -11,6 +11,8 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as EngineerImport } from './routes/engineer'
+import { Route as CscImport } from './routes/csc'
 import { Route as authImport } from './routes/__auth'
 import { Route as IndexImport } from './routes/index'
 import { Route as EngineerIndexImport } from './routes/engineer/index'
@@ -52,6 +54,18 @@ import { Route as CscStockFaultyReportImport } from './routes/csc/stock/faulty/r
 
 // Create/Update Routes
 
+const EngineerRoute = EngineerImport.update({
+  id: '/engineer',
+  path: '/engineer',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CscRoute = CscImport.update({
+  id: '/csc',
+  path: '/csc',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const authRoute = authImport.update({
   id: '/__auth',
   getParentRoute: () => rootRoute,
@@ -64,69 +78,69 @@ const IndexRoute = IndexImport.update({
 } as any)
 
 const EngineerIndexRoute = EngineerIndexImport.update({
-  id: '/engineer/',
-  path: '/engineer/',
-  getParentRoute: () => rootRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => EngineerRoute,
 } as any)
 
 const CscIndexRoute = CscIndexImport.update({
-  id: '/csc/',
-  path: '/csc/',
-  getParentRoute: () => rootRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const EngineerStockReturnRoute = EngineerStockReturnImport.update({
-  id: '/engineer/stock-return',
-  path: '/engineer/stock-return',
-  getParentRoute: () => rootRoute,
+  id: '/stock-return',
+  path: '/stock-return',
+  getParentRoute: () => EngineerRoute,
 } as any)
 
 const EngineerStockReportRoute = EngineerStockReportImport.update({
-  id: '/engineer/stock-report',
-  path: '/engineer/stock-report',
-  getParentRoute: () => rootRoute,
+  id: '/stock-report',
+  path: '/stock-report',
+  getParentRoute: () => EngineerRoute,
 } as any)
 
 const EngineerStockReceiveRoute = EngineerStockReceiveImport.update({
-  id: '/engineer/stock-receive',
-  path: '/engineer/stock-receive',
-  getParentRoute: () => rootRoute,
+  id: '/stock-receive',
+  path: '/stock-receive',
+  getParentRoute: () => EngineerRoute,
 } as any)
 
 const EngineerFaultyReturnRoute = EngineerFaultyReturnImport.update({
-  id: '/engineer/faulty-return',
-  path: '/engineer/faulty-return',
-  getParentRoute: () => rootRoute,
+  id: '/faulty-return',
+  path: '/faulty-return',
+  getParentRoute: () => EngineerRoute,
 } as any)
 
 const EngineerDefectiveReportRoute = EngineerDefectiveReportImport.update({
-  id: '/engineer/defective-report',
-  path: '/engineer/defective-report',
-  getParentRoute: () => rootRoute,
+  id: '/defective-report',
+  path: '/defective-report',
+  getParentRoute: () => EngineerRoute,
 } as any)
 
 const CscScrapReportRoute = CscScrapReportImport.update({
-  id: '/csc/scrap-report',
-  path: '/csc/scrap-report',
-  getParentRoute: () => rootRoute,
+  id: '/scrap-report',
+  path: '/scrap-report',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscPurchaseReturnRoute = CscPurchaseReturnImport.update({
-  id: '/csc/purchase-return',
-  path: '/csc/purchase-return',
-  getParentRoute: () => rootRoute,
+  id: '/purchase-return',
+  path: '/purchase-return',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscAgingReportRoute = CscAgingReportImport.update({
-  id: '/csc/aging-report',
-  path: '/csc/aging-report',
-  getParentRoute: () => rootRoute,
+  id: '/aging-report',
+  path: '/aging-report',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscAdminOptionsRoute = CscAdminOptionsImport.update({
-  id: '/csc/admin-options',
-  path: '/csc/admin-options',
-  getParentRoute: () => rootRoute,
+  id: '/admin-options',
+  path: '/admin-options',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const authUpdatePwdRoute = authUpdatePwdImport.update({
@@ -148,99 +162,99 @@ const authForgotPasswordRoute = authForgotPasswordImport.update({
 } as any)
 
 const CscDefectiveIndexRoute = CscDefectiveIndexImport.update({
-  id: '/csc/defective/',
-  path: '/csc/defective/',
-  getParentRoute: () => rootRoute,
+  id: '/defective/',
+  path: '/defective/',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscChallanIndexRoute = CscChallanIndexImport.update({
-  id: '/csc/challan/',
-  path: '/csc/challan/',
-  getParentRoute: () => rootRoute,
+  id: '/challan/',
+  path: '/challan/',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscStockTransferRoute = CscStockTransferImport.update({
-  id: '/csc/stock/transfer',
-  path: '/csc/stock/transfer',
-  getParentRoute: () => rootRoute,
+  id: '/stock/transfer',
+  path: '/stock/transfer',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscStockReceiveRoute = CscStockReceiveImport.update({
-  id: '/csc/stock/receive',
-  path: '/csc/stock/receive',
-  getParentRoute: () => rootRoute,
+  id: '/stock/receive',
+  path: '/stock/receive',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscStockOwnRoute = CscStockOwnImport.update({
-  id: '/csc/stock/own',
-  path: '/csc/stock/own',
-  getParentRoute: () => rootRoute,
+  id: '/stock/own',
+  path: '/stock/own',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscStockBranchRoute = CscStockBranchImport.update({
-  id: '/csc/stock/branch',
-  path: '/csc/stock/branch',
-  getParentRoute: () => rootRoute,
+  id: '/stock/branch',
+  path: '/stock/branch',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscStockApprovalRoute = CscStockApprovalImport.update({
-  id: '/csc/stock/approval',
-  path: '/csc/stock/approval',
-  getParentRoute: () => rootRoute,
+  id: '/stock/approval',
+  path: '/stock/approval',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscJobEntrySummaryRoute = CscJobEntrySummaryImport.update({
-  id: '/csc/job/entry-summary',
-  path: '/csc/job/entry-summary',
-  getParentRoute: () => rootRoute,
+  id: '/job/entry-summary',
+  path: '/job/entry-summary',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscJobEntryListRoute = CscJobEntryListImport.update({
-  id: '/csc/job/entry-list',
-  path: '/csc/job/entry-list',
-  getParentRoute: () => rootRoute,
+  id: '/job/entry-list',
+  path: '/job/entry-list',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscJobEntryRoute = CscJobEntryImport.update({
-  id: '/csc/job/entry',
-  path: '/csc/job/entry',
-  getParentRoute: () => rootRoute,
+  id: '/job/entry',
+  path: '/job/entry',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscEngineerTransferReportRoute = CscEngineerTransferReportImport.update({
-  id: '/csc/engineer/transfer-report',
-  path: '/csc/engineer/transfer-report',
-  getParentRoute: () => rootRoute,
+  id: '/engineer/transfer-report',
+  path: '/engineer/transfer-report',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscEngineerStockRoute = CscEngineerStockImport.update({
-  id: '/csc/engineer/stock',
-  path: '/csc/engineer/stock',
-  getParentRoute: () => rootRoute,
+  id: '/engineer/stock',
+  path: '/engineer/stock',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscEngineerReturnRoute = CscEngineerReturnImport.update({
-  id: '/csc/engineer/return',
-  path: '/csc/engineer/return',
-  getParentRoute: () => rootRoute,
+  id: '/engineer/return',
+  path: '/engineer/return',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscEngineerFaultyRoute = CscEngineerFaultyImport.update({
-  id: '/csc/engineer/faulty',
-  path: '/csc/engineer/faulty',
-  getParentRoute: () => rootRoute,
+  id: '/engineer/faulty',
+  path: '/engineer/faulty',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscEngineerDefectiveRoute = CscEngineerDefectiveImport.update({
-  id: '/csc/engineer/defective',
-  path: '/csc/engineer/defective',
-  getParentRoute: () => rootRoute,
+  id: '/engineer/defective',
+  path: '/engineer/defective',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscChallanChallanIdRoute = CscChallanChallanIdImport.update({
-  id: '/csc/challan/$challanId',
-  path: '/csc/challan/$challanId',
-  getParentRoute: () => rootRoute,
+  id: '/challan/$challanId',
+  path: '/challan/$challanId',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscAdminOptionsUsersRoute = CscAdminOptionsUsersImport.update({
@@ -268,15 +282,15 @@ const CscAdminOptionsBranchRoute = CscAdminOptionsBranchImport.update({
 } as any)
 
 const CscStockFaultyIndexRoute = CscStockFaultyIndexImport.update({
-  id: '/csc/stock/faulty/',
-  path: '/csc/stock/faulty/',
-  getParentRoute: () => rootRoute,
+  id: '/stock/faulty/',
+  path: '/stock/faulty/',
+  getParentRoute: () => CscRoute,
 } as any)
 
 const CscStockFaultyReportRoute = CscStockFaultyReportImport.update({
-  id: '/csc/stock/faulty/report',
-  path: '/csc/stock/faulty/report',
-  getParentRoute: () => rootRoute,
+  id: '/stock/faulty/report',
+  path: '/stock/faulty/report',
+  getParentRoute: () => CscRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -295,6 +309,20 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof authImport
+      parentRoute: typeof rootRoute
+    }
+    '/csc': {
+      id: '/csc'
+      path: '/csc'
+      fullPath: '/csc'
+      preLoaderRoute: typeof CscImport
+      parentRoute: typeof rootRoute
+    }
+    '/engineer': {
+      id: '/engineer'
+      path: '/engineer'
+      fullPath: '/engineer'
+      preLoaderRoute: typeof EngineerImport
       parentRoute: typeof rootRoute
     }
     '/__auth/forgot-password': {
@@ -320,80 +348,80 @@ declare module '@tanstack/react-router' {
     }
     '/csc/admin-options': {
       id: '/csc/admin-options'
-      path: '/csc/admin-options'
+      path: '/admin-options'
       fullPath: '/csc/admin-options'
       preLoaderRoute: typeof CscAdminOptionsImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/aging-report': {
       id: '/csc/aging-report'
-      path: '/csc/aging-report'
+      path: '/aging-report'
       fullPath: '/csc/aging-report'
       preLoaderRoute: typeof CscAgingReportImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/purchase-return': {
       id: '/csc/purchase-return'
-      path: '/csc/purchase-return'
+      path: '/purchase-return'
       fullPath: '/csc/purchase-return'
       preLoaderRoute: typeof CscPurchaseReturnImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/scrap-report': {
       id: '/csc/scrap-report'
-      path: '/csc/scrap-report'
+      path: '/scrap-report'
       fullPath: '/csc/scrap-report'
       preLoaderRoute: typeof CscScrapReportImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/engineer/defective-report': {
       id: '/engineer/defective-report'
-      path: '/engineer/defective-report'
+      path: '/defective-report'
       fullPath: '/engineer/defective-report'
       preLoaderRoute: typeof EngineerDefectiveReportImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof EngineerImport
     }
     '/engineer/faulty-return': {
       id: '/engineer/faulty-return'
-      path: '/engineer/faulty-return'
+      path: '/faulty-return'
       fullPath: '/engineer/faulty-return'
       preLoaderRoute: typeof EngineerFaultyReturnImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof EngineerImport
     }
     '/engineer/stock-receive': {
       id: '/engineer/stock-receive'
-      path: '/engineer/stock-receive'
+      path: '/stock-receive'
       fullPath: '/engineer/stock-receive'
       preLoaderRoute: typeof EngineerStockReceiveImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof EngineerImport
     }
     '/engineer/stock-report': {
       id: '/engineer/stock-report'
-      path: '/engineer/stock-report'
+      path: '/stock-report'
       fullPath: '/engineer/stock-report'
       preLoaderRoute: typeof EngineerStockReportImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof EngineerImport
     }
     '/engineer/stock-return': {
       id: '/engineer/stock-return'
-      path: '/engineer/stock-return'
+      path: '/stock-return'
       fullPath: '/engineer/stock-return'
       preLoaderRoute: typeof EngineerStockReturnImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof EngineerImport
     }
     '/csc/': {
       id: '/csc/'
-      path: '/csc'
-      fullPath: '/csc'
+      path: '/'
+      fullPath: '/csc/'
       preLoaderRoute: typeof CscIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/engineer/': {
       id: '/engineer/'
-      path: '/engineer'
-      fullPath: '/engineer'
+      path: '/'
+      fullPath: '/engineer/'
       preLoaderRoute: typeof EngineerIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof EngineerImport
     }
     '/csc/admin-options/branch': {
       id: '/csc/admin-options/branch'
@@ -425,129 +453,129 @@ declare module '@tanstack/react-router' {
     }
     '/csc/challan/$challanId': {
       id: '/csc/challan/$challanId'
-      path: '/csc/challan/$challanId'
+      path: '/challan/$challanId'
       fullPath: '/csc/challan/$challanId'
       preLoaderRoute: typeof CscChallanChallanIdImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/engineer/defective': {
       id: '/csc/engineer/defective'
-      path: '/csc/engineer/defective'
+      path: '/engineer/defective'
       fullPath: '/csc/engineer/defective'
       preLoaderRoute: typeof CscEngineerDefectiveImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/engineer/faulty': {
       id: '/csc/engineer/faulty'
-      path: '/csc/engineer/faulty'
+      path: '/engineer/faulty'
       fullPath: '/csc/engineer/faulty'
       preLoaderRoute: typeof CscEngineerFaultyImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/engineer/return': {
       id: '/csc/engineer/return'
-      path: '/csc/engineer/return'
+      path: '/engineer/return'
       fullPath: '/csc/engineer/return'
       preLoaderRoute: typeof CscEngineerReturnImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/engineer/stock': {
       id: '/csc/engineer/stock'
-      path: '/csc/engineer/stock'
+      path: '/engineer/stock'
       fullPath: '/csc/engineer/stock'
       preLoaderRoute: typeof CscEngineerStockImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/engineer/transfer-report': {
       id: '/csc/engineer/transfer-report'
-      path: '/csc/engineer/transfer-report'
+      path: '/engineer/transfer-report'
       fullPath: '/csc/engineer/transfer-report'
       preLoaderRoute: typeof CscEngineerTransferReportImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/job/entry': {
       id: '/csc/job/entry'
-      path: '/csc/job/entry'
+      path: '/job/entry'
       fullPath: '/csc/job/entry'
       preLoaderRoute: typeof CscJobEntryImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/job/entry-list': {
       id: '/csc/job/entry-list'
-      path: '/csc/job/entry-list'
+      path: '/job/entry-list'
       fullPath: '/csc/job/entry-list'
       preLoaderRoute: typeof CscJobEntryListImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/job/entry-summary': {
       id: '/csc/job/entry-summary'
-      path: '/csc/job/entry-summary'
+      path: '/job/entry-summary'
       fullPath: '/csc/job/entry-summary'
       preLoaderRoute: typeof CscJobEntrySummaryImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/stock/approval': {
       id: '/csc/stock/approval'
-      path: '/csc/stock/approval'
+      path: '/stock/approval'
       fullPath: '/csc/stock/approval'
       preLoaderRoute: typeof CscStockApprovalImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/stock/branch': {
       id: '/csc/stock/branch'
-      path: '/csc/stock/branch'
+      path: '/stock/branch'
       fullPath: '/csc/stock/branch'
       preLoaderRoute: typeof CscStockBranchImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/stock/own': {
       id: '/csc/stock/own'
-      path: '/csc/stock/own'
+      path: '/stock/own'
       fullPath: '/csc/stock/own'
       preLoaderRoute: typeof CscStockOwnImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/stock/receive': {
       id: '/csc/stock/receive'
-      path: '/csc/stock/receive'
+      path: '/stock/receive'
       fullPath: '/csc/stock/receive'
       preLoaderRoute: typeof CscStockReceiveImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/stock/transfer': {
       id: '/csc/stock/transfer'
-      path: '/csc/stock/transfer'
+      path: '/stock/transfer'
       fullPath: '/csc/stock/transfer'
       preLoaderRoute: typeof CscStockTransferImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/challan/': {
       id: '/csc/challan/'
-      path: '/csc/challan'
+      path: '/challan'
       fullPath: '/csc/challan'
       preLoaderRoute: typeof CscChallanIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/defective/': {
       id: '/csc/defective/'
-      path: '/csc/defective'
+      path: '/defective'
       fullPath: '/csc/defective'
       preLoaderRoute: typeof CscDefectiveIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/stock/faulty/report': {
       id: '/csc/stock/faulty/report'
-      path: '/csc/stock/faulty/report'
+      path: '/stock/faulty/report'
       fullPath: '/csc/stock/faulty/report'
       preLoaderRoute: typeof CscStockFaultyReportImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
     '/csc/stock/faulty/': {
       id: '/csc/stock/faulty/'
-      path: '/csc/stock/faulty'
+      path: '/stock/faulty'
       fullPath: '/csc/stock/faulty'
       preLoaderRoute: typeof CscStockFaultyIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof CscImport
     }
   }
 }
@@ -586,9 +614,87 @@ const CscAdminOptionsRouteWithChildren = CscAdminOptionsRoute._addFileChildren(
   CscAdminOptionsRouteChildren,
 )
 
+interface CscRouteChildren {
+  CscAdminOptionsRoute: typeof CscAdminOptionsRouteWithChildren
+  CscAgingReportRoute: typeof CscAgingReportRoute
+  CscPurchaseReturnRoute: typeof CscPurchaseReturnRoute
+  CscScrapReportRoute: typeof CscScrapReportRoute
+  CscIndexRoute: typeof CscIndexRoute
+  CscChallanChallanIdRoute: typeof CscChallanChallanIdRoute
+  CscEngineerDefectiveRoute: typeof CscEngineerDefectiveRoute
+  CscEngineerFaultyRoute: typeof CscEngineerFaultyRoute
+  CscEngineerReturnRoute: typeof CscEngineerReturnRoute
+  CscEngineerStockRoute: typeof CscEngineerStockRoute
+  CscEngineerTransferReportRoute: typeof CscEngineerTransferReportRoute
+  CscJobEntryRoute: typeof CscJobEntryRoute
+  CscJobEntryListRoute: typeof CscJobEntryListRoute
+  CscJobEntrySummaryRoute: typeof CscJobEntrySummaryRoute
+  CscStockApprovalRoute: typeof CscStockApprovalRoute
+  CscStockBranchRoute: typeof CscStockBranchRoute
+  CscStockOwnRoute: typeof CscStockOwnRoute
+  CscStockReceiveRoute: typeof CscStockReceiveRoute
+  CscStockTransferRoute: typeof CscStockTransferRoute
+  CscChallanIndexRoute: typeof CscChallanIndexRoute
+  CscDefectiveIndexRoute: typeof CscDefectiveIndexRoute
+  CscStockFaultyReportRoute: typeof CscStockFaultyReportRoute
+  CscStockFaultyIndexRoute: typeof CscStockFaultyIndexRoute
+}
+
+const CscRouteChildren: CscRouteChildren = {
+  CscAdminOptionsRoute: CscAdminOptionsRouteWithChildren,
+  CscAgingReportRoute: CscAgingReportRoute,
+  CscPurchaseReturnRoute: CscPurchaseReturnRoute,
+  CscScrapReportRoute: CscScrapReportRoute,
+  CscIndexRoute: CscIndexRoute,
+  CscChallanChallanIdRoute: CscChallanChallanIdRoute,
+  CscEngineerDefectiveRoute: CscEngineerDefectiveRoute,
+  CscEngineerFaultyRoute: CscEngineerFaultyRoute,
+  CscEngineerReturnRoute: CscEngineerReturnRoute,
+  CscEngineerStockRoute: CscEngineerStockRoute,
+  CscEngineerTransferReportRoute: CscEngineerTransferReportRoute,
+  CscJobEntryRoute: CscJobEntryRoute,
+  CscJobEntryListRoute: CscJobEntryListRoute,
+  CscJobEntrySummaryRoute: CscJobEntrySummaryRoute,
+  CscStockApprovalRoute: CscStockApprovalRoute,
+  CscStockBranchRoute: CscStockBranchRoute,
+  CscStockOwnRoute: CscStockOwnRoute,
+  CscStockReceiveRoute: CscStockReceiveRoute,
+  CscStockTransferRoute: CscStockTransferRoute,
+  CscChallanIndexRoute: CscChallanIndexRoute,
+  CscDefectiveIndexRoute: CscDefectiveIndexRoute,
+  CscStockFaultyReportRoute: CscStockFaultyReportRoute,
+  CscStockFaultyIndexRoute: CscStockFaultyIndexRoute,
+}
+
+const CscRouteWithChildren = CscRoute._addFileChildren(CscRouteChildren)
+
+interface EngineerRouteChildren {
+  EngineerDefectiveReportRoute: typeof EngineerDefectiveReportRoute
+  EngineerFaultyReturnRoute: typeof EngineerFaultyReturnRoute
+  EngineerStockReceiveRoute: typeof EngineerStockReceiveRoute
+  EngineerStockReportRoute: typeof EngineerStockReportRoute
+  EngineerStockReturnRoute: typeof EngineerStockReturnRoute
+  EngineerIndexRoute: typeof EngineerIndexRoute
+}
+
+const EngineerRouteChildren: EngineerRouteChildren = {
+  EngineerDefectiveReportRoute: EngineerDefectiveReportRoute,
+  EngineerFaultyReturnRoute: EngineerFaultyReturnRoute,
+  EngineerStockReceiveRoute: EngineerStockReceiveRoute,
+  EngineerStockReportRoute: EngineerStockReportRoute,
+  EngineerStockReturnRoute: EngineerStockReturnRoute,
+  EngineerIndexRoute: EngineerIndexRoute,
+}
+
+const EngineerRouteWithChildren = EngineerRoute._addFileChildren(
+  EngineerRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof authRouteWithChildren
+  '/csc': typeof CscRouteWithChildren
+  '/engineer': typeof EngineerRouteWithChildren
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
   '/update-pwd': typeof authUpdatePwdRoute
@@ -601,8 +707,8 @@ export interface FileRoutesByFullPath {
   '/engineer/stock-receive': typeof EngineerStockReceiveRoute
   '/engineer/stock-report': typeof EngineerStockReportRoute
   '/engineer/stock-return': typeof EngineerStockReturnRoute
-  '/csc': typeof CscIndexRoute
-  '/engineer': typeof EngineerIndexRoute
+  '/csc/': typeof CscIndexRoute
+  '/engineer/': typeof EngineerIndexRoute
   '/csc/admin-options/branch': typeof CscAdminOptionsBranchRoute
   '/csc/admin-options/sku-code': typeof CscAdminOptionsSkuCodeRoute
   '/csc/admin-options/stock-entry': typeof CscAdminOptionsStockEntryRoute
@@ -672,6 +778,8 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/__auth': typeof authRouteWithChildren
+  '/csc': typeof CscRouteWithChildren
+  '/engineer': typeof EngineerRouteWithChildren
   '/__auth/forgot-password': typeof authForgotPasswordRoute
   '/__auth/login': typeof authLoginRoute
   '/__auth/update-pwd': typeof authUpdatePwdRoute
@@ -715,6 +823,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/csc'
+    | '/engineer'
     | '/forgot-password'
     | '/login'
     | '/update-pwd'
@@ -727,8 +837,8 @@ export interface FileRouteTypes {
     | '/engineer/stock-receive'
     | '/engineer/stock-report'
     | '/engineer/stock-return'
-    | '/csc'
-    | '/engineer'
+    | '/csc/'
+    | '/engineer/'
     | '/csc/admin-options/branch'
     | '/csc/admin-options/sku-code'
     | '/csc/admin-options/stock-entry'
@@ -795,6 +905,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/__auth'
+    | '/csc'
+    | '/engineer'
     | '/__auth/forgot-password'
     | '/__auth/login'
     | '/__auth/update-pwd'
@@ -837,69 +949,15 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   authRoute: typeof authRouteWithChildren
-  CscAdminOptionsRoute: typeof CscAdminOptionsRouteWithChildren
-  CscAgingReportRoute: typeof CscAgingReportRoute
-  CscPurchaseReturnRoute: typeof CscPurchaseReturnRoute
-  CscScrapReportRoute: typeof CscScrapReportRoute
-  EngineerDefectiveReportRoute: typeof EngineerDefectiveReportRoute
-  EngineerFaultyReturnRoute: typeof EngineerFaultyReturnRoute
-  EngineerStockReceiveRoute: typeof EngineerStockReceiveRoute
-  EngineerStockReportRoute: typeof EngineerStockReportRoute
-  EngineerStockReturnRoute: typeof EngineerStockReturnRoute
-  CscIndexRoute: typeof CscIndexRoute
-  EngineerIndexRoute: typeof EngineerIndexRoute
-  CscChallanChallanIdRoute: typeof CscChallanChallanIdRoute
-  CscEngineerDefectiveRoute: typeof CscEngineerDefectiveRoute
-  CscEngineerFaultyRoute: typeof CscEngineerFaultyRoute
-  CscEngineerReturnRoute: typeof CscEngineerReturnRoute
-  CscEngineerStockRoute: typeof CscEngineerStockRoute
-  CscEngineerTransferReportRoute: typeof CscEngineerTransferReportRoute
-  CscJobEntryRoute: typeof CscJobEntryRoute
-  CscJobEntryListRoute: typeof CscJobEntryListRoute
-  CscJobEntrySummaryRoute: typeof CscJobEntrySummaryRoute
-  CscStockApprovalRoute: typeof CscStockApprovalRoute
-  CscStockBranchRoute: typeof CscStockBranchRoute
-  CscStockOwnRoute: typeof CscStockOwnRoute
-  CscStockReceiveRoute: typeof CscStockReceiveRoute
-  CscStockTransferRoute: typeof CscStockTransferRoute
-  CscChallanIndexRoute: typeof CscChallanIndexRoute
-  CscDefectiveIndexRoute: typeof CscDefectiveIndexRoute
-  CscStockFaultyReportRoute: typeof CscStockFaultyReportRoute
-  CscStockFaultyIndexRoute: typeof CscStockFaultyIndexRoute
+  CscRoute: typeof CscRouteWithChildren
+  EngineerRoute: typeof EngineerRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   authRoute: authRouteWithChildren,
-  CscAdminOptionsRoute: CscAdminOptionsRouteWithChildren,
-  CscAgingReportRoute: CscAgingReportRoute,
-  CscPurchaseReturnRoute: CscPurchaseReturnRoute,
-  CscScrapReportRoute: CscScrapReportRoute,
-  EngineerDefectiveReportRoute: EngineerDefectiveReportRoute,
-  EngineerFaultyReturnRoute: EngineerFaultyReturnRoute,
-  EngineerStockReceiveRoute: EngineerStockReceiveRoute,
-  EngineerStockReportRoute: EngineerStockReportRoute,
-  EngineerStockReturnRoute: EngineerStockReturnRoute,
-  CscIndexRoute: CscIndexRoute,
-  EngineerIndexRoute: EngineerIndexRoute,
-  CscChallanChallanIdRoute: CscChallanChallanIdRoute,
-  CscEngineerDefectiveRoute: CscEngineerDefectiveRoute,
-  CscEngineerFaultyRoute: CscEngineerFaultyRoute,
-  CscEngineerReturnRoute: CscEngineerReturnRoute,
-  CscEngineerStockRoute: CscEngineerStockRoute,
-  CscEngineerTransferReportRoute: CscEngineerTransferReportRoute,
-  CscJobEntryRoute: CscJobEntryRoute,
-  CscJobEntryListRoute: CscJobEntryListRoute,
-  CscJobEntrySummaryRoute: CscJobEntrySummaryRoute,
-  CscStockApprovalRoute: CscStockApprovalRoute,
-  CscStockBranchRoute: CscStockBranchRoute,
-  CscStockOwnRoute: CscStockOwnRoute,
-  CscStockReceiveRoute: CscStockReceiveRoute,
-  CscStockTransferRoute: CscStockTransferRoute,
-  CscChallanIndexRoute: CscChallanIndexRoute,
-  CscDefectiveIndexRoute: CscDefectiveIndexRoute,
-  CscStockFaultyReportRoute: CscStockFaultyReportRoute,
-  CscStockFaultyIndexRoute: CscStockFaultyIndexRoute,
+  CscRoute: CscRouteWithChildren,
+  EngineerRoute: EngineerRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -916,17 +974,29 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/__auth",
+        "/csc",
+        "/engineer"
+      ]
+    },
+    "/": {
+      "filePath": "index.tsx"
+    },
+    "/__auth": {
+      "filePath": "__auth.tsx",
+      "children": [
+        "/__auth/forgot-password",
+        "/__auth/login",
+        "/__auth/update-pwd"
+      ]
+    },
+    "/csc": {
+      "filePath": "csc.tsx",
+      "children": [
         "/csc/admin-options",
         "/csc/aging-report",
         "/csc/purchase-return",
         "/csc/scrap-report",
-        "/engineer/defective-report",
-        "/engineer/faulty-return",
-        "/engineer/stock-receive",
-        "/engineer/stock-report",
-        "/engineer/stock-return",
         "/csc/",
-        "/engineer/",
         "/csc/challan/$challanId",
         "/csc/engineer/defective",
         "/csc/engineer/faulty",
@@ -947,15 +1017,15 @@ export const routeTree = rootRoute
         "/csc/stock/faulty/"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/__auth": {
-      "filePath": "__auth.tsx",
+    "/engineer": {
+      "filePath": "engineer.tsx",
       "children": [
-        "/__auth/forgot-password",
-        "/__auth/login",
-        "/__auth/update-pwd"
+        "/engineer/defective-report",
+        "/engineer/faulty-return",
+        "/engineer/stock-receive",
+        "/engineer/stock-report",
+        "/engineer/stock-return",
+        "/engineer/"
       ]
     },
     "/__auth/forgot-password": {
@@ -972,6 +1042,7 @@ export const routeTree = rootRoute
     },
     "/csc/admin-options": {
       "filePath": "csc/admin-options.tsx",
+      "parent": "/csc",
       "children": [
         "/csc/admin-options/branch",
         "/csc/admin-options/sku-code",
@@ -980,34 +1051,44 @@ export const routeTree = rootRoute
       ]
     },
     "/csc/aging-report": {
-      "filePath": "csc/aging-report.tsx"
+      "filePath": "csc/aging-report.tsx",
+      "parent": "/csc"
     },
     "/csc/purchase-return": {
-      "filePath": "csc/purchase-return.tsx"
+      "filePath": "csc/purchase-return.tsx",
+      "parent": "/csc"
     },
     "/csc/scrap-report": {
-      "filePath": "csc/scrap-report.tsx"
+      "filePath": "csc/scrap-report.tsx",
+      "parent": "/csc"
     },
     "/engineer/defective-report": {
-      "filePath": "engineer/defective-report.tsx"
+      "filePath": "engineer/defective-report.tsx",
+      "parent": "/engineer"
     },
     "/engineer/faulty-return": {
-      "filePath": "engineer/faulty-return.tsx"
+      "filePath": "engineer/faulty-return.tsx",
+      "parent": "/engineer"
     },
     "/engineer/stock-receive": {
-      "filePath": "engineer/stock-receive.tsx"
+      "filePath": "engineer/stock-receive.tsx",
+      "parent": "/engineer"
     },
     "/engineer/stock-report": {
-      "filePath": "engineer/stock-report.tsx"
+      "filePath": "engineer/stock-report.tsx",
+      "parent": "/engineer"
     },
     "/engineer/stock-return": {
-      "filePath": "engineer/stock-return.tsx"
+      "filePath": "engineer/stock-return.tsx",
+      "parent": "/engineer"
     },
     "/csc/": {
-      "filePath": "csc/index.tsx"
+      "filePath": "csc/index.tsx",
+      "parent": "/csc"
     },
     "/engineer/": {
-      "filePath": "engineer/index.tsx"
+      "filePath": "engineer/index.tsx",
+      "parent": "/engineer"
     },
     "/csc/admin-options/branch": {
       "filePath": "csc/admin-options/branch.tsx",
@@ -1026,58 +1107,76 @@ export const routeTree = rootRoute
       "parent": "/csc/admin-options"
     },
     "/csc/challan/$challanId": {
-      "filePath": "csc/challan/$challanId.tsx"
+      "filePath": "csc/challan/$challanId.tsx",
+      "parent": "/csc"
     },
     "/csc/engineer/defective": {
-      "filePath": "csc/engineer/defective.tsx"
+      "filePath": "csc/engineer/defective.tsx",
+      "parent": "/csc"
     },
     "/csc/engineer/faulty": {
-      "filePath": "csc/engineer/faulty.tsx"
+      "filePath": "csc/engineer/faulty.tsx",
+      "parent": "/csc"
     },
     "/csc/engineer/return": {
-      "filePath": "csc/engineer/return.tsx"
+      "filePath": "csc/engineer/return.tsx",
+      "parent": "/csc"
     },
     "/csc/engineer/stock": {
-      "filePath": "csc/engineer/stock.tsx"
+      "filePath": "csc/engineer/stock.tsx",
+      "parent": "/csc"
     },
     "/csc/engineer/transfer-report": {
-      "filePath": "csc/engineer/transfer-report.tsx"
+      "filePath": "csc/engineer/transfer-report.tsx",
+      "parent": "/csc"
     },
     "/csc/job/entry": {
-      "filePath": "csc/job/entry.tsx"
+      "filePath": "csc/job/entry.tsx",
+      "parent": "/csc"
     },
     "/csc/job/entry-list": {
-      "filePath": "csc/job/entry-list.tsx"
+      "filePath": "csc/job/entry-list.tsx",
+      "parent": "/csc"
     },
     "/csc/job/entry-summary": {
-      "filePath": "csc/job/entry-summary.tsx"
+      "filePath": "csc/job/entry-summary.tsx",
+      "parent": "/csc"
     },
     "/csc/stock/approval": {
-      "filePath": "csc/stock/approval.tsx"
+      "filePath": "csc/stock/approval.tsx",
+      "parent": "/csc"
     },
     "/csc/stock/branch": {
-      "filePath": "csc/stock/branch.tsx"
+      "filePath": "csc/stock/branch.tsx",
+      "parent": "/csc"
     },
     "/csc/stock/own": {
-      "filePath": "csc/stock/own.tsx"
+      "filePath": "csc/stock/own.tsx",
+      "parent": "/csc"
     },
     "/csc/stock/receive": {
-      "filePath": "csc/stock/receive.tsx"
+      "filePath": "csc/stock/receive.tsx",
+      "parent": "/csc"
     },
     "/csc/stock/transfer": {
-      "filePath": "csc/stock/transfer.tsx"
+      "filePath": "csc/stock/transfer.tsx",
+      "parent": "/csc"
     },
     "/csc/challan/": {
-      "filePath": "csc/challan/index.tsx"
+      "filePath": "csc/challan/index.tsx",
+      "parent": "/csc"
     },
     "/csc/defective/": {
-      "filePath": "csc/defective/index.tsx"
+      "filePath": "csc/defective/index.tsx",
+      "parent": "/csc"
     },
     "/csc/stock/faulty/report": {
-      "filePath": "csc/stock/faulty/report.tsx"
+      "filePath": "csc/stock/faulty/report.tsx",
+      "parent": "/csc"
     },
     "/csc/stock/faulty/": {
-      "filePath": "csc/stock/faulty/index.tsx"
+      "filePath": "csc/stock/faulty/index.tsx",
+      "parent": "/csc"
     }
   }
 }

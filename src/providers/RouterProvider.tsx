@@ -20,7 +20,7 @@ export default function RouterProvider() {
   // react redux
   const auth = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  const isLogged = Boolean(auth.user);
+  const isLogged = Boolean(auth?.user);
 
   useEffect(() => {
     dispatch(authUser());
