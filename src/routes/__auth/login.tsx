@@ -48,8 +48,14 @@ function Login() {
     mutationFn: (data) => authApi.login(data),
     onSuccess: ({ data }) => {
       if (data) {
-        Cookies.set("ac_token", data.ac_token, { expires: 7 });
-        Cookies.set("re_token", data.re_token, { expires: 7 });
+        Cookies.set("ac_token", data.ac_token, {
+          expires: 7,
+        });
+        Cookies.set("re_token", data.re_token, {
+          expires: 7,
+          sameSite: "none",
+          secure: true,
+        });
         reset();
         window.location.href = "/";
       } else {
