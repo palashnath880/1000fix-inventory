@@ -55,7 +55,7 @@ export type StockReturnInputs = {
 export type JobEntryInputs = {
   jobNo: string;
   imeiNo: string;
-  serviceType: "AMC" | "BD Call" | "PM";
+  serviceType: "BD Call - Bill" | "BD Call - Cooling" | "Refurbishment" | "PM";
   sellFrom: "branch" | "engineer";
   engineerId?: string;
   engineer: User | null;

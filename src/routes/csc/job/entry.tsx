@@ -149,16 +149,22 @@ function Entry() {
                       onChange={(e) => onChange(e.target.value)}
                     >
                       <FormControlLabel
-                        value="AMC"
+                        value="BD Call - Cooling"
                         control={<Radio />}
-                        label="AMC"
-                        checked={value === "AMC"}
+                        label="BD Call - Cooling"
+                        checked={value === "BD Call - Cooling"}
                       />
                       <FormControlLabel
-                        value="BD Call"
+                        value="BD Call - Bill"
                         control={<Radio />}
-                        label="BD Call"
-                        checked={value === "BD Call"}
+                        label="BD Call - Bill"
+                        checked={value === "BD Call - Bill"}
+                      />
+                      <FormControlLabel
+                        value="Refurbishment"
+                        control={<Radio />}
+                        label="Refurbishment"
+                        checked={value === "Refurbishment"}
                       />
                       <FormControlLabel
                         value="PM"
