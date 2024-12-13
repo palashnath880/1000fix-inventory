@@ -13,7 +13,6 @@ import {
   fetchUOMs,
 } from "../features/utilsSlice";
 import { fetchUsers } from "../features/userSlice";
-import authApi from "../api/auth";
 export default function CSCLayout({
   children,
   context,
@@ -34,8 +33,6 @@ export default function CSCLayout({
     dispatch(fetchUsers(""));
     dispatch(fetchSku());
     dispatch(fetchUOMs());
-
-    authApi.refresh().then((data) => console.log(data));
   }, [dispatch]);
 
   return (
