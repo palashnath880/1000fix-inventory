@@ -9,6 +9,8 @@ const authApi = {
     instance.post(`/auth/send-reset-link`, { login }),
   updateResetPwd: (data: { password: string; tokenId: string }) =>
     instance.post(`/auth/update-reset-pwd`, data),
+  refresh: () =>
+    instance.post(`/auth/refresh-token`, {}, { withCredentials: true }),
 };
 
 export default authApi;
