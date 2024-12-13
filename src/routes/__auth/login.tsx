@@ -53,7 +53,7 @@ function Login() {
         });
         Cookies.set("re_token", data.re_token, {
           expires: 7,
-          sameSite: "none",
+          sameSite: "Strict",
           secure: true,
         });
         reset();
