@@ -19,6 +19,7 @@ import stockApi from "../../../api/stock";
 import moment from "moment";
 import { StockType } from "../../../types/types";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { exportExcel } from "../../../utils/utils";
 
 export const Route = createFileRoute("/csc/admin-options/stock-entry")({
   component: StockEntry,
@@ -77,6 +78,7 @@ function StockEntry() {
             <Button
               startIcon={<Download />}
               disabled={!data || data.length <= 0}
+              onClick={() => exportExcel("stockEntry", "Stock entry report")}
             >
               Download
             </Button>
@@ -98,7 +100,7 @@ function StockEntry() {
             {data?.length > 0 ? (
               <div className="mt-5">
                 <TableContainer component={Paper}>
-                  <Table>
+                  <Table id="stockEntry">
                     <TableHead>
                       <TableRow>
                         <TableCell>#</TableCell>
