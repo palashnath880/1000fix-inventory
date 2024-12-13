@@ -55,6 +55,7 @@ function Login() {
           expires: 7,
           sameSite: "Strict",
           secure: true,
+          path: "/",
         });
         reset();
         window.location.href = "/";

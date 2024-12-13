@@ -43,10 +43,10 @@ instance.interceptors.response.use(
         }
         return instance.request(error.config);
       } catch {
-        Cookies.remove("ac_token"); // remove access token
-        Cookies.remove("re_token"); // remove refresh token
+        // Cookies.remove("ac_token"); // remove access token
+        // Cookies.remove("re_token"); // remove refresh token
         toast.error(`Refresh token expired. Please log in again.`);
-        window.location.href = "/login";
+        // window.location.href = "/login";
       }
     }
 
