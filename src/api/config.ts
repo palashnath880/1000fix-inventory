@@ -35,7 +35,7 @@ instance.interceptors.response.use(
           {},
           {
             headers: {
-              re_token: Cookies.get("re_token"),
+              Authorization: Cookies.get("re_token"),
             },
           }
         );
