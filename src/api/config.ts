@@ -34,7 +34,7 @@ instance.interceptors.response.use(
           `${API_URL}/auth/refresh-token`,
           {},
           {
-            withCredentials: true,
+            // withCredentials: true,
           }
         );
         if (data?.ac_token && error?.config?.headers) {
@@ -46,7 +46,7 @@ instance.interceptors.response.use(
         // Cookies.remove("ac_token"); // remove access token
         // Cookies.remove("re_token"); // remove refresh token
         toast.error(`Refresh token expired. Please log in again.`);
-        // window.location.href = "/login";
+        window.location.href = "/login";
       }
     }
 
