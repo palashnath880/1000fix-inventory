@@ -140,7 +140,7 @@ function OwnStock() {
                       <TableCell>{index + 1}</TableCell>
                       <SkuTable
                         skuCode={item.skuCode}
-                        quantity={item?.quantity}
+                        quantity={item.quantity || 0}
                       />
                       <TableCell>{item?.avgPrice}</TableCell>
                       <TableCell>{item?.defective}</TableCell>
