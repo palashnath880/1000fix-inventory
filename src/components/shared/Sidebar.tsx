@@ -91,6 +91,7 @@ const MySubMenu = ({
                 menu.href && (
                   <Link
                     to={menu.href}
+                    activeOptions={{ exact: true }}
                     activeProps={{
                       className: `!bg-[#f8f8ff85]`,
                     }}
@@ -328,10 +329,6 @@ export default function Sidebar() {
                   ":hover": {
                     backgroundColor: `${theme.palette.secondary.main}85`,
                   },
-                  "&.active": {
-                    backgroundColor: `${theme.palette.secondary.main}85`,
-                    fontWeight: 600,
-                  },
                 },
               }}
             >
@@ -343,8 +340,17 @@ export default function Sidebar() {
                   ) : (
                     <MenuItem
                       key={index}
-                      component={menu.href && <Link to={menu.href} />}
+                      component={
+                        menu.href && (
+                          <Link
+                            to={menu.href}
+                            activeOptions={{ exact: true }}
+                            activeProps={{ className: `!bg-[#f8f8ff85]` }}
+                          />
+                        )
+                      }
                       icon={<menu.Icon fontSize="medium" />}
+                      active
                     >
                       {menu.name}
                     </MenuItem>
