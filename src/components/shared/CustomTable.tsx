@@ -30,7 +30,7 @@ export const SkuTable = ({
       <TableCell>{skuCode?.item?.name}</TableCell>
       <TableCell>{skuCode?.name}</TableCell>
       <TableCell>{skuCode?.item?.uom}</TableCell>
-      {quantity && <TableCell>{quantity}</TableCell>}
+      {typeof quantity === "number" && <TableCell>{quantity}</TableCell>}
     </>
   );
 };
