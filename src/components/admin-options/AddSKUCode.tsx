@@ -96,8 +96,12 @@ export default function AddSKUCode() {
                         fullWidth
                         type="text"
                         placeholder="SKU Code"
+                        slotProps={{ htmlInput: { className: "!uppercase" } }}
                         error={Boolean(errors["name"])}
-                        {...register("name", { required: true })}
+                        {...register("name", {
+                          required: true,
+                          pattern: /^[a-zA-Z0-9]+$/,
+                        })}
                       />
 
                       <Controller
