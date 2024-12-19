@@ -21,6 +21,7 @@ import { exportExcel } from "../../../utils/utils";
 import { SkuTable } from "../../../components/shared/CustomTable";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import SelectInput from "../../../components/stock/SelectInput";
+import { SkuSelect } from "../../../components/shared/Inputs";
 
 function OwnStock() {
   // react redux
@@ -28,7 +29,6 @@ function OwnStock() {
     (state) => state.utils.categories
   );
   const { data: models } = useAppSelector((state) => state.utils.models);
-  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
 
   // search queries
   const { skuCode, model, category } = Route.useSearch();
@@ -80,16 +80,18 @@ function OwnStock() {
             navigate({ search: (prev) => ({ ...prev, model: val }) })
           }
         />
-        <SelectInput
-          label="Select SKU"
-          loading={isLoading}
-          options={skuCodes}
-          noOptionsText="No sku matched"
-          value={skuCode}
-          onChange={(val) =>
-            navigate({ search: (prev) => ({ ...prev, skuCode: val }) })
-          }
-        />
+        <div className="flex-1">
+          <SkuSelect
+            disabled={isLoading}
+            placeholder="Select SKU"
+            value={skuCode}
+            onChange={({ sku }) =>
+              navigate({
+                search: (prev) => ({ ...prev, skuCode: sku?.id || "" }),
+              })
+            }
+          />
+        </div>
       </div>
       {/* search inputs end */}
 

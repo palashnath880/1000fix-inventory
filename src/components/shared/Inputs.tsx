@@ -32,19 +32,29 @@ export const SkuSelect = ({
       noOptionsText="No sku matched"
       getOptionLabel={(opt) => opt.name}
       onChange={(_, val) => onChange({ sku: val })}
+      filterOptions={(options, { inputValue }) => {
+        const lowerCaseVal = inputValue.toLowerCase();
+        return options.filter(
+          (i) =>
+            i.name.toLowerCase().includes(lowerCaseVal) ||
+            i.item.name.toLowerCase().includes(lowerCaseVal)
+        );
+      }}
       isOptionEqualToValue={(opt, val) => opt.id === val.id}
-      renderOption={(props, opt) => (
-        <li
-          {...props}
-          key={opt.id}
-          className={`${props.className} flex-col !items-start`}
-        >
-          {opt.name}
-          <small>
-            Item: {opt.item?.name}; UOM: {opt.item?.uom}
-          </small>
-        </li>
-      )}
+      renderOption={(props, opt, state) => {
+        return (
+          <li
+            {...props}
+            key={state.index}
+            className={`${props.className} flex-col !items-start`}
+          >
+            {opt.name}
+            <small>
+              Item: {opt.item?.name}; UOM: {opt.item?.uom}
+            </small>
+          </li>
+        );
+      }}
       renderInput={(params) => (
         <TextField
           {...params}
