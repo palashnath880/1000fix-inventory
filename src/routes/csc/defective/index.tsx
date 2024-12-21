@@ -27,6 +27,8 @@ import { toast } from "react-toastify";
 import scrapApi from "../../../api/scrap";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import SelectInput from "../../../components/stock/SelectInput";
+import { SkuSelect } from "../../../components/shared/Inputs";
+import { SkuTable } from "../../../components/shared/CustomTable";
 
 type SelectType = { skuId: string; quantity: number; max: number };
 
@@ -63,13 +65,9 @@ const SelectItem = ({
   const changeHandler = (e: any) => {
     const quantity: number = parseInt(e.target.value);
     let state: SelectType[] = [...values];
-    state = state.map((i) => {
-      if (checked) {
-        return { ...i, quantity };
-      } else {
-        return i;
-      }
-    });
+    state = state.map((i) =>
+      i.skuId === stock.skuCode.id ? { ...i, quantity } : i
+    );
     onChange(state);
   };
 
@@ -102,7 +100,6 @@ function Defective() {
     (state) => state.utils.categories
   );
   const { data: models } = useAppSelector((state) => state.utils.models);
-  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
   const { user } = useAppSelector((state) => state.auth);
 
   // search queries
@@ -111,7 +108,7 @@ function Defective() {
 
   // fetch stock
   const { data, isLoading, refetch, isSuccess } = useQuery<OwnStockType[]>({
-    queryKey: ["ownStock", category, model, skuCode],
+    queryKey: ["defectiveStock", category, model, skuCode],
     queryFn: async () => {
       const res = await stockApi.getDefective(category, model, skuCode);
       return res.data;
@@ -183,16 +180,19 @@ function Defective() {
             navigate({ search: (prev) => ({ ...prev, model: val }) })
           }
         />
-        <SelectInput
-          label="Select SKU"
-          loading={isLoading}
-          options={skuCodes}
-          noOptionsText="No sku matched"
-          value={skuCode}
-          onChange={(val) =>
-            navigate({ search: (prev) => ({ ...prev, skuCode: val }) })
-          }
-        />
+
+        <div className="flex-1">
+          <SkuSelect
+            disabled={isLoading}
+            placeholder="Select SKU"
+            value={skuCode}
+            onChange={({ sku }) =>
+              navigate({
+                search: (prev) => ({ ...prev, skuCode: sku?.id || "" }),
+              })
+            }
+          />
+        </div>
       </div>
 
       {/* loader */}
@@ -248,12 +248,8 @@ function Defective() {
                 <TableHead>
                   <TableRow>
                     <TableCell>#</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Model</TableCell>
-                    <TableCell>Item</TableCell>
-                    <TableCell>UOM</TableCell>
-                    <TableCell>SKU Code</TableCell>
-                    <TableCell>Quantity</TableCell>
+                    <SkuTable isHeader quantity />
+
                     <TableCell></TableCell>
                   </TableRow>
                 </TableHead>
@@ -261,14 +257,10 @@ function Defective() {
                   {data?.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell>{index + 1}</TableCell>
-                      <TableCell>
-                        {item?.skuCode?.item?.model?.category?.name}
-                      </TableCell>
-                      <TableCell>{item?.skuCode?.item?.model?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.name}</TableCell>
-                      <TableCell>{item?.skuCode?.item?.uom}</TableCell>
-                      <TableCell>{item?.skuCode?.name}</TableCell>
-                      <TableCell>{item?.quantity}</TableCell>
+                      <SkuTable
+                        skuCode={item.skuCode}
+                        quantity={item?.quantity || 0}
+                      />
                       <TableCell>
                         <SelectItem
                           onChange={(e) => setSelected(e)}
