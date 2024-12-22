@@ -24,6 +24,7 @@ import DeleteConfirm from "../../../components/shared/DeleteConfirm";
 import { SkuTable } from "../../../components/shared/CustomTable";
 import UOMs from "../../../components/admin-options/UOMs";
 import { createFileRoute } from "@tanstack/react-router";
+import EditSKU from "../../../components/admin-options/EditSKU";
 
 export const Route = createFileRoute("/csc/admin-options/sku-code")({
   component: SKUCode,
@@ -111,6 +112,10 @@ function SKUCode() {
                       {moment(skuCode.createdAt).format("lll")}
                     </TableCell>
                     <TableCell>
+                      <EditSKU
+                        refetch={() => dispatch(fetchSku())}
+                        skuCode={skuCode}
+                      />
                       <DeleteConfirm
                         confirm={() => deleteHandler(skuCode)}
                         title={`Are you sure to delete ${skuCode.name}`}
