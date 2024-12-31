@@ -20,6 +20,7 @@ import stockApi from "../../../api/stock";
 import { exportExcel } from "../../../utils/utils";
 import { SkuTable } from "../../../components/shared/CustomTable";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { SkuSelect } from "../../../components/shared/Inputs";
 
 function BranchStock() {
   // react redux
@@ -27,7 +28,6 @@ function BranchStock() {
     (state) => state.utils.categories
   );
   const { data: models } = useAppSelector((state) => state.utils.models);
-  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
   const { data: branches } = useAppSelector((state) => state.utils.branches);
 
   // search queries
@@ -90,16 +90,17 @@ function BranchStock() {
             navigate({ search: (prev) => ({ ...prev, model: val }) })
           }
         />
-        <SelectInput
-          label="Select SKU"
-          loading={isLoading}
-          options={skuCodes}
-          noOptionsText="No sku matched"
-          value={skuCode}
-          onChange={(val) =>
-            navigate({ search: (prev) => ({ ...prev, skuCode: val }) })
-          }
-        />
+        <div className="flex-1">
+          <SkuSelect
+            disabled={isLoading}
+            value={skuCode}
+            onChange={({ sku }) =>
+              navigate({
+                search: (prev) => ({ ...prev, skuCode: sku?.id || "" }),
+              })
+            }
+          />
+        </div>
       </div>
       {/* search inputs end */}
 
