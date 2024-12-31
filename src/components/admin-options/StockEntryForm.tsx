@@ -1,6 +1,5 @@
 import { Add, Close } from "@mui/icons-material";
 import {
-  Autocomplete,
   Button,
   Divider,
   IconButton,
@@ -16,21 +15,17 @@ import {
 } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import type { StockFormInputs } from "../../types/reactHookForm.types";
-import { useAppSelector } from "../../hooks";
 import { useState } from "react";
-// import { fetchSku } from "../../features/utilsSlice";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import stockApi from "../../api/stock";
+import { SkuSelect } from "../shared/Inputs";
 
 export default function StockEntryForm() {
   // states
   const [entryList, setEntryList] = useState<StockFormInputs[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
-
-  // react-redux
-  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
 
   // react hook form
   const {
@@ -96,35 +91,13 @@ export default function StockEntryForm() {
                 field: { value, onChange },
                 fieldState: { error },
               }) => (
-                <Autocomplete
-                  options={skuCodes}
-                  value={value || null}
-                  onChange={(_, val) => onChange(val)}
-                  isOptionEqualToValue={(opt, val) => opt.id === val.id}
-                  getOptionLabel={(opt) => opt.name}
-                  renderOption={(props, opt) => (
-                    <li {...props}>
-                      {opt.name}{" "}
-                      <small className="!ml-2">
-                        <b>Item: </b>
-                        {opt.item?.name}
-                      </small>
-                      <small className="!ml-2">
-                        <b>UOM: </b>
-                        {opt.item?.uom}
-                      </small>
-                    </li>
-                  )}
-                  noOptionsText="No sku matched"
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Select SKU Code"
-                      placeholder="Select SKU Code"
-                      error={Boolean(error)}
-                    />
-                  )}
-                />
+                <>
+                  <SkuSelect
+                    value={value}
+                    error={Boolean(error)}
+                    onChange={({ sku }) => onChange(sku)}
+                  />
+                </>
               )}
             />
             <TextField
@@ -157,7 +130,7 @@ export default function StockEntryForm() {
               })}
             />
 
-            <Button variant="contained" startIcon={<Add />} type="submit">
+            <Button startIcon={<Add />} type="submit">
               Add To Entry List
             </Button>
           </div>
