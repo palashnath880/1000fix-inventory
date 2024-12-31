@@ -20,14 +20,10 @@ import { Download, Refresh } from "@mui/icons-material";
 import { exportExcel } from "../../../utils/utils";
 import { SkuTable } from "../../../components/shared/CustomTable";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import FilterOptions from "../../../components/shared/FilterOptions";
 
 function Stock() {
   // react redux
-  const { data: categories } = useAppSelector(
-    (state) => state.utils.categories
-  );
-  const { data: models } = useAppSelector((state) => state.utils.models);
-  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
   const { data: users } = useAppSelector((state) => state.users);
   const engineers = users.filter((i) => i.role === "engineer");
 
@@ -60,49 +56,21 @@ function Stock() {
       <Header title="Engineer Stock" />
 
       {/* search inputs start  */}
-      <div className="flex max-md:flex-col gap-3 flex-1">
-        <SelectInput
-          label="Select Engineer"
-          loading={isLoading}
-          options={engineers}
-          noOptionsText="No engineer matched"
-          value={engineer}
-          onChange={(val) =>
-            navigate({ search: (prev) => ({ ...prev, engineer: val }) })
-          }
-        />
-        <SelectInput
-          label="Select Category"
-          loading={isLoading}
-          options={categories}
-          noOptionsText="No category matched"
-          value={category}
-          onChange={(val) =>
-            navigate({ search: (prev) => ({ ...prev, category: val }) })
-          }
-        />
-
-        <SelectInput
-          label="Select Model"
-          loading={isLoading}
-          options={models}
-          noOptionsText="No model matched"
-          value={model}
-          onChange={(val) =>
-            navigate({ search: (prev) => ({ ...prev, model: val }) })
-          }
-        />
-        <SelectInput
-          label="Select SKU"
-          loading={isLoading}
-          options={skuCodes}
-          noOptionsText="No sku matched"
-          value={skuCode}
-          onChange={(val) =>
-            navigate({ search: (prev) => ({ ...prev, skuCode: val }) })
-          }
-        />
-      </div>
+      <FilterOptions
+        disabled={isLoading}
+        startContent={
+          <SelectInput
+            label="Select Engineer"
+            loading={isLoading}
+            options={engineers}
+            noOptionsText="No engineer matched"
+            value={engineer}
+            onChange={(val) =>
+              navigate({ search: (prev) => ({ ...prev, engineer: val }) })
+            }
+          />
+        }
+      />
       {/* search inputs end */}
 
       {/* loader */}

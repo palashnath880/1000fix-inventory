@@ -8,7 +8,10 @@ import { useEffect } from "react";
 import { authUser } from "../features/authSlice";
 import Loader from "../components/shared/Loader";
 
-const router = createRouter({ routeTree, context: { auth: undefined! } });
+export const router = createRouter({
+  routeTree,
+  context: { auth: undefined! },
+});
 
 declare module "@tanstack/react-router" {
   interface Register {
