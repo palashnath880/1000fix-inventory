@@ -1,6 +1,5 @@
 import {
   Alert,
-  Autocomplete,
   Button,
   CircularProgress,
   Paper,
@@ -10,10 +9,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
-import { useAppSelector } from "../../hooks";
 import { useQuery } from "@tanstack/react-query";
 import { Download, Refresh } from "@mui/icons-material";
 import engineerStockApi from "../../api/engineerStock";
@@ -22,14 +19,12 @@ import { exportExcel } from "../../utils/utils";
 import DefectiveReturn from "../../components/engineer/DefectiveReturn";
 import { SkuTable } from "../../components/shared/CustomTable";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { SkuSelect } from "../../components/shared/Inputs";
 
 function OwnStock() {
   // search params
   const { skuId = "" } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
-
-  // react redux
-  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
 
   // react -query
   const { data, isLoading, isSuccess, refetch } = useQuery<OwnStockType[]>({
@@ -49,16 +44,10 @@ function OwnStock() {
 
       {/* search sku input */}
       <div className="flex flex-col gap-4 mt-5">
-        <Autocomplete
-          options={skuCodes}
-          value={skuCodes.find((i) => i.id === skuId) || null}
-          getOptionLabel={(opt) => opt.name}
-          isOptionEqualToValue={(opt, val) => opt.id === val.id}
-          onChange={(_, val) => navigate({ search: { skuId: val?.id || "" } })}
-          noOptionsText="No sku matched"
-          renderInput={(params) => (
-            <TextField {...params} label="Stock search by sku" />
-          )}
+        <SkuSelect
+          value={skuId}
+          disabled={isLoading}
+          onChange={({ sku }) => navigate({ search: { skuId: sku?.id || "" } })}
         />
       </div>
 
@@ -98,7 +87,6 @@ function OwnStock() {
                       <TableRow>
                         <TableCell>#</TableCell>
                         <SkuTable isHeader />
-                        <TableCell>AVG Price</TableCell>
                         <TableCell>Good</TableCell>
                         <TableCell>Defective</TableCell>
                         <TableCell></TableCell>
@@ -109,7 +97,6 @@ function OwnStock() {
                         <TableRow key={index}>
                           <TableCell>{index + 1}</TableCell>
                           <SkuTable skuCode={stock.skuCode} />
-                          <TableCell>{stock?.avgPrice}</TableCell>
                           <TableCell>{stock?.quantity}</TableCell>
                           <TableCell>{stock?.defective || 0}</TableCell>
                           <TableCell>
