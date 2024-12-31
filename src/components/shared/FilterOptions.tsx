@@ -8,7 +8,7 @@ export default function FilterOptions({
   disabled,
   startContent,
 }: {
-  startContent: React.ReactNode;
+  startContent?: React.ReactNode;
   disabled: boolean;
 }) {
   // react-redux
@@ -32,7 +32,7 @@ export default function FilterOptions({
 
   return (
     <div className="flex max-md:flex-col gap-3 flex-1 items-center">
-      {startContent}
+      {startContent && startContent}
       <SelectInput
         label="Select Category"
         loading={disabled}

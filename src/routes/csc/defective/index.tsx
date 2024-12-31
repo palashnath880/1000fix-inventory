@@ -25,10 +25,10 @@ import { useState } from "react";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import scrapApi from "../../../api/scrap";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import SelectInput from "../../../components/stock/SelectInput";
-import { SkuSelect } from "../../../components/shared/Inputs";
+import { createFileRoute } from "@tanstack/react-router";
+
 import { SkuTable } from "../../../components/shared/CustomTable";
+import FilterOptions from "../../../components/shared/FilterOptions";
 
 type SelectType = { skuId: string; quantity: number; max: number };
 
@@ -96,15 +96,10 @@ function Defective() {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   // react redux
-  const { data: categories } = useAppSelector(
-    (state) => state.utils.categories
-  );
-  const { data: models } = useAppSelector((state) => state.utils.models);
   const { user } = useAppSelector((state) => state.auth);
 
   // search queries
   const { category, model, skuCode } = Route.useSearch();
-  const navigate = useNavigate({ from: Route.fullPath });
 
   // fetch stock
   const { data, isLoading, refetch, isSuccess } = useQuery<OwnStockType[]>({
@@ -158,42 +153,7 @@ function Defective() {
     <div className="pb-10">
       <Header title="Defective" />
 
-      <div className="flex max-md:flex-col gap-3 flex-1">
-        <SelectInput
-          label="Select Category"
-          loading={isLoading}
-          options={categories}
-          noOptionsText="No category matched"
-          value={category}
-          onChange={(val) =>
-            navigate({ search: (prev) => ({ ...prev, category: val }) })
-          }
-        />
-
-        <SelectInput
-          label="Select Model"
-          loading={isLoading}
-          options={models}
-          noOptionsText="No model matched"
-          value={model}
-          onChange={(val) =>
-            navigate({ search: (prev) => ({ ...prev, model: val }) })
-          }
-        />
-
-        <div className="flex-1">
-          <SkuSelect
-            disabled={isLoading}
-            placeholder="Select SKU"
-            value={skuCode}
-            onChange={({ sku }) =>
-              navigate({
-                search: (prev) => ({ ...prev, skuCode: sku?.id || "" }),
-              })
-            }
-          />
-        </div>
-      </div>
+      <FilterOptions disabled={isLoading} />
 
       {/* loader */}
       {isLoading && (

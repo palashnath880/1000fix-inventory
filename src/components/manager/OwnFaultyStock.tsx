@@ -3,7 +3,6 @@ import { OwnStockType, SKUCode } from "../../types/types";
 import { useQuery } from "@tanstack/react-query";
 import {
   Alert,
-  Autocomplete,
   Badge,
   Button,
   Divider,
@@ -16,7 +15,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import { Refresh, ShoppingCart } from "@mui/icons-material";
@@ -26,6 +24,7 @@ import OwnFaultyDrawer from "../../components/manager/OwnFaultyDrawer";
 import { SkuTable } from "../shared/CustomTable";
 import faultyApi from "../../api/faulty";
 import { useNavigate, useSearch } from "@tanstack/react-router";
+import { SkuSelect } from "../shared/Inputs";
 
 type StateType = {
   skuCodeId: string;
@@ -40,7 +39,6 @@ export default function OwnFaultyStock() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   // react redux
-  const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
   const { user } = useAppSelector((state) => state.auth);
 
   // search queries
@@ -67,34 +65,16 @@ export default function OwnFaultyStock() {
       <div className="flex items-center justify-between">
         <Typography variant="h6">Own Faulty Stock</Typography>
         <div className="flex items-center gap-5">
-          <Autocomplete
-            size="small"
-            options={skuCodes}
-            sx={{ width: 280 }}
-            noOptionsText="No sku matched"
-            onChange={(_, val) =>
-              navigate({ search: { skuCode: val?.id || "" } })
-            }
-            value={skuCodes.find((i) => i.id === skuCode) || null}
-            isOptionEqualToValue={(opt, val) => opt.id === val.id}
-            getOptionLabel={(opt) => opt.name}
-            renderOption={(props, opt) => (
-              <li
-                {...props}
-                className={`${props.className} flex-col !items-start`}
-              >
-                {opt.name}
-                <small>
-                  <b>Item: </b>
-                  {opt.item.name} <b>UOM: </b>
-                  {opt.item.uom}
-                </small>
-              </li>
-            )}
-            renderInput={(params) => (
-              <TextField {...params} label="Filter by sku" />
-            )}
-          />
+          <div className="w-64">
+            <SkuSelect
+              value={skuCode}
+              disabled={isLoading}
+              onChange={({ sku }) =>
+                navigate({ search: { skuCode: sku?.id || "" } })
+              }
+            />
+          </div>
+
           <Button
             startIcon={<Refresh />}
             disabled={isLoading}

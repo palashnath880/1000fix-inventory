@@ -11,7 +11,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useAppSelector } from "../../../hooks";
 import { useQuery } from "@tanstack/react-query";
 import stockApi from "../../../api/stock";
 import { Download, Refresh } from "@mui/icons-material";
@@ -19,20 +18,13 @@ import { OwnStockType } from "../../../types/types";
 import { Header } from "../../../components/shared/TopBar";
 import { exportExcel } from "../../../utils/utils";
 import { SkuTable } from "../../../components/shared/CustomTable";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import SelectInput from "../../../components/stock/SelectInput";
-import { SkuSelect } from "../../../components/shared/Inputs";
+import { createFileRoute } from "@tanstack/react-router";
+
+import FilterOptions from "../../../components/shared/FilterOptions";
 
 function OwnStock() {
-  // react redux
-  const { data: categories } = useAppSelector(
-    (state) => state.utils.categories
-  );
-  const { data: models } = useAppSelector((state) => state.utils.models);
-
   // search queries
   const { skuCode, model, category } = Route.useSearch();
-  const navigate = useNavigate({ from: Route.fullPath });
 
   // fetch stock
   const { data, isLoading, refetch, isSuccess } = useQuery<OwnStockType[]>({
@@ -58,41 +50,7 @@ function OwnStock() {
       <Header title="Own Stock" />
 
       {/* search inputs start  */}
-      <div className="flex max-md:flex-col gap-3 flex-1">
-        <SelectInput
-          label="Select Category"
-          loading={isLoading}
-          options={categories}
-          noOptionsText="No category matched"
-          value={category}
-          onChange={(val) =>
-            navigate({ search: (prev) => ({ ...prev, category: val }) })
-          }
-        />
-
-        <SelectInput
-          label="Select Model"
-          loading={isLoading}
-          options={models}
-          noOptionsText="No model matched"
-          value={model}
-          onChange={(val) =>
-            navigate({ search: (prev) => ({ ...prev, model: val }) })
-          }
-        />
-        <div className="flex-1">
-          <SkuSelect
-            disabled={isLoading}
-            placeholder="Select SKU"
-            value={skuCode}
-            onChange={({ sku }) =>
-              navigate({
-                search: (prev) => ({ ...prev, skuCode: sku?.id || "" }),
-              })
-            }
-          />
-        </div>
-      </div>
+      <FilterOptions disabled={isLoading} />
       {/* search inputs end */}
 
       {/* loader */}
