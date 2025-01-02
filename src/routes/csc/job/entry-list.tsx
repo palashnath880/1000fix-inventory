@@ -50,6 +50,7 @@ function EntryList() {
   } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const search = new URLSearchParams();
+
   if (fromDate) search.set("fromDate", fromDate);
   if (toDate) search.set("toDate", toDate);
   if (Array.isArray(selectedEng)) {
@@ -194,7 +195,15 @@ function EntryList() {
                         {moment(item.createdAt).format("ll")}
                       </TableCell>
                       <TableCell>{item.jobNo}</TableCell>
-                      <TableCell>{item.imeiNo}</TableCell>
+                      <TableCell
+                        sx={{
+                          wordWrap: "break-word",
+                          overflow: "hidden",
+                          maxWidth: 280,
+                        }}
+                      >
+                        {item.imeiNo}
+                      </TableCell>
                       <TableCell>
                         {item.sellFrom === "branch" ? "Branch" : "Engineer"}
                       </TableCell>
