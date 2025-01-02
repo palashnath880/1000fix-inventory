@@ -199,7 +199,7 @@ function EntryList() {
                         sx={{
                           wordWrap: "break-word",
                           overflow: "hidden",
-                          maxWidth: 280,
+                          maxWidth: 200,
                         }}
                       >
                         {item.imeiNo}
@@ -211,7 +211,7 @@ function EntryList() {
                       <TableCell>{item.engineer?.name}</TableCell>
                       <TableCell>
                         {item?.items?.map((_, subIndex) => (
-                          <span key={subIndex} className="!block">
+                          <span key={subIndex} className="!block text-xs">
                             <b>Item {subIndex + 1}</b> Item Name:{" "}
                             {_.skuCode?.item?.name} SKU Code: {_.skuCode?.name}{" "}
                             Price: {_.price} Quantity: {_.quantity};
