@@ -191,11 +191,12 @@ function EntryList() {
                   {data?.map((item, index) => (
                     <TableRow key={item.id}>
                       <TableCell>{index + 1}</TableCell>
-                      <TableCell>
+                      <TableCell className="text-xs">
                         {moment(item.createdAt).format("ll")}
                       </TableCell>
-                      <TableCell>{item.jobNo}</TableCell>
+                      <TableCell className="text-xs">{item.jobNo}</TableCell>
                       <TableCell
+                        className="text-xs"
                         sx={{
                           wordWrap: "break-word",
                           overflow: "hidden",
@@ -204,10 +205,12 @@ function EntryList() {
                       >
                         {item.imeiNo}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="text-xs">
                         {item.sellFrom === "branch" ? "Branch" : "Engineer"}
                       </TableCell>
-                      <TableCell>{item.serviceType}</TableCell>
+                      <TableCell className="text-xs">
+                        {item.serviceType}
+                      </TableCell>
                       <TableCell>{item.engineer?.name}</TableCell>
                       <TableCell>
                         {item?.items?.map((_, subIndex) => (
