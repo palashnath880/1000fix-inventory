@@ -62,6 +62,14 @@ export default function SkuCodeSelect({
       isOptionEqualToValue={(opt, val) => opt.id === val.id}
       getOptionLabel={(opt) => opt.name}
       noOptionsText="No sku matched"
+      filterOptions={(options, { inputValue }) => {
+        const lowerCaseVal = inputValue.toLowerCase();
+        return options.filter(
+          (i) =>
+            i.name.toLowerCase().includes(lowerCaseVal) ||
+            i.item.name.toLowerCase().includes(lowerCaseVal)
+        );
+      }}
       renderOption={(props, opt) => (
         <li
           {...props}
