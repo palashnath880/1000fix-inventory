@@ -185,6 +185,9 @@ function EntryList() {
                     <TableCell>Service Type</TableCell>
                     <TableCell>Engineer</TableCell>
                     <TableCell>Items</TableCell>
+                    <TableCell>
+                      Total Items <br /> Quantity
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -220,6 +223,12 @@ function EntryList() {
                             Price: {_.price} Quantity: {_.quantity};
                           </span>
                         ))}
+                      </TableCell>
+                      <TableCell>
+                        {item?.items?.reduce(
+                          (total, i) => total + i.quantity,
+                          0
+                        ) || 0}
                       </TableCell>
                     </TableRow>
                   ))}
