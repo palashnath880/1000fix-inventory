@@ -21,6 +21,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosErr } from "../../types/types";
 import { toast } from "react-toastify";
+import bg from "../../assets/bg-1.jpg";
 
 export const Route = createFileRoute("/__auth/login")({
   component: Login,
@@ -68,7 +69,15 @@ function Login() {
     error?.response?.data.message || "Sorry! Something went wrong";
 
   return (
-    <div className="w-full h-screen grid place-items-center">
+    <div
+      className="w-full h-screen grid place-items-center"
+      style={{
+        background: `url(${bg})`,
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+      }}
+    >
       <Paper className="!px-5 !py-5 max-sm:w-[90%] sm:!w-[380px]">
         <form onSubmit={handleSubmit((data) => mutate(data))}>
           <div className="flex flex-col gap-4">
