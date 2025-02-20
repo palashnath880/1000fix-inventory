@@ -27,6 +27,7 @@ import { exportExcel } from "../../../utils/utils";
 import { useAppSelector } from "../../../hooks";
 import moment from "moment";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { SkuSelect } from "../../../components/shared/Inputs";
 
 export const Route = createFileRoute("/csc/job/entry-list")({
   component: EntryList,
@@ -35,6 +36,7 @@ export const Route = createFileRoute("/csc/job/entry-list")({
       fromDate: (search.fromDate as string) || "",
       toDate: (search.toDate as string) || "",
       filter: (search.filter as string) || "",
+      skuId: (search.skuId as string) || "",
       engineers: (search.engineers as string[]) || [],
     };
   },
@@ -47,6 +49,7 @@ function EntryList() {
     toDate,
     engineers: selectedEng,
     filter,
+    skuId,
   } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const search = new URLSearchParams();
@@ -59,6 +62,7 @@ function EntryList() {
     }
   }
   if (filter) search.set("filter", filter);
+  if (skuId) search.set("skuId", skuId);
   const searchQuery = search.toString();
 
   // engineers
@@ -154,6 +158,13 @@ function EntryList() {
             )}
           />
         )}
+        <SkuSelect
+          value={skuId}
+          placeholder="Filter by sku code"
+          onChange={({ sku }) =>
+            navigate({ search: (prev) => ({ ...prev, skuId: sku?.id || "" }) })
+          }
+        />
       </div>
 
       <Typography variant="body2" className="!text-yellow-700">
