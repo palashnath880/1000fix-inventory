@@ -8,6 +8,7 @@ type SkuSelectProps = {
   disabled?: boolean;
   value: string | SKUCode | null;
   onChange: (data: { sku: SKUCode | null }) => void;
+  size?: "small" | "medium";
 };
 
 export const SkuSelect = ({
@@ -16,6 +17,7 @@ export const SkuSelect = ({
   disabled,
   value,
   onChange,
+  size,
 }: SkuSelectProps) => {
   const { data: skuCodes } = useAppSelector((state) => state.utils.skuCodes);
 
@@ -26,6 +28,7 @@ export const SkuSelect = ({
 
   return (
     <Autocomplete
+      size={size || "medium"}
       disabled={disabled}
       options={skuCodes}
       value={input}
