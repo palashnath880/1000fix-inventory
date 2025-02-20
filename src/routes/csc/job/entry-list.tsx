@@ -158,13 +158,18 @@ function EntryList() {
             )}
           />
         )}
-        <SkuSelect
-          value={skuId}
-          placeholder="Filter by sku code"
-          onChange={({ sku }) =>
-            navigate({ search: (prev) => ({ ...prev, skuId: sku?.id || "" }) })
-          }
-        />
+        <div className="!w-[240px]">
+          <SkuSelect
+            size="small"
+            value={skuId}
+            placeholder="Filter by sku code"
+            onChange={({ sku }) =>
+              navigate({
+                search: (prev) => ({ ...prev, skuId: sku?.id || "" }),
+              })
+            }
+          />
+        </div>
       </div>
 
       <Typography variant="body2" className="!text-yellow-700">
@@ -185,7 +190,7 @@ function EntryList() {
         <div className="!mt-5">
           {Array.isArray(data) && data?.length > 0 ? (
             <TableContainer component={Paper}>
-              <Table id="jobEntry">
+              <Table id="jobEntry" sx={{ minWidth: "max-content" }}>
                 <TableHead>
                   <TableRow>
                     <TableCell>#</TableCell>
@@ -195,10 +200,10 @@ function EntryList() {
                     <TableCell>Sell From</TableCell>
                     <TableCell>Service Type</TableCell>
                     <TableCell>Engineer</TableCell>
-                    <TableCell>Items</TableCell>
                     <TableCell>
                       Total Items <br /> Quantity
                     </TableCell>
+                    <TableCell>Items</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -227,19 +232,32 @@ function EntryList() {
                       </TableCell>
                       <TableCell>{item.engineer?.name}</TableCell>
                       <TableCell>
-                        {item?.items?.map((_, subIndex) => (
-                          <span key={subIndex} className="!block text-xs">
-                            <b>Item {subIndex + 1}</b> Item Name:{" "}
-                            {_.skuCode?.item?.name} SKU Code: {_.skuCode?.name}{" "}
-                            Price: {_.price} Quantity: {_.quantity};
-                          </span>
-                        ))}
-                      </TableCell>
-                      <TableCell>
                         {item?.items?.reduce(
                           (total, i) => total + i.quantity,
                           0
                         ) || 0}
+                      </TableCell>
+                      <TableCell>
+                        <Table className="!w-[500px]">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Item Name</TableCell>
+                              <TableCell>SKU Code</TableCell>
+                              <TableCell>Price</TableCell>
+                              <TableCell>Quantity</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {item?.items?.map((_, subIndex) => (
+                              <TableRow key={subIndex} className="text-xs">
+                                <TableCell>{_.skuCode?.item?.name}</TableCell>
+                                <TableCell>{_.skuCode?.name}</TableCell>
+                                <TableCell>{_.price}</TableCell>
+                                <TableCell>{_.quantity}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
                       </TableCell>
                     </TableRow>
                   ))}
